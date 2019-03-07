@@ -13,6 +13,7 @@ class LoginMiddleware(object):
 
     def process_view(self, request, view, args, kwargs):
         """process_view."""
+        return None
         if getattr(view, 'login_exempt', False):
             return None
 
