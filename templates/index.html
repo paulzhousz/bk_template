@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8>
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <title>华夏银行监控自服务</title>
+    <link rel="icon" href="${STATIC_URL}favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="${STATIC_URL}logo.png">
+    <link href=${STATIC_URL}assets/css/app.css rel=stylesheet>
+</head>
+<script>
+    if ('${RUN_MODE}' === 'DEVELOP') {
+        window.siteUrl = "http://dev.szbke.com:8008"
+    }else{
+        window.siteUrl = '${BK_PLAT_HOST}${SITE_URL}'
+    }
+    window.userName = '${request.user.username}'
+    window.isAdmin = '1'
+</script>
+<body>
+<div id=app></div>
+<script type=text/javascript src=${STATIC_URL}assets/js/manifest.js></script>
+<script type=text/javascript src=${STATIC_URL}assets/js/vendor.js></script>
+<script type=text/javascript src=${STATIC_URL}assets/js/app.js></script>
+</body>
+</html>
