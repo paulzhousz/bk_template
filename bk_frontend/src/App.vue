@@ -22,7 +22,8 @@
         created () {
           this.$http.get('/test/').then(res => {
             // console.log(res)
-            alert(window.env)
+            // alert(window.env)
+            alert(XYZ)
           })
         }
     }
