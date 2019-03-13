@@ -10,9 +10,13 @@
 </head>
 <script>
     if ('${RUN_MODE}' === 'DEVELOP') {
-        window.siteUrl = "http://dev.szbke.com:8008"
-    }else{
+        window.siteUrl = "http://dev.szbke.com:8001"
+        window.env = "d"
+    }else if ('${RUN_MODE}' === 'PRODUCT') {
         window.siteUrl = '${BK_PLAT_HOST}${SITE_URL}'
+        window.env = "o"
+    }else{
+        window.env = "t"
     }
     window.userName = '${request.user.username}'
     window.isAdmin = '1'
