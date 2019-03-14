@@ -21,9 +21,10 @@
         },
         created () {
           this.$http.get('/test/').then(res => {
-            console.log(XYZ)
+            // console.log(XYZ)
+            console.log(res)
             // alert(window.env)
-            alert(XYZ)
+            // alert(XYZ)
           })
         }
     }
