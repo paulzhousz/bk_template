@@ -21,7 +21,7 @@
         },
         created () {
           this.$http.get('/test/').then(res => {
-            // console.log(res)
+            console.log(XYZ)
             // alert(window.env)
             alert(XYZ)
           })
