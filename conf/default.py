@@ -111,6 +111,7 @@ INSTALLED_APPS = (
     'app_control',
     'account',
     'home_application',
+    'sysmanage'
 )
 
 # ==============================================================================
@@ -316,4 +317,22 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+# ==============================================================================
+# REST FRAMEWORK SETTING
+# ==============================================================================
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'component.drf.generics.exception_handler',
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'component.drf.pagination.CustomPageNumberPagination',
+    'PAGE_SIZE': 10,
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend', ),
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S"
 }

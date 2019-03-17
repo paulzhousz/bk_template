@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Login middleware."""
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.middleware.csrf import get_token as get_csrf_token
 from django.conf import settings
 
@@ -13,6 +13,14 @@ class LoginMiddleware(object):
 
     def process_view(self, request, view, args, kwargs):
         """process_view."""
+        # 模拟登录账号
+        username = 'admin'
+        user_model = get_user_model()
+        if user_model.objects.filter(username=username).exists():
+            user = user_model.objects.get(username=username)
+        else:
+            user = user_model.objects.create(username=username, is_staff=True, is_superuser=True)
+        request.user = user
         return None
         if getattr(view, 'login_exempt', False):
             return None

@@ -14,3 +14,6 @@ django-celery==3.2.1
 supervisor==3.3.3
 uWSGI==2.0.13.1
 requests==2.9.1
+djangorestframework==3.6.3
+django-filter==1.1.0
+django-jsonfield==1.0.1
