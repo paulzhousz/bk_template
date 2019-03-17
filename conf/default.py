@@ -107,6 +107,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'rest_framework',
     # OTHER 3rd Party App
     'app_control',
     'account',
