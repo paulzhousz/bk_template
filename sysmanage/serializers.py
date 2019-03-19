@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import serializers
-from .models import Log, Menu, GroupProfile, GroupToMenu
+from .models import Log, Menu, GroupProfile, GroupToMenu, PermissionGroup, PermissionProfile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from component.drf.serializer import CustomSerializer, ModelSerializer
@@ -17,7 +17,13 @@ class LogSerializer(ModelSerializer):
 class MenuSerializer(ModelSerializer):
     class Meta:
         model = Menu
-        fields = ('id', 'name', 'parent', 'display_name', 'is_menu', 'path', 'icon')
+        fields = ('id', 'name', 'parent', 'display_name', 'is_menu', 'path', 'icon', 'image_url', 'image_h_url')
+
+
+class PermissionGroupSerializer(ModelSerializer):
+    class Meta:
+        model = PermissionGroup
+        fields = ('id', 'display_name', 'is_enable')
 
 
 class PermissionSerializer(ModelSerializer):
@@ -29,13 +35,13 @@ class PermissionSerializer(ModelSerializer):
         fields = ('id', 'codename', 'display_name', 'is_enable')
 
     def get_is_enable(self, obj):
-        if hasattr(Permission, 'is_enable'):
+        if hasattr(obj, 'permissionprofile'):
             return obj.permissionprofile.is_enable
         else:
             return False
 
     def get_display_name(self, obj):
-        if hasattr(Permission, 'display_name'):
+        if hasattr(obj, 'permissionprofile'):
             return obj.permissionprofile.display_name
         else:
             return ''
@@ -56,7 +62,7 @@ class BasicGroupSerializer(ModelSerializer):
         """
         获取当前角色的显示名
         """
-        if hasattr(Group, 'groupprofile'):
+        if hasattr(obj, 'groupprofile'):
             return obj.groupprofile.display_name
         else:
             return ''
@@ -65,7 +71,7 @@ class BasicGroupSerializer(ModelSerializer):
         """
         获取当前角色是否启用
         """
-        if hasattr(Group, 'groupprofile'):
+        if hasattr(obj, 'groupprofile'):
             return obj.groupprofile.is_enable
         else:
             return False
@@ -74,7 +80,7 @@ class BasicGroupSerializer(ModelSerializer):
         """
         获取当前角色描述信息
         """
-        if hasattr(Group, 'groupprofile'):
+        if hasattr(obj, 'groupprofile'):
             return obj.groupprofile.description
         else:
             return ''
@@ -83,7 +89,7 @@ class BasicGroupSerializer(ModelSerializer):
         """
         获取当前角色是否内置角色
         """
-        if hasattr(Group, 'groupprofile'):
+        if hasattr(obj, 'groupprofile'):
             return obj.groupprofile.is_built_in
         else:
             return False

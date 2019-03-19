@@ -25,7 +25,7 @@ class PermissionProfile(models.Model):
     is_enable = models.BooleanField(_(u'是否启用'), default=True)
     permission = models.OneToOneField(Permission, verbose_name=_(u'权限'))
     permission_group = models.ForeignKey(PermissionGroup, verbose_name=_(u'权限分组'), on_delete=models.SET_NULL, null=True,
-                                        blank=True)
+                                         blank=True)
 
 
 class GroupProfile(models.Model):
