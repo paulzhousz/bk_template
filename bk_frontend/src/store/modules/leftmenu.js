@@ -1,12 +1,18 @@
+import * as commonApi from '@/api/api'
+
 const state = {
 }
 
 const getters = {
 }
 
-const actions = {}
-
 const mutations = {
+}
+
+const actions = {
+  getMenu ({ commit, state }, param) {
+    return commonApi.getMenu()
+  },
 }
 
 export default {
