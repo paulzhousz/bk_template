@@ -14,7 +14,7 @@ from sysmanage.filters import GroupFilter
 
 class UserViewSet(ModelViewSet):
     """用户相关操作"""
-    queryset = get_user_model().objects.all()
+    queryset = get_user_model().objects.filter(is_in_app=True)
     serializer_class = UserSerializer
     http_method_names = ['get']
 
@@ -49,12 +49,11 @@ class UserViewSet(ModelViewSet):
                                          'permissionprofile__display_name': permission.permissionprofile.display_name})
         return Response({'menus': user_menus, 'permissions': user_permissions})
 
-
     @list_route(methods=['get'], url_path='select')
     def get_select(self, request, *args, **kwargs):
         """获取所有用户的下拉框数据"""
-        user_model = get_user_model()
-        user_model.object.filter()
+        ret = self.queryset.filter(is_enable=True).annotate(label=F('chname'), value=F('id')).values('label', 'value')
+        return Response(ret)
 
 
 class GroupViewSet(ModelViewSet):

@@ -11,7 +11,7 @@ def initial_user_data(apps, schema_editor):
     try:
         admin_username_list = settings.ADMIN_USERNAME_LIST
         for username in admin_username_list:
-            BkUser.objects.create_superuser(username)
+            BkUser.objects.create_superuser(username, **{'chname': '超级管理员', 'is_in_app': True})
     except Exception, e:
         pass
 
