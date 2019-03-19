@@ -56,6 +56,13 @@ class GroupViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'delete']
     filter_class = GroupFilter
 
+    @list_route(methods=['get'], url_path='select')
+    def get_select(self, request, *args, **kwargs):
+        """获取所有角色的下拉框数据"""
+        ret = Group.objects.all().extra(select={'value': 'id', 'label': 'groupprofile__display_name'}).values('value',
+                                                                                                              'label')
+        return Response(ret)
+
 
 class PermViewSet(ModelViewSet):
     """权限相关操作"""
