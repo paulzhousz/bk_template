@@ -9,22 +9,20 @@
                 text-color="#fff"
                 active-text-color="#ffd04b"
                 :unique-opened="only">
-                    <template v-for="(key, item) in $router.options.routes" :index="item">
-                        <div v-if="item.menuShow" :key="key">
-                            <el-submenu :index="item.path" :key="item.path" v-if="item.hasChild">
-                                <template slot="title">
-                                    <i class="el-icon-document"></i>
-                                    <span>{{item.menuName}}</span>
-                                </template>
-                                <el-menu-item v-for="(itemChild, index) in item.children" :index="itemChild.path" :key="index">
-                                    <span>{{itemChild.menuName}}</span>
-                                </el-menu-item>
-                            </el-submenu>
-                            <el-menu-item :index="item.path" :key="item.path" v-else>
-                                <i class="el-icon-view"></i>
-                                <span>{{item.menuName}}</span>
+                    <template v-for="(index, item) in menusList">
+                        <el-submenu :index="index + ''" :key="index" v-if="item.children.length > 0 && item.is_menu">
+                            <template slot="title">
+                                <i class="el-icon-document"></i>
+                                <span>{{item.display_name}}</span>
+                            </template>
+                            <el-menu-item v-for="(itemChild, indexChild) in item.children" :index="itemChild.path" :key="indexChild">
+                                <span>{{itemChild.display_name}}</span>
                             </el-menu-item>
-                        </div>
+                        </el-submenu>
+                        <el-menu-item :index="item.path" :key="item.path" v-else-if="item.children == 0 && item.is_menu">
+                            <i class="el-icon-view"></i>
+                            <span>{{item.display_name}}</span>
+                        </el-menu-item>
                     </template>
                 </el-menu>
             </el-col>
@@ -37,7 +35,10 @@
         data() {
             return {
                 only: true,
-                currentMenu: '/home'
+                currentMenu: '/home',
+                menusList: [
+                    {children: []}
+                ]
             }
         },
        created() {
@@ -65,8 +66,12 @@
             getLeftmenu() {
                 this.$store.dispatch('leftmenu/getMenu').then(res => {
                     if (res.result) {
-                        console.log(res.data)
-                    }
+                        // for (let i of res.data) {
+                        //     if (i.children.length == 0) {
+                                this.menusList = res.data
+                            }
+                    //     }
+                    // }
                 })
             }
         },
