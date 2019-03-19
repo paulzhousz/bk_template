@@ -49,3 +49,13 @@ class LoginMiddleware(object):
 
         account = Account()
         return account.redirect_login(request)
+
+
+class DisableCSRFCheck(object):
+    """
+    本地开发，去掉django rest framework强制的csrf检查
+    """
+
+    def process_request(self, request):
+        setattr(request, '_dont_enforce_csrf_checks', True)
+        return None

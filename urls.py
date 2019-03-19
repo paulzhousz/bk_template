@@ -5,6 +5,8 @@ urls config
 from django.conf.urls import patterns, include, url
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from rest_framework_swagger.views import get_swagger_view
+
 # admin.autodiscover()
 
 # 公共URL配置
@@ -18,10 +20,10 @@ urlpatterns = patterns(
     url(r'^app_control/', include('app_control.urls')),
     # Resful API
     url(r'^api/', include('api.v1')),
+    url(r'^docs/', get_swagger_view(title=u'API文档')),
     # 在home_application(根应用)里开始开发你的应用的主要功能
     url(r'^', include('home_application.urls')),
 )
-
 
 handler404 = 'error_pages.views.error_404'
 handler500 = 'error_pages.views.error_500'

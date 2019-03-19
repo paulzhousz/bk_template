@@ -9,9 +9,10 @@ class CustomSerializer(object):
 
     @staticmethod
     def to_internal_value(self, data):
-        """实现部分更新功能（包括主外键、多对多）"""
-        many_foreign_fields = {}
+        """实现部分更新功能（包括主外键、多对多、额外键）"""
+        no_validated_fields = {}
         foreign_field_names = getattr(self.Meta, 'foreign_fields', [])
+        extra_field_names = getattr(self.Meta, 'extra_fields', [])
         # 更新数据
         if self.instance:
             fields = self.fields.values()
@@ -20,27 +21,33 @@ class CustomSerializer(object):
                 if field.field_name not in data:
                     if getattr(field, 'many', False):
                         value = list(getattr(self.instance, field.field_name).values_list('pk', flat=True))
-                        many_foreign_fields.update(**{field.field_name: value})
+                        no_validated_fields.update(**{field.field_name: value})
                     elif field.field_name in foreign_field_names:
                         value = getattr(self.instance, field.field_name)
-                        many_foreign_fields.update(**{field.field_name + '_id': None if value is None else value.pk})
+                        no_validated_fields.update(**{field.field_name + '_id': None if value is None else value.pk})
                     elif not getattr(field, 'read_only', False):
                         value = getattr(self.instance, field.field_name)
                         data.update(**{field.field_name: value})
                 else:
-                    if getattr(field, 'many', False):
-                        many_foreign_fields.update(**{field.field_name: data[field.field_name]})
+                    if getattr(field, 'many', False) or field.field_name in extra_field_names:
+                        no_validated_fields.update(**{field.field_name: data[field.field_name]})
                     elif field.field_name in foreign_field_names:
-                        many_foreign_fields.update(**{field.field_name + '_id': data[field.field_name]})
+                        no_validated_fields.update(**{field.field_name + '_id': data[field.field_name]})
         # 创建数据
         else:
             fields = self.fields.values()
             for field in fields:
-                if getattr(field, 'many', False):
-                    many_foreign_fields.update(**{field.field_name: data[field.field_name]})
-                elif field.field_name in foreign_field_names:
-                    many_foreign_fields.update(**{field.field_name + '_id': data[field.field_name]})
-        return data, many_foreign_fields
+                if field.field_name in data:
+                    if getattr(field, 'many', False) or field.field_name in extra_field_names:
+                        no_validated_fields.update(**{field.field_name: data[field.field_name]})
+                    elif field.field_name in foreign_field_names:
+                        no_validated_fields.update(**{field.field_name + '_id': data[field.field_name]})
+        return data, no_validated_fields
+
+    @staticmethod
+    def get_instances(model, ids):
+        instances = [model.objects.get(id=i) for i in ids if model.objects.filter(id=i).exists()]
+        return instances
 
 
 class DynamicFieldsMixin(object):

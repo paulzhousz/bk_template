@@ -34,15 +34,15 @@ def save_permission_handler(sender, instance, **kwargs):
 
 def save_group_handler(sender, instance, **kwargs):
     """创建/更新组"""
-    group_profile_model = sender.get_model('GroupProfile')
+    from sysmanage.models import GroupProfile
     # 获取profile字段
-    profile_fields = [f.name for f in group_profile_model._meta.fields if f != 'id']
+    profile_fields = [f.name for f in GroupProfile._meta.fields if f != 'id']
     profile_instance_value = {}
     for profile_field in profile_fields:
         if hasattr(instance, profile_field):
             attr_value = getattr(instance, profile_field)
             profile_instance_value.update(**{profile_field: attr_value})
-    group_profile_model.objects.update_or_create(defaults=profile_instance_value, group_id=instance.id)
+    GroupProfile.objects.update_or_create(defaults=profile_instance_value, group_id=instance.id)
 
 
 def init_group(group_model, group_profile_model):

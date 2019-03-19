@@ -11,6 +11,7 @@ from sysmanage.filters import GroupFilter
 
 
 class UserViewSet(ModelViewSet):
+    """用户相关操作"""
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     http_method_names = ['get']
@@ -48,7 +49,13 @@ class UserViewSet(ModelViewSet):
 
 
 class GroupViewSet(ModelViewSet):
+    """角色基础操作"""
     queryset = Group.objects.filter(groupprofile__isnull=False)
-    serializer_class = BasicGroupSerializer
-    http_method_names = ['get']
+    serializer_class = GroupSerializer
+    http_method_names = ['get', 'post', 'put', 'delete']
     filter_class = GroupFilter
+
+    @detail_route(methods=['post'])
+    def update_perm(self, request, *args, **kwargs):
+        """更新角色权限"""
+        pass

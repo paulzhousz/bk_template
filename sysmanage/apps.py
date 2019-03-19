@@ -5,7 +5,8 @@
 """
 
 from django.apps import AppConfig
-from sysmanage.signals.dispatch import (dispatch_init_data)
+from django.contrib.auth.models import Group
+from sysmanage.signals.dispatch import (dispatch_init_data, dispatch_create_group)
 
 
 class SysmanageConfig(AppConfig):
@@ -13,5 +14,6 @@ class SysmanageConfig(AppConfig):
     verbose_name = 'Sysmanage'
 
     def ready(self):
+        dispatch_create_group(Group)
         dispatch_init_data(self)
 
