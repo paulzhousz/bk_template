@@ -29,3 +29,4 @@ axios.interceptors.response.use(response => {
   }
 });
 Vue.prototype.$http = axios;
+export const $axios = axios

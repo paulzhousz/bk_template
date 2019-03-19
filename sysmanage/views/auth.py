@@ -31,7 +31,11 @@ class UserViewSet(ModelViewSet):
     def perform_destroy(self, instance):
         """重写删除用户方法"""
         instance.is_in_app = False
+        instance.groups.clear()
         instance.save()
+
+    def update(self, request, *args, **kwargs):
+        pass
 
     @list_route(methods=['get'])
     def current_permission(self, request, *args, **kwargs):
