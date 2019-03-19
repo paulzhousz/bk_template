@@ -14,9 +14,24 @@ from sysmanage.filters import GroupFilter
 
 class UserViewSet(ModelViewSet):
     """用户相关操作"""
-    queryset = get_user_model().objects.filter(is_in_app=True)
+    queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
-    http_method_names = ['get']
+    http_method_names = ['get', 'delete']
+
+    def list(self, request, *args, **kwargs):
+        """获取所有APP用户"""
+        queryset = self.filter_queryset(self.get_queryset().filter(is_in_app=True))
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def perform_destroy(self, instance):
+        """重写删除用户方法"""
+        instance.is_in_app = False
+        instance.save()
 
     @list_route(methods=['get'])
     def current_permission(self, request, *args, **kwargs):
@@ -46,13 +61,21 @@ class UserViewSet(ModelViewSet):
                                                    permissionprofile__is_enable=True).first()
             if permission:
                 user_permissions.append({'id': permission.id, 'codename': codename, 'name': permission.name,
-                                         'permissionprofile__display_name': permission.permissionprofile.display_name})
+                                         'display_name': permission.permissionprofile.display_name})
         return Response({'menus': user_menus, 'permissions': user_permissions})
 
     @list_route(methods=['get'], url_path='select')
     def get_select(self, request, *args, **kwargs):
         """获取所有用户的下拉框数据"""
-        ret = self.queryset.filter(is_enable=True).annotate(label=F('chname'), value=F('id')).values('label', 'value')
+        ret = self.queryset.filter(is_enable=True, is_in_app=True).annotate(label=F('chname'),
+                                                                            value=F('id')).values('label', 'value')
+        return Response(ret)
+
+    @list_route(methods=['get'], url_path='add/select')
+    def get_add_select(self, request, *args, **kwargs):
+        """获取新增用户的下拉框数据"""
+        ret = self.queryset.filter(is_enable=True, is_in_app=False).annotate(label=F('chname'),
+                                                                             value=F('id')).values('label', 'value')
         return Response(ret)
 
 

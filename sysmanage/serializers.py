@@ -165,7 +165,6 @@ class GroupSerializer(BasicGroupSerializer):
 
     def create(self, validated_data):
         """重写创建数据方法"""
-
         group = Group.objects.create(name=validated_data['name'])
         validated_data.pop('name')
         # 用户ID列表
