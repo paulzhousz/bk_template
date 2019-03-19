@@ -54,8 +54,9 @@ def init_group(group_model, group_profile_model):
         group_model.objects.all().delete()
         for i in group_data:
             group = group_model.objects.create(id=i['id'], name=i['name'])
-            group_profile_model.objects.create(group=group, display_name=i['display_name'],
-                                               is_built_in=i['is_built_in'])
+            group.display_name = i['display_name']
+            group.is_built_in = i['is_built_in']
+            group.save()
 
 
 def init_permission(permission_model, permission_profile_model):
@@ -74,7 +75,8 @@ def init_permission(permission_model, permission_profile_model):
                                                                   content_type=ContentType.objects.get(
                                                                       model=j['model_name']),
                                                                   codename=j["codename"])
-                permission_profile_model.objects.create(display_name=j['display_name'], permission=permission_info)
+                permission_info.display_name = j['display_name']
+                permission_info.save()
         except Exception as e:
             logger.exception(e)
 

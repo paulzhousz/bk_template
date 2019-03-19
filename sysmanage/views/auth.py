@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.db.models import F
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from rest_framework.response import Response
@@ -49,6 +50,13 @@ class UserViewSet(ModelViewSet):
         return Response({'menus': user_menus, 'permissions': user_permissions})
 
 
+    @list_route(methods=['get'], url_path='select')
+    def get_select(self, request, *args, **kwargs):
+        """获取所有用户的下拉框数据"""
+        user_model = get_user_model()
+        user_model.object.filter()
+
+
 class GroupViewSet(ModelViewSet):
     """角色相关操作"""
     queryset = Group.objects.filter(groupprofile__isnull=False)
@@ -59,8 +67,8 @@ class GroupViewSet(ModelViewSet):
     @list_route(methods=['get'], url_path='select')
     def get_select(self, request, *args, **kwargs):
         """获取所有角色的下拉框数据"""
-        ret = Group.objects.all().extra(select={'value': 'id', 'label': 'groupprofile__display_name'}).values('value',
-                                                                                                              'label')
+        ret = Group.objects.filter(groupprofile__is_enable=True).annotate(label=F('groupprofile__display_name'),
+                                                                          value=F('id')).values('label', 'value')
         return Response(ret)
 
 

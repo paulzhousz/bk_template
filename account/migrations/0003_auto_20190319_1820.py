@@ -11,6 +11,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AddField(
+            model_name='bkuser',
+            name='is_enable',
+            field=models.BooleanField(default=True, verbose_name='\u662f\u5426\u542f\u7528'),
+        ),
+        migrations.AddField(
+            model_name='bkuser',
+            name='is_in_app',
+            field=models.BooleanField(default=False, verbose_name='\u662f\u5426\u8be5APP\u7528\u6237'),
+        ),
         migrations.AlterField(
             model_name='bkuser',
             name='email',

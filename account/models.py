@@ -48,6 +48,8 @@ class BkUser(AbstractBaseUser, PermissionsMixin):
     qq = models.CharField(u"QQ号", max_length=32, blank=True)
     phone = models.CharField(u"手机号", max_length=64, blank=True)
     email = models.EmailField(u"邮箱", max_length=254, blank=True)
+    is_in_app = models.BooleanField(u'是否该APP用户', default=False)
+    is_enable = models.BooleanField(u'是否启用', default=True)
 
     is_staff = models.BooleanField(u"普通管理员", default=False, help_text=u"普通管理员可以登录到admin")
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
