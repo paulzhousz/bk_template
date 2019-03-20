@@ -1,75 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/home'
-import First from '@/pages/first/First'
-import New from '@/pages/new/New'
+const MonitorPanel = () => import('@/pages/monitor_panel/MonitorPanel')
+const Authority = () => import('@/pages/authority/authority')
 Vue.use(Router);
 
 let router = new Router({
     routes: [
         {
-            path: '/',
-            redirect: '/index'
+            path: '/monitor_panel',
+            name: '/monitor_panel',
+            component: MonitorPanel
         },
         {
-            path: '/first_first',
-            component: First
-        },
-        {
-            path: '/home',
-            name: 'Home',
-            component: Home,
-            menuName: '首页',
-            menuShow: true,
-            hasChild: false,
-        },
-        {
-            path: '/new',
-            name: 'New',
-            component: New,
-            menuName: '新建页面',
-            menuShow: true,
-            hasChild: false,
-        },
-        {
-            path: '/first',
-            menuName: '导航一',
-            menuShow: true,
-            hasChild: true,
-            children: [
-                {
-                    path: '/first_first',
-                    menuName: '选项一'
-                },
-                {
-                    path: '/first_second',
-                    menuName: '选项二'
-                },
-                {
-                    path: '/first_third',
-                    menuName: '选项三'
-                },
-            ]
-        },
-        {
-            path: '/second',
-            menuName: '导航二',
-            menuShow: true,
-            hasChild: true,
-            children: [
-                {
-                    path: '/second_first',
-                    menuName: '选项一'
-                },
-                {
-                    path: '/second_second',
-                    menuName: '选项二'
-                },
-                {
-                    path: '/second_third',
-                    menuName: '选项三'
-                },
-            ]
+            path: '/authority',
+            name: '/authority',
+            component: Authority
         },
     ]
 });

@@ -10,14 +10,14 @@ import '@/api/axios'
 import '../mock/mock.js'
 import 'element-ui/lib/theme-chalk/index.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faListAlt, faTachometerAlt, faExclamationTriangle, faTable, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { fatachometerAlt, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.prototype.$ = $;
 
-library.add(faListAlt, faTachometerAlt, faExclamationTriangle, faTable, faEdit)
+library.add(fatachometerAlt, faEdit)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 /* eslint-disable no-new */
