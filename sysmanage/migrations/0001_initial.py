@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('display_name', models.CharField(max_length=50, verbose_name='\u663e\u793a\u540d\u79f0', blank=True)),
                 ('is_enable', models.BooleanField(default=True, verbose_name='\u662f\u5426\u542f\u7528')),
                 ('is_built_in', models.BooleanField(default=True, verbose_name='\u662f\u5426\u5185\u7f6e')),
-                ('description', models.CharField(max_length=140, null=True, verbose_name='\u63cf\u8ff0', blank=True)),
+                ('description', models.CharField(max_length=140, verbose_name='\u63cf\u8ff0', blank=True)),
                 ('group', models.OneToOneField(verbose_name='\u7ec4', to='auth.Group')),
             ],
         ),
