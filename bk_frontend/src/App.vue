@@ -20,12 +20,12 @@
             Container
         },
         created () {
-          this.$http.get('/test/').then(res => {
+        //   this.$http.get('/test/').then(res => {
             // console.log(XYZ)
-            console.log(res)
+            // console.log(res)
             // alert(window.env)
             // alert(XYZ)
-          })
+        //   })
         }
     }
 </script>
