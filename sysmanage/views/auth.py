@@ -5,7 +5,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
+from rest_framework.exceptions import ValidationError
 from component.drf.viewsets import ModelViewSet
+from component.drf.serializer import CustomSerializer
 from sysmanage.serializers import (UserSerializer, PermissionSerializer, GroupSerializer, MenuSerializer,
                                    PermissionGroupSerializer)
 from sysmanage.models import Menu, Permission, PermissionGroup, PermissionProfile
@@ -16,7 +18,7 @@ class UserViewSet(ModelViewSet):
     """用户相关操作"""
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
-    http_method_names = ['get', 'delete']
+    http_method_names = ['get', 'post', 'put', 'delete']
 
     def list(self, request, *args, **kwargs):
         """获取所有APP用户"""
@@ -31,11 +33,48 @@ class UserViewSet(ModelViewSet):
     def perform_destroy(self, instance):
         """重写删除用户方法"""
         instance.is_in_app = False
+        instance.is_enable = True
         instance.groups.clear()
         instance.save()
 
+    def create(self, request, *args, **kwargs):
+        """
+        添加APP用户
+        :param request.body: {"id": 1, "groups": [1, 2]}
+        """
+        # id必传
+        if 'id' not in request.data:
+            raise ValidationError(u'ID该字段是必填项')
+        id = request.data['id']
+        group_ids = request.data.get('groups', [])
+        user_model = get_user_model()
+        user = user_model.objects.get(id=id)
+        # 添加用户、角色关联关系
+        groups = CustomSerializer.get_instances(Group, group_ids)
+        user.groups.clear()
+        user.groups.add(*groups)
+        # 初始化用户属性
+        user.is_in_app = True
+        user.is_enable = True
+        user.save()
+        serializer = self.serializer_class(instance=user)
+        return Response(serializer.data)
+
     def update(self, request, *args, **kwargs):
-        pass
+        """
+        编辑APP用户
+        :param request.body: {"groups": [1, 2]}
+        """
+        instance = self.get_object()
+        # 判断是否传入groups
+        if 'groups' in request.data:
+            # 添加用户、角色关联关系
+            group_ids = request.data['groups']
+            groups = CustomSerializer.get_instances(Group, group_ids)
+            instance.groups.clear()
+            instance.groups.add(*groups)
+        serializer = self.serializer_class(instance=instance)
+        return Response(serializer.data)
 
     @list_route(methods=['get'])
     def current_permission(self, request, *args, **kwargs):

@@ -117,7 +117,7 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'chname', 'email', 'phone', 'groups')
+        fields = ('id', 'username', 'chname', 'email', 'phone', 'is_in_app', 'is_enable', 'groups')
 
     def update(self, instance, validated_data):
         """反序列化更新对象"""
