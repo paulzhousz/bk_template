@@ -7,13 +7,6 @@ from django.contrib.auth.models import Group, Permission
 from component.drf.serializer import CustomSerializer, ModelSerializer
 
 
-class LogSerializer(ModelSerializer):
-    class Meta:
-        model = Log
-        fields = (
-            'id', 'operator_date', 'operator', 'operated_object', 'operated_type', 'content', 'ip_addr', 'is_success')
-
-
 class MenuSerializer(ModelSerializer):
     class Meta:
         model = Menu
@@ -118,15 +111,6 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('id', 'username', 'chname', 'email', 'phone', 'is_in_app', 'is_enable', 'groups')
-
-    def update(self, instance, validated_data):
-        """反序列化更新对象"""
-        instance.username = validated_data.get('username', instance.username)
-        instance.chname = validated_data.get('chname', instance.chname)
-        instance.phone = validated_data.get('phone', instance.phone)
-        instance.email = validated_data.get('email', instance.email)
-        instance.save()
-        return instance
 
 
 class GroupSerializer(BasicGroupSerializer):

@@ -71,3 +71,13 @@ def exception_handler(exc, content):
 
         set_rollback()
         return Response(data, status=status.HTTP_200_OK)
+
+
+def validate_fields(data, *fields):
+    """校验必填参数"""
+    validations = []
+    for field in fields:
+        if field not in data:
+            validations.append(u'%s该字段是必填项' % field)
+    if validations:
+        raise ValidationError(validations)
