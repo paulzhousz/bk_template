@@ -9,3 +9,7 @@ export const getDemoApi = params => {
 export const getMenu = params => {
   return $axios.get('/api/sysmanage/menus/tree/', { params: params })
 }
+// 获取当前用户的权限列表
+export const getCurrentPermission = params => {
+  return $axios.get('/api/sysmanage/users/current_permission/', { params: params })
+}

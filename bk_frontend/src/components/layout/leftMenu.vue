@@ -113,7 +113,7 @@
         margin-left: 20px;
     }
     .el-submenu .el-menu-item {
-        padding-left: 90px !important;
+        padding-left: 60px !important;
     }
 </style>
 <style lang="scss">
