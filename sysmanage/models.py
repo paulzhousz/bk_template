@@ -32,7 +32,7 @@ class GroupProfile(models.Model):
     display_name = models.CharField(_(u'显示名称'), max_length=50, blank=True)
     is_enable = models.BooleanField(_(u'是否启用'), default=True)
     is_built_in = models.BooleanField(_(u'是否内置'), default=True)
-    description = models.CharField(_(u'描述'), max_length=140, blank=True, null=True)
+    description = models.CharField(_(u'描述'), max_length=140, blank=True)
     group = models.OneToOneField(Group, verbose_name=_(u'组'))
 
 

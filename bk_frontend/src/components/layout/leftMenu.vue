@@ -9,7 +9,7 @@
                 text-color="#fff"
                 active-text-color="#ffd04b"
                 :unique-opened="only">
-                    <template v-for="(index, item) in menusList">
+                    <template v-for="(item, index) in menusList">
                         <el-submenu :index="index + ''" :key="index" v-if="item.children.length > 0 && item.is_menu">
                             <template slot="title">
                                 <i class="el-icon-document"></i>
@@ -69,6 +69,7 @@
                         // for (let i of res.data) {
                         //     if (i.children.length == 0) {
                                 this.menusList = res.data
+                                console.log(res.data)
                             }
                     //     }
                     // }
