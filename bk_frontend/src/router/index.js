@@ -1,75 +1,51 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/home'
-import First from '@/pages/first/First'
-import New from '@/pages/new/New'
+import store from '@/store'
+import { mapGetters } from 'vuex'
+const MonitorPanel = () => import('@/pages/monitor_panel/MonitorPanel')
+const Authority = () => import('@/pages/authority/authority')
 Vue.use(Router);
+
+let routerVue = new Vue({
+    store,
+    methods: {
+        // 当前用户是否有路由权限
+        async isRouterNameAuthority(routerName) {
+            // 当前用户能访问的路由列表是否已获取,如果没有获取,则请求获取路由权限接口
+            if (!this.isGetUserPerm) {
+                await this.store.dispatch('leftmenu/getCurrentPermission')
+            }
+            // 判断当前用户能访问的路由
+            // 第一步，首先判断用户是否为管理员
+            if (this.isAdmin) {
+                return true
+            }
+            let authorityRes = false
+            for(let i = 0; i < this.routerMenuList; i++) {
+                if (this.routerMenuList[i].name === routerName) {
+                    authorityRes = true
+                    break
+                }
+            }
+            return authorityRes
+        }
+    },
+    computed: {
+        ...mapGetters('leftmenu', ['isAdmin', 'isGetUserPerm', 'routerMenuList'])
+    }
+})
 
 let router = new Router({
     routes: [
         {
-            path: '/',
-            redirect: '/index'
+            path: '/monitor_panel',
+            name: '/monitor_panel',
+            component: MonitorPanel
         },
         {
-            path: '/first_first',
-            component: First
-        },
-        {
-            path: '/home',
-            name: 'Home',
-            component: Home,
-            menuName: '首页',
-            menuShow: true,
-            hasChild: false,
-        },
-        {
-            path: '/new',
-            name: 'New',
-            component: New,
-            menuName: '新建页面',
-            menuShow: true,
-            hasChild: false,
-        },
-        {
-            path: '/first',
-            menuName: '导航一',
-            menuShow: true,
-            hasChild: true,
-            children: [
-                {
-                    path: '/first_first',
-                    menuName: '选项一'
-                },
-                {
-                    path: '/first_second',
-                    menuName: '选项二'
-                },
-                {
-                    path: '/first_third',
-                    menuName: '选项三'
-                },
-            ]
-        },
-        {
-            path: '/second',
-            menuName: '导航二',
-            menuShow: true,
-            hasChild: true,
-            children: [
-                {
-                    path: '/second_first',
-                    menuName: '选项一'
-                },
-                {
-                    path: '/second_second',
-                    menuName: '选项二'
-                },
-                {
-                    path: '/second_third',
-                    menuName: '选项三'
-                },
-            ]
+            path: '/authority',
+            name: '/authority',
+            component: Authority
         },
     ]
 });
@@ -78,7 +54,12 @@ router.beforeEach((to, from, next) => {
     if (to.matched.length === 0) {
         from.name ? next({name: from.name}) : next('/');
     } else {
-        next();
+        let authorityResult = routerVue.isRouterNameAuthority(to.name)
+        if (authorityResult || ['/403', '/404'].indexOf(to.path != -1)) {
+            next();
+        } else {
+            next('/403');
+        }
     }
 });
 export default router

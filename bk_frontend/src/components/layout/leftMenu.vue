@@ -12,7 +12,7 @@
                     <template v-for="(item, index) in menusList">
                         <el-submenu :index="index + ''" :key="index" v-if="item.children.length > 0 && item.is_menu">
                             <template slot="title">
-                                <i class="el-icon-document"></i>
+                                <font-awesome-icon :icon="item.icon"></font-awesome-icon>
                                 <span>{{item.display_name}}</span>
                             </template>
                             <el-menu-item v-for="(itemChild, indexChild) in item.children" :index="itemChild.path" :key="indexChild">
@@ -20,7 +20,7 @@
                             </el-menu-item>
                         </el-submenu>
                         <el-menu-item :index="item.path" :key="item.path" v-else-if="item.children == 0 && item.is_menu">
-                            <i class="el-icon-view"></i>
+                            <font-awesome-icon :icon="item.icon"></font-awesome-icon>
                             <span>{{item.display_name}}</span>
                         </el-menu-item>
                     </template>
@@ -69,7 +69,6 @@
                         // for (let i of res.data) {
                         //     if (i.children.length == 0) {
                                 this.menusList = res.data
-                                console.log(res.data)
                             }
                     //     }
                     // }
@@ -114,7 +113,7 @@
         margin-left: 20px;
     }
     .el-submenu .el-menu-item {
-        padding-left: 90px !important;
+        padding-left: 60px !important;
     }
 </style>
 <style lang="scss">
