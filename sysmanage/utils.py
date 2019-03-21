@@ -7,6 +7,27 @@ from django.contrib.auth.models import Permission, ContentType
 from django.contrib.auth import get_user_model
 
 
+def get_mapping(from_data, mappings, is_abandon=True):
+    """
+    通过映射关系获取映射后数据
+    :param from_data: 映射前数据
+    :param mappings: 映射关系
+    :param is_abandon: 未匹配是否舍弃
+    """
+    to_data = {}
+    for key, value in from_data.items():
+        # 是否匹配
+        is_match = False
+        for map in mappings:
+            if key == map['from']:
+                to_data.update(**{map['to']: value})
+                is_match = True
+                break
+        if not (is_abandon or is_match):
+            to_data.update(**{key: value})
+    return to_data
+
+
 def get_ip_addr(request):
     """
     通过request获取对象IP
