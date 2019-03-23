@@ -17,7 +17,6 @@ import sys
 # Import global settings to make it easier to extend settings.
 from django.conf.global_settings import *  # noqa
 
-
 # ==============================================================================
 # 应用基本信息配置 (请按照说明修改)
 # ==============================================================================
@@ -65,9 +64,9 @@ else:
     RUN_MODE = 'DEVELOP'
     DEBUG = True
 
-
 try:
     import pymysql
+
     pymysql.install_as_MySQLdb()
 except:
     pass
@@ -95,7 +94,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'account.middlewares.LoginMiddleware',   # 登录鉴权中间件
+    'account.middlewares.LoginMiddleware',  # 登录鉴权中间件
     'common.middlewares.CheckXssMiddleware',  # Xss攻击处理中间件
 )
 
@@ -109,6 +108,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'rest_framework',
     'rest_framework_swagger',
+    'guardian',
     # OTHER 3rd Party App
     'app_control',
     'account',
@@ -175,14 +175,18 @@ TEMPLATES = [
 # ==============================================================================
 # session and cache
 # ==============================================================================
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True       # 默认为false,为true时SESSION_COOKIE_AGE无效
-SESSION_COOKIE_PATH = SITE_URL               # NOTE 不要改动，否则，可能会改成和其他app的一样，这样会影响登录
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 默认为false,为true时SESSION_COOKIE_AGE无效
+SESSION_COOKIE_PATH = SITE_URL  # NOTE 不要改动，否则，可能会改成和其他app的一样，这样会影响登录
 
 # ===============================================================================
 # Authentication
 # ===============================================================================
 AUTH_USER_MODEL = 'account.BkUser'
-AUTHENTICATION_BACKENDS = ('account.backends.BkBackend', 'django.contrib.auth.backends.ModelBackend')
+AUTHENTICATION_BACKENDS = (
+    'account.backends.BkBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
 LOGIN_URL = "%s/login/?app_id=%s" % (BK_PAAS_HOST, APP_ID)
 LOGOUT_URL = '%saccount/logout/' % SITE_URL
 LOGIN_REDIRECT_URL = SITE_URL
@@ -198,8 +202,9 @@ ADMIN_USERNAME_LIST = ['admin']
 if IS_USE_CELERY:
     try:
         import djcelery
+
         INSTALLED_APPS += (
-            'djcelery',            # djcelery
+            'djcelery',  # djcelery
         )
         djcelery.setup_loader()
         CELERY_ENABLE_UTC = False
@@ -210,6 +215,7 @@ if IS_USE_CELERY:
         BROKER_URL = os.environ.get('BK_BROKER_URL', BROKER_URL_DEV)
         if RUN_MODE == 'DEVELOP':
             from celery.signals import worker_process_init
+
 
             @worker_process_init.connect
             def configure_workers(*args, **kwargs):
@@ -246,7 +252,8 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s [%(asctime)s] %(pathname)s %(lineno)d %(funcName)s %(process)d %(thread)d \n \t %(message)s \n',  # noqa
+            'format': '%(levelname)s [%(asctime)s] %(pathname)s %(lineno)d %(funcName)s %(process)d %(thread)d \n \t %(message)s \n',
+            # noqa
             'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'simple': {
@@ -322,7 +329,7 @@ LOGGING = {
 }
 
 # ==============================================================================
-# REST FRAMEWORK SETTING
+# RREST FRAMEWORK SETTING
 # ==============================================================================
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'component.drf.generics.exception_handler',
@@ -335,6 +342,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend', ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S"
 }

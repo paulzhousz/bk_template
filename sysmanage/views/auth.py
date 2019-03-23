@@ -2,18 +2,20 @@
 
 from django.db.models import F
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, ContentType, Permission
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
+from guardian.shortcuts import assign_perm, remove_perm
+from guardian.models import GroupObjectPermission
 from blueking.component.shortcuts import get_client_by_user
 from component.drf.viewsets import ModelViewSet
 from component.drf.serializer import CustomSerializer
 from component.drf.generics import validate_fields
 from sysmanage.serializers import (UserSerializer, PermissionSerializer, GroupSerializer, MenuSerializer,
                                    PermissionGroupSerializer)
-from sysmanage.models import Menu, Permission, PermissionGroup, PermissionProfile, GroupProfile
+from sysmanage.models import Menu, PermissionGroup, PermissionProfile, GroupProfile
 from sysmanage.filters import GroupFilter
-from sysmanage.utils import get_mapping
+from sysmanage.utils import (get_mapping, get_perms_with_groups, clear_perms_obj, set_perms_obj)
 
 
 class UserViewSet(ModelViewSet):
@@ -178,6 +180,29 @@ class UserViewSet(ModelViewSet):
         else:
             raise ValueError(result['message'])
 
+    @detail_route(methods=['get'], url_path='search/perm')
+    def get_perms(self, request, *args, **kwargs):
+        """获取对象关联权限"""
+        instance = self.get_object()
+        perms = get_perms_with_groups(instance)
+        return Response(perms)
+
+    @detail_route(methods=['post'], url_path='set/perm')
+    def set_perms(self, request, *args, **kwargs):
+        """
+        设置对象关联权限
+        :param body:
+        [
+            {"name": "account.add_bkuser", "groups": [1, 2]},
+            {"name": "account.change_bkuser", "groups": [1, 3]},
+            {"name": "account.delete_bkuser", "groups": []}
+        ]
+        """
+        instance = self.get_object()
+        codename_list = [i['name'] for i in request.data]
+        set_perms_obj(instance, codename_list, request.data)
+        return Response()
+
 
 class GroupViewSet(ModelViewSet):
     """角色相关操作"""
@@ -253,6 +278,13 @@ class GroupViewSet(ModelViewSet):
         enable = request.data['enable']
         GroupProfile.objects.filter(group_id__in=groups_ids).update(is_enable=enable)
         return Response()
+
+    @detail_route(methods=['get'], url_path='perm')
+    def get_perms(self, request, *args, **kwargs):
+        """获取对象关联权限"""
+        instance = self.get_object()
+        perms = get_perms_with_groups(instance)
+        return Response(perms)
 
 
 class PermViewSet(ModelViewSet):
