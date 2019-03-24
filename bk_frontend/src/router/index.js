@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import store from '@/store'
 import { mapGetters } from 'vuex'
 const MonitorPanel = () => import('@/pages/monitor_panel/MonitorPanel')
-const Authority = () => import('@/pages/authority/authority')
+const User = () => import('@/pages/user/user')
+const Group = () => import('@/pages/group/Group')
 Vue.use(Router);
 
 let routerVue = new Vue({
@@ -13,7 +14,7 @@ let routerVue = new Vue({
         async isRouterNameAuthority(routerName) {
             // 当前用户能访问的路由列表是否已获取,如果没有获取,则请求获取路由权限接口
             if (!this.isGetUserPerm) {
-                await this.store.dispatch('leftmenu/getCurrentPermission')
+                await this.$store.dispatch('leftmenu/getCurrentPermission')
             }
             // 判断当前用户能访问的路由
             // 第一步，首先判断用户是否为管理员
@@ -43,9 +44,14 @@ let router = new Router({
             component: MonitorPanel
         },
         {
-            path: '/authority',
-            name: '/authority',
-            component: Authority
+            path: '/user',
+            name: '/user',
+            component: User
+        },
+        {
+            path: '/group',
+            name: '/group',
+            component: Group
         },
     ]
 });
