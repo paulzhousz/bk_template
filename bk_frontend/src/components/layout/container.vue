@@ -18,7 +18,7 @@
     #main-container {
         width: calc(100% - 220px);
         height: calc(100% - 60px);
-        padding: 20px;
+        // padding: 20px;
         background: #f0f2f5;
         float: left;
         overflow: hidden;

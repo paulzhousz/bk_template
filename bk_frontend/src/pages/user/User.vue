@@ -1,5 +1,5 @@
 <template>
-<div class="authority">
+<div class="user">
   <breadcrumb :to="to"></breadcrumb>
   <div class="contain"></div>
 </div>
@@ -23,11 +23,12 @@ export default {
 </script>
 
 <style lang="scss">
-  .authority {
+  .user {
+    padding: 20px;
+    height: 100%;
+    width: 100%;
     .contain {
-      width: 100%;
       height: 100%;
-      // height: calc(100% - 80px);
       background: #fff;
     }
   }
