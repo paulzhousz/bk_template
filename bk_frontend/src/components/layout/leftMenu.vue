@@ -66,12 +66,8 @@
             getLeftmenu() {
                 this.$store.dispatch('leftmenu/getMenu').then(res => {
                     if (res.result) {
-                        // for (let i of res.data) {
-                        //     if (i.children.length == 0) {
-                                this.menusList = res.data
-                            }
-                    //     }
-                    // }
+                        this.menusList = res.data
+                    }
                 })
             }
         },

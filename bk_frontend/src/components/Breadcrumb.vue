@@ -24,10 +24,11 @@
   #bread-crumb {
     width: 95%;
     height: 30px;
-    padding-left: 20px;
+    cursor: pointer;
   }
   .el-breadcrumb {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.8;
+    cursor: pointer;
 }
 </style>
