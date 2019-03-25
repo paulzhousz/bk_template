@@ -10,10 +10,10 @@
           </el-col>
           <el-col :span="6">
             <span class="aglin">是否内置：</span>
-            <el-select size="mini" v-model="valueIsBuiltIn" placeholder="请选择">
+            <el-select size="mini" v-model="valueIsBuiltIn" clearable placeholder="请选择">
               <el-option
-                v-for="item in optionsIsBuiltIn"
-                :key="item.value"
+                v-for="(item, index) in optionsIsBuiltIn"
+                :key="index"
                 :label="item.label"
                 :value="item.value">
               </el-option>
@@ -21,10 +21,10 @@
           </el-col>
           <el-col :span="6">
             <span class="aglin">是否启用：</span>
-            <el-select size="mini" v-model="valueIsEnable" placeholder="请选择">
+            <el-select size="mini" v-model="valueIsEnable" clearable placeholder="请选择">
               <el-option
-                v-for="item in optionsIsEnable"
-                :key="item.value"
+                v-for="(item, index) in optionsIsEnable"
+                :key="index"
                 :label="item.label"
                 :value="item.value">
               </el-option>
@@ -117,15 +117,15 @@ export default {
       inputGroup: '',
       title: '',
       dialogAction: '',
-      valueIsBuiltIn: '',
-      valueIsEnable: '',
+      valueIsBuiltIn: undefined,
+      valueIsEnable: undefined,
       optionsIsBuiltIn: [
-        {value: 0, label: '是'},
-        {value: 1, label: '否'},
+        {value: true, label: '是'},
+        {value: false, label: '否'},
       ],
       optionsIsEnable: [
-        {value: 0, label: '是'},
-        {value: 1, label: '否'},
+        {value: true, label: '是'},
+        {value: false, label: '否'},
       ],
       totalNumber: 0,
       currentPage: 1,
@@ -167,8 +167,8 @@ export default {
     },
     reset() {
       this.inputGroup = ''
-      this.valueIsBuiltIn = ''
-      this.optionsIsEnable = ''
+      this.valueIsBuiltIn = undefined
+      this.valueIsEnable = undefined
       this.search()
     },
     handleEdit(scope) {
