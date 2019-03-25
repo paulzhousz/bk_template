@@ -226,7 +226,18 @@ class GroupViewSet(ModelViewSet):
     filter_class = GroupFilter
 
     def list(self, request, *args, **kwargs):
-        """获取所有角色"""
+        """
+        获取所有角色
+
+            /api/sysmanage/groups/?page=1&page_size=10&is_built_in=true&is_enable=true&display_name=管理&omit=menus,permissions
+            - page: 当前页面【可选】
+            - page_size: 每页条数【可选】
+            - is_built_in: 是否为内置角色【可选】
+            - is_enable: 是否启用【可选】
+            - display_name: 显示名称, 支持模糊匹配【可选】
+            - omit: 屏蔽字段名, 多个用英文逗号隔开【可选】
+            - fields: 显示字段名, 多个英文用逗号【可选】
+        """
         return super(GroupViewSet, self).list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
@@ -243,7 +254,7 @@ class GroupViewSet(ModelViewSet):
                 "description": "测试角色一的描述信息",
                 "users": [1]
             }
-                - name: 角色名称【必填】
+                - name: 角色名称【必选】
                 - description: 角色描述信息【可选】
                 - users: 由id组成的用户列表【可选】
         """
@@ -292,8 +303,8 @@ class GroupViewSet(ModelViewSet):
         批量启用或者禁用角色
 
             {"groups": [1], "enable": true}
-            - groups: 由id组成的角色列表【必填】
-            - enable: true表示开启，false表示禁用【必填】
+            - groups: 由id组成的角色列表【必选】
+            - enable: true表示开启，false表示禁用【必选】
         """
         validate_fields(request.data, 'groups', 'enable')
         groups_ids = request.data['groups']
