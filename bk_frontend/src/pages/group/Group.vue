@@ -147,7 +147,7 @@ export default {
         page: this.currentPage,
         page_size: this.pageSize,
         is_built_in: this.valueIsBuiltIn,
-        is_enable: this.optionsIsEnable,
+        is_enable: this.valueIsEnable,
         display_name: this.inputGroup,
         omit: 'menus, permissions'
       }
