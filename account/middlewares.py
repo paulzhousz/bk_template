@@ -19,7 +19,7 @@ class LoginMiddleware(object):
         if user_model.objects.filter(username=username).exists():
             user = user_model.objects.get(username=username)
         else:
-            user = user_model.objects.create(username=username, chname='超级管理员', is_staff=True, is_superuser=True,
+            user = user_model.objects.create(username=username, chname=username, is_staff=False, is_superuser=False,
                                              is_in_app=True)
         request.user = user
         return None

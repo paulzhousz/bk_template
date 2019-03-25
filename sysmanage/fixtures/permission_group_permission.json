@@ -7,14 +7,10 @@
       "change_group",
       "change_permission",
       "delete_group",
-      "up_group",
-      "down_group",
       "add_bkuser",
       "delete_bkuser",
       "sync_bkuser",
-      "change_bkuser",
-      "up_bkuser",
-      "down_bkuser"
+      "change_bkuser"
     ]
   },
   {

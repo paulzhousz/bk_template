@@ -4,6 +4,7 @@
 信号处理
 """
 
+import traceback
 import os
 import json
 from django.db import transaction
@@ -22,22 +23,22 @@ SETTING_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/setting.j
 
 def save_permission_handler(sender, instance, **kwargs):
     """创建/更新权限"""
-    permission_profile_model = sender.get_model('PermissionProfile')
+    from sysmanage.models import PermissionProfile
     # 获取profile字段
-    profile_fields = [f.name for f in permission_profile_model._meta.fields if f != 'id']
+    profile_fields = [f.name for f in PermissionProfile._meta.fields if f.name != 'id']
     profile_instance_value = {}
     for profile_field in profile_fields:
         if hasattr(instance, profile_field):
             attr_value = getattr(instance, profile_field)
             profile_instance_value.update(**{profile_field: attr_value})
-    permission_profile_model.objects.update_or_create(defaults=profile_instance_value, permission_id=instance.id)
+    PermissionProfile.objects.update_or_create(defaults=profile_instance_value, permission_id=instance.id)
 
 
 def save_group_handler(sender, instance, **kwargs):
     """创建/更新组"""
     from sysmanage.models import GroupProfile
     # 获取profile字段
-    profile_fields = [f.name for f in GroupProfile._meta.fields if f != 'id']
+    profile_fields = [f.name for f in GroupProfile._meta.fields if f.name != 'id']
     profile_instance_value = {}
     for profile_field in profile_fields:
         if hasattr(instance, profile_field):
@@ -79,7 +80,7 @@ def init_permission(permission_model, permission_profile_model):
                 permission_info.display_name = j['display_name']
                 permission_info.save()
         except Exception as e:
-            logger.exception(e)
+            print traceback.format_exc()
 
 
 def init_permission_group(permission_group_model, permission_profile_model):
@@ -106,7 +107,7 @@ def init_menu(menu_data_model):
         try:
             menu_data_model.objects.create(**j)
         except Exception as e:
-            logger.exception(e)
+            print traceback.format_exc()
 
 
 def init_group_to_menu(group_to_menu_model):

@@ -2,20 +2,21 @@
 
 from django.db.models import F
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, ContentType, Permission
+from django.contrib.auth.models import Group, Permission
+from django.utils.decorators import method_decorator
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
-from guardian.shortcuts import assign_perm, remove_perm
-from guardian.models import GroupObjectPermission
+from guardian.decorators import permission_required_or_403
 from blueking.component.shortcuts import get_client_by_user
 from component.drf.viewsets import ModelViewSet
 from component.drf.serializer import CustomSerializer
 from component.drf.generics import validate_fields
 from sysmanage.serializers import (UserSerializer, PermissionSerializer, GroupSerializer, MenuSerializer,
                                    PermissionGroupSerializer)
-from sysmanage.models import Menu, PermissionGroup, PermissionProfile, GroupProfile
+from sysmanage.models import Menu, PermissionGroup, GroupProfile
 from sysmanage.filters import GroupFilter
-from sysmanage.utils import (get_mapping, get_perms_with_groups, clear_perms_obj, set_perms_obj)
+from sysmanage.utils import (get_mapping, get_perms_with_groups, set_perms_obj)
+from sysmanage.decorators import surperuser_required
 
 
 class UserViewSet(ModelViewSet):
@@ -38,6 +39,9 @@ class UserViewSet(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    @method_decorator(
+        permission_required_or_403('account.delete_bkuser', (get_user_model(), 'pk', 'pk'), accept_global_perms=True)
+    )
     def destroy(self, request, *args, **kwargs):
         """删除指定APP用户"""
         return super(UserViewSet, self).destroy(request, *args, **kwargs)
@@ -49,6 +53,7 @@ class UserViewSet(ModelViewSet):
         instance.groups.clear()
         instance.save()
 
+    @method_decorator(permission_required_or_403('account.add_bkuser'))
     def create(self, request, *args, **kwargs):
         """
         添加APP用户
@@ -74,6 +79,9 @@ class UserViewSet(ModelViewSet):
         serializer = self.serializer_class(instance=user)
         return Response(serializer.data)
 
+    @method_decorator(
+        permission_required_or_403('account.change_bkuser', (get_user_model(), 'pk', 'pk'), accept_global_perms=True)
+    )
     def update(self, request, *args, **kwargs):
         """
         编辑APP用户
@@ -137,6 +145,7 @@ class UserViewSet(ModelViewSet):
                                                                              value=F('id')).values('label', 'value')
         return Response(ret)
 
+    @method_decorator(permission_required_or_403('account.change_bkuser'))
     @list_route(methods=['put'], url_path='status')
     def change_status(self, request, *args, **kwargs):
         """
@@ -152,6 +161,7 @@ class UserViewSet(ModelViewSet):
         self.queryset.filter(id__in=user_ids).update(is_enable=enable)
         return Response()
 
+    @method_decorator(permission_required_or_403('account.sync_bkuser'))
     @list_route(methods=['post'], url_path='sync')
     def sync_user(self, request, *args, **kwargs):
         """
@@ -187,6 +197,7 @@ class UserViewSet(ModelViewSet):
         perms = get_perms_with_groups(instance)
         return Response(perms)
 
+    @method_decorator(surperuser_required)
     @detail_route(methods=['post'], url_path='set/perm')
     def set_perms(self, request, *args, **kwargs):
         """
@@ -219,6 +230,7 @@ class GroupViewSet(ModelViewSet):
         """获取单个角色详情"""
         return super(GroupViewSet, self).retrieve(request, *args, **kwargs)
 
+    @method_decorator(permission_required_or_403('account.add_group'))
     def create(self, request, *args, **kwargs):
         """
         添加角色
@@ -234,6 +246,9 @@ class GroupViewSet(ModelViewSet):
         """
         return super(GroupViewSet, self).create(request, *args, **kwargs)
 
+    @method_decorator(
+        permission_required_or_403('auth.change_group', (Group, 'pk', 'pk'), accept_global_perms=True)
+    )
     def update(self, request, *args, **kwargs):
         """
         更新指定角色
@@ -253,6 +268,9 @@ class GroupViewSet(ModelViewSet):
         """
         return super(GroupViewSet, self).update(request, *args, **kwargs)
 
+    @method_decorator(
+        permission_required_or_403('auth.delete_group', (Group, 'pk', 'pk'), accept_global_perms=True)
+    )
     def destroy(self, request, *args, **kwargs):
         """删除指定角色"""
         return super(GroupViewSet, self).destroy(request, *args, **kwargs)
@@ -264,6 +282,7 @@ class GroupViewSet(ModelViewSet):
                                                                           value=F('id')).values('label', 'value')
         return Response(ret)
 
+    @method_decorator(permission_required_or_403('auth.delete_group'))
     @list_route(methods=['put'], url_path='status')
     def change_status(self, request, *args, **kwargs):
         """
@@ -286,6 +305,7 @@ class GroupViewSet(ModelViewSet):
         perms = get_perms_with_groups(instance)
         return Response(perms)
 
+    @method_decorator(surperuser_required)
     @detail_route(methods=['post'], url_path='set/perm')
     def set_perms(self, request, *args, **kwargs):
         """

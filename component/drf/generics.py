@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import traceback
+from django.core.exceptions import PermissionDenied
 from rest_framework import status
 from rest_framework.compat import set_rollback
 from rest_framework.response import Response
-from rest_framework.exceptions import (AuthenticationFailed, MethodNotAllowed, NotAuthenticated, PermissionDenied,
+from rest_framework.exceptions import (AuthenticationFailed, MethodNotAllowed, NotAuthenticated,
+                                       PermissionDenied as RestPermissionDenied,
                                        ValidationError)
 from django.http import Http404
 from component.constants import ResponseCodeStatus
@@ -23,15 +25,16 @@ def exception_handler(exc, content):
             'detail': u'用户未登录或登录态失效，请使用登录链接重新登录',
             'login_url': ''
         }
-        return ResponseCodeStatus(data, status=status.HTTP_403_FORBIDDEN)
+        return Response(data, status=status.HTTP_403_FORBIDDEN)
 
-    if isinstance(exc, PermissionDenied):
+    if isinstance(exc, PermissionDenied) or isinstance(exc, RestPermissionDenied):
+        message = exc.detail if hasattr(exc, 'detail') else u'该用户没有该权限功能'
         data = {
             'result': False,
             'code': ResponseCodeStatus.PERMISSION_DENIED,
-            'message': exc.detail
+            'message': message
         }
-        return ResponseCodeStatus(data, status=status.HTTP_403_FORBIDDEN)
+        return Response(data, status=status.HTTP_403_FORBIDDEN)
 
     else:
         if isinstance(exc, ValidationError):
@@ -43,11 +46,6 @@ def exception_handler(exc, content):
         elif isinstance(exc, MethodNotAllowed):
             data.update({
                 'code': ResponseCodeStatus.METHOD_NOT_ALLOWED,
-                'message': exc.detail,
-            })
-        elif isinstance(exc, PermissionDenied):
-            data.update({
-                'code': ResponseCodeStatus.PERMISSION_DENIED,
                 'message': exc.detail,
             })
 
