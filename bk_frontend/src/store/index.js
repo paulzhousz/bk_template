@@ -15,11 +15,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import main from './modules/main'
 import leftmenu from './modules/leftmenu'
+import group from './modules/group'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     main,
     leftmenu,
+    group,
   }
 })
