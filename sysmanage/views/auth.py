@@ -57,8 +57,10 @@ class UserViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         """
         添加APP用户
-        :param
-        body: {"id": 1, "groups": [1, 2]}
+
+            {
+                "id": 1, "groups": [1, 2]
+            }
             - id: user的id【必填】
             - groups: 由角色id组成的列表【可选】
         """
@@ -85,8 +87,8 @@ class UserViewSet(ModelViewSet):
     def update(self, request, *args, **kwargs):
         """
         编辑APP用户
-        :param
-        body: {"groups": [1, 2]}
+
+            {"groups": [1, 2]}
             - groups: 由id组成的角色列表【可选】
         """
         instance = self.get_object()
@@ -150,8 +152,8 @@ class UserViewSet(ModelViewSet):
     def change_status(self, request, *args, **kwargs):
         """
         批量启用或者禁用用户
-        :param
-        body: {"users": [1], "enable": true}
+
+            {"users": [1], "enable": true}
             - users: 由id组成的用户列表【必填】
             - enable: true表示开启，false表示禁用【必填】
         """
@@ -166,7 +168,8 @@ class UserViewSet(ModelViewSet):
     def sync_user(self, request, *args, **kwargs):
         """
         同步蓝鲸用户
-        body: {}
+
+            {}
         """
         # bk用户和app用户字段映射
         user_maps = [
@@ -202,12 +205,12 @@ class UserViewSet(ModelViewSet):
     def set_perms(self, request, *args, **kwargs):
         """
         设置对象关联权限
-        :param body:
-        [
-            {"name": "account.add_bkuser", "groups": [1, 2]},
-            {"name": "account.change_bkuser", "groups": [1, 3]},
-            {"name": "account.delete_bkuser", "groups": []}
-        ]
+
+            [
+                {"name": "account.add_bkuser", "groups": [1, 2]},
+                {"name": "account.change_bkuser", "groups": [1, 3]},
+                {"name": "account.delete_bkuser", "groups": []}
+            ]
         """
         instance = self.get_object()
         codename_list = [i['name'] for i in request.data]
@@ -234,15 +237,15 @@ class GroupViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         """
         添加角色
-        :param
-        body: {
-            "name": "测试角色一",
-            "description": "测试角色一的描述信息",
-            "users": [1]
-        }
-            - name: 角色名称【必填】
-            - description: 角色描述信息【可选】
-            - users: 由id组成的用户列表【可选】
+
+            {
+                "name": "测试角色一",
+                "description": "测试角色一的描述信息",
+                "users": [1]
+            }
+                - name: 角色名称【必填】
+                - description: 角色描述信息【可选】
+                - users: 由id组成的用户列表【可选】
         """
         return super(GroupViewSet, self).create(request, *args, **kwargs)
 
@@ -252,19 +255,19 @@ class GroupViewSet(ModelViewSet):
     def update(self, request, *args, **kwargs):
         """
         更新指定角色
-        :param
-        body {
-            "name": "测试角色一",
-            "description": "测试角色一的描述信息",
-            "users": [1],
-            "menus": [1, 2, 3],
-            "permissions": [4, 5, 6]
-        }
-            - name: 角色名称【可选】
-            - description: 角色描述信息【可选】
-            - users: 由id组成的用户列表【可选】
-            - menus: 由id组成的菜单列表【可选】
-            - permissions: 由id组成的权限列表【可选】
+
+            {
+                "name": "测试角色一",
+                "description": "测试角色一的描述信息",
+                "users": [1],
+                "menus": [1, 2, 3],
+                "permissions": [4, 5, 6]
+            }
+                - name: 角色名称【可选】
+                - description: 角色描述信息【可选】
+                - users: 由id组成的用户列表【可选】
+                - menus: 由id组成的菜单列表【可选】
+                - permissions: 由id组成的权限列表【可选】
         """
         return super(GroupViewSet, self).update(request, *args, **kwargs)
 
@@ -287,8 +290,8 @@ class GroupViewSet(ModelViewSet):
     def change_status(self, request, *args, **kwargs):
         """
         批量启用或者禁用角色
-        :param
-        body: {"groups": [1], "enable": true}
+
+            {"groups": [1], "enable": true}
             - groups: 由id组成的角色列表【必填】
             - enable: true表示开启，false表示禁用【必填】
         """
@@ -310,12 +313,12 @@ class GroupViewSet(ModelViewSet):
     def set_perms(self, request, *args, **kwargs):
         """
         设置对象关联权限
-        :param body:
-        [
-            {"name": "account.add_group", "groups": [1, 2]},
-            {"name": "account.change_group", "groups": [1, 3]},
-            {"name": "account.delete_group", "groups": []}
-        ]
+
+            [
+                {"name": "account.add_group", "groups": [1, 2]},
+                {"name": "account.change_group", "groups": [1, 3]},
+                {"name": "account.delete_group", "groups": []}
+            ]
         """
         instance = self.get_object()
         codename_list = [i['name'] for i in request.data]
