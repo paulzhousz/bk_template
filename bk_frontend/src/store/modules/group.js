@@ -11,8 +11,7 @@ const mutations = {
 
 const actions = {
   getGroups({commit, state}, param) {
-    debugger
-    return commonApi.getGroups()
+    return commonApi.getGroups(param)
   }
 }
 

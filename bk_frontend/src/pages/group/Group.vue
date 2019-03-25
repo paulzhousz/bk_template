@@ -8,15 +8,27 @@
             <span class="aglin">角色名：</span>
             <el-input class="aglin-input" size="mini" v-model="inputGroup" placeholder="请输入内容"></el-input>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="6">
             <span class="aglin">是否内置：</span>
-            <el-checkbox v-model="checkedIsBuilt"></el-checkbox>
-            <!-- <el-checkbox v-model="checkedIsBuilt" :true-label="1" :false-label="0"></el-checkbox> -->
+            <el-select size="mini" v-model="valueIsBuiltIn" placeholder="请选择">
+              <el-option
+                v-for="item in optionsIsBuiltIn"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="6">
             <span class="aglin">是否启用：</span>
-            <el-checkbox v-model="checkedIsEnable"></el-checkbox>
-            <!-- <el-checkbox v-model="checkedIsEnable" :true-label="1" :false-label="0"></el-checkbox> -->
+            <el-select size="mini" v-model="valueIsEnable" placeholder="请选择">
+              <el-option
+                v-for="item in optionsIsEnable"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-col>
           <el-col :span="6">
             <el-button size="mini" type="primary" @click.native="search">查询</el-button>
@@ -105,8 +117,16 @@ export default {
       inputGroup: '',
       title: '',
       dialogAction: '',
-      checkedIsBuilt: 0,
-      checkedIsEnable: 0,
+      valueIsBuiltIn: '',
+      valueIsEnable: '',
+      optionsIsBuiltIn: [
+        {value: 0, label: '是'},
+        {value: 1, label: '否'},
+      ],
+      optionsIsEnable: [
+        {value: 0, label: '是'},
+        {value: 1, label: '否'},
+      ],
       totalNumber: 0,
       currentPage: 1,
       pageSize: 10,
@@ -126,9 +146,10 @@ export default {
       let params = {
         page: this.currentPage,
         page_size: this.pageSize,
-        is_built_in: this.checkedIsBuilt,
-        is_enable: this.checkedIsEnable,
-        display_name: this.inputGroup
+        is_built_in: this.valueIsBuiltIn,
+        is_enable: this.optionsIsEnable,
+        display_name: this.inputGroup,
+        omit: 'menus, permissions'
       }
       this.loading = true
       this.$store.dispatch('group/getGroups', params).then(res => {
@@ -146,8 +167,8 @@ export default {
     },
     reset() {
       this.inputGroup = ''
-      this.checkedIsBuilt = 0
-      this.checkedIsEnable = 0
+      this.valueIsBuiltIn = ''
+      this.optionsIsEnable = ''
       this.search()
     },
     handleEdit(scope) {
@@ -184,7 +205,7 @@ export default {
         height: 50px;
         line-height: 50px;
         .aglin-input {
-          width: 40%;
+          width: 60%;
         }
       }
       .new {
