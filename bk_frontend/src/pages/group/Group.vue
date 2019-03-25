@@ -142,7 +142,7 @@ export default {
     pageSizeChange(val) {
       this.currentPage = val.currentPage
       this.pageSize = val.pageSize
-      this.search({page: val.currentPage, page_size: val.pageSize})
+      this.search({page: this.currentPage, page_size: this.pageSize})
     },
     reset() {
       this.inputGroup = ''
