@@ -279,12 +279,28 @@ class GroupViewSet(ModelViewSet):
         GroupProfile.objects.filter(group_id__in=groups_ids).update(is_enable=enable)
         return Response()
 
-    @detail_route(methods=['get'], url_path='perm')
+    @detail_route(methods=['get'], url_path='search/perm')
     def get_perms(self, request, *args, **kwargs):
         """获取对象关联权限"""
         instance = self.get_object()
         perms = get_perms_with_groups(instance)
         return Response(perms)
+
+    @detail_route(methods=['post'], url_path='set/perm')
+    def set_perms(self, request, *args, **kwargs):
+        """
+        设置对象关联权限
+        :param body:
+        [
+            {"name": "account.add_group", "groups": [1, 2]},
+            {"name": "account.change_group", "groups": [1, 3]},
+            {"name": "account.delete_group", "groups": []}
+        ]
+        """
+        instance = self.get_object()
+        codename_list = [i['name'] for i in request.data]
+        set_perms_obj(instance, codename_list, request.data)
+        return Response()
 
 
 class PermViewSet(ModelViewSet):

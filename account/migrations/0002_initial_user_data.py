@@ -10,8 +10,11 @@ from account.models import BkUser
 def initial_user_data(apps, schema_editor):
     try:
         admin_username_list = settings.ADMIN_USERNAME_LIST
-        for username in admin_username_list:
-            BkUser.objects.create_superuser(username, **{'chname': '超级管理员', 'is_in_app': True})
+        general_username_list = settings.GENERAL_USERNAME_LIST
+        for admin_username in admin_username_list:
+            BkUser.objects.create_superuser(admin_username, **{'chname': '超级管理员', 'is_in_app': True})
+        for general_username in general_username_list:
+            BkUser.objects.create_user(general_username, is_in_app=True)
     except Exception, e:
         pass
 

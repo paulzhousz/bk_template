@@ -1,0 +1,15 @@
+[
+  {
+    "group_id": 1,
+    "username_list": [
+      "admin"
+    ]
+  },
+  {
+    "group_id": 2,
+    "username_list": [
+      "kris",
+      "janna"
+    ]
+  }
+]

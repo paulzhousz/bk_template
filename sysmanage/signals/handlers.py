@@ -16,6 +16,7 @@ PERMISSION_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/permis
 PERMISSION_GROUP_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/permission_group_permission.json')
 MENU_DATA_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/menu_data.json')
 GROUP_MENU_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/group_menu.json')
+GROUP_USER_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/group_user.json')
 SETTING_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/setting.json')
 
 
@@ -45,7 +46,7 @@ def save_group_handler(sender, instance, **kwargs):
     GroupProfile.objects.update_or_create(defaults=profile_instance_value, group_id=instance.id)
 
 
-def init_group(group_model, group_profile_model):
+def init_group(group_model):
     """初始化角色数据"""
     with open(GROUP_JSON) as f:
         group_data = json.load(f)
@@ -120,6 +121,17 @@ def init_group_to_menu(group_to_menu_model):
     group_to_menu_model.objects.bulk_create(bulk_list)
 
 
+def init_group_to_user(group_model, user_model):
+    """初始化角色和用户的多对多关系"""
+    with open(GROUP_USER_JSON) as f:
+        group_users = json.load(f)
+    for group_user_names in group_users:
+        group = group_model.objects.get(id=group_user_names['group_id'])
+        group.user_set.clear()
+        users = [user_model.objects.get(username=i) for i in group_user_names['username_list']]
+        group.user_set.add(*users)
+
+
 def init_setting(setting_model):
     """初始化设置项数据"""
     with open(SETTING_JSON) as f:
@@ -147,8 +159,7 @@ def init_data_handler(sender, **kwargs):
         init_setting(setting_model)
         # 初始化超级管理员
         BkUser.objects.update_or_create(defaults={'is_staff': True, 'is_superuser': True}, username='admin')
-        group_profile_model = sender.get_model('GroupProfile')
-        init_group(Group, group_profile_model)
+        init_group(Group)
         permission_profile_model = sender.get_model('PermissionProfile')
         init_permission(Permission, permission_profile_model)
         permission_group_model = sender.get_model('PermissionGroup')
@@ -157,12 +168,10 @@ def init_data_handler(sender, **kwargs):
         init_menu(menu_data_model)
         group_to_menu_model = sender.get_model('GroupToMenu')
         init_group_to_menu(group_to_menu_model)
+        init_group_to_user(Group, BkUser)
         # 绑定超级管理员默认成员和对应权限
         if Group.objects.filter(id=1).exists():
             group = Group.objects.get(id=1)
-            group.user_set.clear()
-            users = [BkUser.objects.get(username="admin")]
-            group.user_set.add(*users)
             # 组与权限的关系
             permissions = [per_info.permission_id for per_info in permission_profile_model.objects.all()]
             with transaction.atomic():

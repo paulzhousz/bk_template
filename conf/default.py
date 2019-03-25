@@ -193,9 +193,11 @@ LOGIN_REDIRECT_URL = SITE_URL
 REDIRECT_FIELD_NAME = "c_url"
 # 验证登录的cookie名
 BK_COOKIE_NAME = 'bk_token'
-# 数据库初始化 管理员列表
+# 数据库初始化
+# 管理员列表
 ADMIN_USERNAME_LIST = ['admin']
-
+# 普通用户列表
+GENERAL_USERNAME_LIST = ['kris', 'janna']
 # ===============================================================================
 # CELERY 配置
 # ===============================================================================
