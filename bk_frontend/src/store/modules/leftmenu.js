@@ -27,7 +27,7 @@ const mutations = {
 }
 
 const actions = {
-  getMenu ({ commit, state }, param) {
+  getMenu ({ commit }, param) {
     return commonApi.getMenu()
   },
   getCurrentPermission ({ commit }, param) {

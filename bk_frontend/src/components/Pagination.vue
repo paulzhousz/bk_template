@@ -38,7 +38,7 @@
        */
       handleCurrentChange(val) { // currentPage改变时会触发
         this.currentPage = val
-        this.$emit('current-page-change', {pageSize: this.pageSize, currentPage: this.currentPage})
+        this.$emit('page-size-change', {pageSize: this.pageSize, currentPage: this.currentPage})
       }
     },
   }
