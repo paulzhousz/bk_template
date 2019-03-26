@@ -1,7 +1,7 @@
 <template>
     <div id="main-container">
         <router-view/>
-        <Footer></Footer>
+        <app-footer></app-footer>
     </div>
 </template>
 
@@ -13,7 +13,8 @@
         mounted() {
         },
         components: {
-            Footer
+            'app-footer': Footer,
+            Breadcrumb
         },
         methods: {}
     }
