@@ -17,11 +17,11 @@ export default {
 
 <style lang="scss">
   .user {
-    padding: 20px;
-    height: 100%;
+    height: calc(100% - 55px);
     width: 100%;
     .contain {
       height: 100%;
+      padding: 15px 20px 0 20px;
       background: #fff;
     }
   }

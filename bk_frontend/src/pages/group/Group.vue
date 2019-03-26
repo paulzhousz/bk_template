@@ -194,12 +194,10 @@ export default {
 
 <style lang="scss">
   .group {
-    // padding: 20px 20px 0 20px;
     height: calc(100% - 55px);
     width: 100%;
     .contain {
       height: 100%;
-      // height: calc(100% - 34px);
       padding: 15px 20px 0 20px;
       background: #fff;
       .search {
