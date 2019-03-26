@@ -101,7 +101,7 @@
       </pagination>
       <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction" :width="width">
         <div slot="dialog-content">
-          <el-form :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
+          <el-form ref="formGroups" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
             <el-form-item label="组名" prop="name">
               <el-input class="form-content" size="mini" v-model="formGroups.name"></el-input>
             </el-form-item>
@@ -131,14 +131,14 @@
 <script>
 import Pagination from '@/components/Pagination'
 import NewEdit from '@/components/NewEdit'
-import NewEdit from '@/pages/group/Group'
+// import NewEdit from '@/pages/group/Group'
 import * as commonMethods from '@/common/js/validate'
 
 export default {
   components: {
     Pagination,
     NewEdit,
-    Group,
+    // Group,
   },
   data() {
     return {
@@ -227,15 +227,23 @@ export default {
     handleEdit(scope) {
       this.dialogAction = 'edit'
       this.title = '编辑'
+      this.formGroups = {}
       this.formGroups.users = []
-      this.$nextTick(() => {
-        this.$refs['newEdit'].open()
-      })
+      this.$refs['newEdit'].open()
+        // this.$refs['formGroups'].clearValidate()
       this.formGroups = JSON.parse(JSON.stringify(scope.row))
+      this.formGroups.users = this.formGroups.users.map(item => item.id)
+      // this.formGroups.users = []
+      // for (let i of scope.row.users) {
+      //   this.formGroups.users.push(i.id)
+      // }
     },
     handleNew() {
       this.dialogAction = 'new'
       this.$refs['newEdit'].open()
+      this.$nextTick(() => {
+        this.$refs['formGroups'].clearValidate()
+      })
       this.formGroups = {}
       this.formGroups.users = []
       this.title = '新建'
