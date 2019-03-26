@@ -294,7 +294,7 @@ class GroupViewSet(ModelViewSet):
         """获取所有角色的下拉框数据"""
         ret = Group.objects.filter(groupprofile__is_enable=True).annotate(label=F('groupprofile__display_name'),
                                                                           value=F('id')).values('label', 'value')
-        return Response(ret)
+        return Response(list(ret))
 
     @method_decorator(permission_required_or_403('auth.delete_group'))
     @list_route(methods=['put'], url_path='status')

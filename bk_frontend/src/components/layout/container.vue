@@ -2,7 +2,7 @@
     <div id="main-container">
         <breadcrumb :to="$route.meta.bread"></breadcrumb>
         <router-view/>
-        <footer>{{$route.meta.footer}}</footer>
+        <app-footer></app-footer>
     </div>
 </template>
 
@@ -15,7 +15,7 @@
         mounted() {
         },
         components: {
-            Footer,
+            'app-footer': Footer,
             Breadcrumb
         },
         methods: {}
