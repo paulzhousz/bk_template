@@ -41,17 +41,32 @@ let router = new Router({
         {
             path: '/monitor_panel',
             name: '/monitor_panel',
-            component: MonitorPanel
+            component: MonitorPanel,
+            meta: {
+                bread: []
+            }
         },
         {
             path: '/user',
             name: '/user',
-            component: User
+            component: User,
+            meta: {
+                bread: [
+                    {displayName: '系统管理', path: {path: ''}},
+                    {displayName: '用户管理', path: {path: '/user'}},
+                ]
+            }
         },
         {
             path: '/group',
             name: '/group',
-            component: Group
+            component: Group,
+            meta: {
+                bread: [
+                    {displayName: '系统管理', path: {path: ''}},
+                    {displayName: '角色管理', path: {path: '/group'}},
+                ]
+            }
         },
     ]
 });

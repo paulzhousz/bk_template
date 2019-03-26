@@ -1,11 +1,13 @@
 <template>
     <div id="main-container">
+        <breadcrumb :to="$route.meta.bread"></breadcrumb>
         <router-view/>
-        <Footer></Footer>
+        <footer></footer>
     </div>
 </template>
 
 <script>
+    import Breadcrumb from '@/components/Breadcrumb'
     import Footer from '@/components/layout/Footer'
 
     export default {
@@ -13,7 +15,8 @@
         mounted() {
         },
         components: {
-            Footer
+            Footer,
+            Breadcrumb
         },
         methods: {}
     }
@@ -22,6 +25,7 @@
 <style lang="scss" scoped>
     $headerHeight: 60px;
     #main-container {
+        padding: 20px 0 0 20px;
         width: calc(100% - 220px);
         height: calc(100% - 60px);
         background: #f0f2f5;

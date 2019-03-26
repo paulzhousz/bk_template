@@ -1,12 +1,12 @@
 <template>
   <div class="group">
-    <breadcrumb :to="to"></breadcrumb>
+    <!-- <breadcrumb :to="to"></breadcrumb> -->
     <div class="contain">
       <div class="search">
         <el-row>
           <el-col :span="6">
             <span class="aglin">角色名：</span>
-            <el-input class="aglin-input" size="mini" v-model="inputGroup" placeholder="请输入内容"></el-input>
+            <el-input class="aglin-input" size="mini" v-model="inputGroup" clearable placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="6">
             <span class="aglin">是否内置：</span>
@@ -103,12 +103,12 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb'
+// import Breadcrumb from '@/components/Breadcrumb'
 import Pagination from '@/components/Pagination'
 import NewEdit from '@/components/NewEdit'
 export default {
   components: {
-    Breadcrumb,
+    // Breadcrumb,
     Pagination,
     NewEdit
   },
@@ -194,12 +194,13 @@ export default {
 
 <style lang="scss">
   .group {
-    padding: 20px 20px 0 20px;
-    height: calc(100% - 20px);
+    // padding: 20px 20px 0 20px;
+    height: calc(100% - 55px);
     width: 100%;
     .contain {
-      height: calc(100% - 33px);
-      padding: 20px;
+      height: 100%;
+      // height: calc(100% - 34px);
+      padding: 15px 20px 0 20px;
       background: #fff;
       .search {
         height: 50px;
@@ -212,7 +213,7 @@ export default {
         height: 40px;
       }
       .table {
-        height: calc(100% - 110px);
+        height: calc(100% - 130px);
         .el-table {
           border-top: 1px solid rgb(235, 238, 245);
         }
