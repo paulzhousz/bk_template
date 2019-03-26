@@ -33,7 +33,7 @@ export const addGroups = params => {
 export const deleteGroups = params => {
   return $axios.delete(`/api/sysmanage/groups/${params.id}/`, params)
 }
-// 禁用角色
+// 启用/禁用角色
 export const groupsStatus = params => {
   return $axios.put('/api/sysmanage/groups/status/', params)
 }

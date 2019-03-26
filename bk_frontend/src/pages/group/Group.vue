@@ -283,21 +283,40 @@ export default {
     },
     checkboxChange(row) {
       let tipEnable = row.is_enable ? '是否启用' : '是否禁用'
-      let params = {
-        name: [row.id]
-      }
       this.$confirm(tipEnable, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('group/groupsStatus', params).then(res => {
-          if (res.result) {
-            this.$message({type: 'success', message: res.message})
-          } else {
-            this.$message({type: 'error', message: res.message})
+        if (row.is_enable == 0) {
+          let params = {
+            groups: [row.id],
+            enable: true
           }
-        })
+          this.$store.dispatch('group/groupsStatus', params).then(res => {
+            if (res.result) {
+              row.is_enable = !row.is_enable
+              this.$message({type: 'success', message: res.message})
+            } else {
+              this.$message({type: 'error', message: res.message})
+            }
+          });
+        } else if (row.is_enable == 1) {
+          let params = {
+            groups: [row.id],
+            enable: false
+          }
+          this.$store.dispatch('group/groupsStatus', params).then(res => {
+            if (res.result) {
+              row.is_enable = !row.is_enable
+              this.$message({type: 'success', message: res.message})
+            } else {
+              this.$message({type: 'error', message: res.message})
+            }
+          });
+        }
+      }).catch(() => {
+        this.$message({type: 'info', message: '调取接口失败'})
       })
     },
     handleAuthority(scope) {
