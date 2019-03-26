@@ -195,7 +195,7 @@ export default {
         is_built_in: this.valueIsBuiltIn,
         is_enable: this.valueIsEnable,
         display_name: this.inputGroup,
-        omit: 'menus, permissions'
+        omit: 'menus,permissions'
       }
       this.loading = true
       this.$store.dispatch('group/getGroups', params).then(res => {
@@ -227,8 +227,6 @@ export default {
     handleEdit(scope) {
       this.dialogAction = 'edit'
       this.title = '编辑'
-      this.formGroups = {}
-      this.formGroups.users = []
       this.$refs['newEdit'].open()
         // this.$refs['formGroups'].clearValidate()
       this.formGroups = JSON.parse(JSON.stringify(scope.row))
@@ -240,13 +238,12 @@ export default {
     },
     handleNew() {
       this.dialogAction = 'new'
+      this.title = '新建'
+      this.formGroups = {users: []}
       this.$refs['newEdit'].open()
       this.$nextTick(() => {
         this.$refs['formGroups'].clearValidate()
       })
-      this.formGroups = {}
-      this.formGroups.users = []
-      this.title = '新建'
     },
     handleSuccess(dialogAction) {
       if (this.dialogAction == 'new') {
@@ -262,8 +259,15 @@ export default {
           } else {
             this.$message({type: 'error', message: res.message})
           }
+        }).catch(() => {
+          this.$message({type: 'info', message: '接口调用失败'})
         })
       } else if (this.dialogAction == 'edit') {
+        // let params = {
+        //   id: this.formGroups.id,
+        //   omit: 'menus, permissions'
+        // }
+        // delete this.formGroups['permissions']
         let params = this.formGroups
         this.$store.dispatch('group/editGroups', params).then(res => {
           if (res.result) {
@@ -271,6 +275,8 @@ export default {
           } else {
             this.$message({type: 'error', message: res.message})
           }
+        }).catch(() => {
+          this.$message({type: 'info', message: '接口调用失败'})
         })
       }
       this.$refs['newEdit'].cancel()

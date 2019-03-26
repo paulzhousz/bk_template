@@ -12,7 +12,7 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(response => {
-  if (response.status !== 200) {
+  if (response.status >= 400) {
       return {
           code: response.status,
           message: '请求异常，请刷新重试',
