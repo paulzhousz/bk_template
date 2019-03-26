@@ -131,12 +131,14 @@
 <script>
 import Pagination from '@/components/Pagination'
 import NewEdit from '@/components/NewEdit'
+import NewEdit from '@/pages/group/Group'
 import * as commonMethods from '@/common/js/validate'
 
 export default {
   components: {
     Pagination,
-    NewEdit
+    NewEdit,
+    Group,
   },
   data() {
     return {

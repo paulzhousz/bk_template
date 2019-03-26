@@ -23,7 +23,7 @@ export const getUserSelect = params => {
 }
 // 编辑角色数据
 export const editGroups = params => {
-  return $axios.post('/api/sysmanage/groups/{id}/', params)
+  return $axios.put('/api/sysmanage/groups/{id}/', params)
 }
 // 添加角色数据
 export const addGroups = params => {
@@ -31,9 +31,9 @@ export const addGroups = params => {
 }
 // 删除角色数据
 export const deleteGroups = params => {
-  return $axios.post('/api/sysmanage/groups/{id}/', params)
+  return $axios.delete('/api/sysmanage/groups/{id}/', params)
 }
 // 禁用角色
 export const groupsStatus = params => {
-  return $axios.post('/api/sysmanage/groups/status/', params)
+  return $axios.put('/api/sysmanage/groups/status/', params)
 }
