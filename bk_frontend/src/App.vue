@@ -11,6 +11,8 @@
     import LeftMenu from '@/components/layout/LeftMenu'
     import Container from '@/components/layout/Container'
     import '@/assets/css/base.scss'
+    import '@/assets/css/table.scss'
+    import '@/assets/css/dialog.scss'
 
     export default {
         name: 'App',

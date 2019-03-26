@@ -17,3 +17,23 @@ export const getCurrentPermission = params => {
 export const getGroups = params => {
   return $axios.get('/api/sysmanage/groups/', { params: params })
 }
+// 新增/编辑角色数据时获取用户
+export const getUserSelect = params => {
+  return $axios.get('/api/sysmanage/users/select/', { params: params })
+}
+// 编辑角色数据
+export const editGroups = params => {
+  return $axios.post('/api/sysmanage/groups/{id}/', params)
+}
+// 添加角色数据
+export const addGroups = params => {
+  return $axios.post('/api/sysmanage/groups/', params)
+}
+// 删除角色数据
+export const deleteGroups = params => {
+  return $axios.post('/api/sysmanage/groups/{id}/', params)
+}
+// 禁用角色
+export const groupsStatus = params => {
+  return $axios.post('/api/sysmanage/groups/status/', params)
+}

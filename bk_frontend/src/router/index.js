@@ -56,7 +56,6 @@ let router = new Router({
                     {displayName: '系统管理', path: {path: ''}},
                     {displayName: '用户管理', path: {path: '/user'}},
                 ],
-                footer: 'Copyright&copy;2019&nbsp;版权说明'
             }
         },
         {
@@ -68,7 +67,6 @@ let router = new Router({
                     {displayName: '系统管理', path: {path: ''}},
                     {displayName: '角色管理', path: {path: '/group'}},
                 ],
-                footer: 'Copyright&copy;2019&nbsp;版权说明'
             }
         },
     ]

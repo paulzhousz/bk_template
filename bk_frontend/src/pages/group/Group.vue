@@ -1,6 +1,5 @@
 <template>
   <div class="group">
-    <!-- <breadcrumb :to="to"></breadcrumb> -->
     <div class="contain">
       <div class="search">
         <el-row>
@@ -70,7 +69,12 @@
           <el-table-column
           label="是否禁用">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.is_enable"></el-checkbox>
+              <el-checkbox
+              v-model="scope.row.is_enable"
+              :true-label="0"
+              :false-label="1"
+              @change="checkboxChange(scope.row)">
+              </el-checkbox>
             </template>
           </el-table-column>
           <el-table-column
@@ -95,20 +99,42 @@
         :total="totalNumber"
         @page-size-change="pageSizeChange">
       </pagination>
-      <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction">
-        <div slot="dialog-content"></div>
+      <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction" :width="width">
+        <div slot="dialog-content">
+          <el-form :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
+            <el-form-item label="组名" prop="name">
+              <el-input class="form-content" size="mini" v-model="formGroups.name"></el-input>
+            </el-form-item>
+            <el-form-item label="显示名" prop="display_name">
+              <el-input class="form-content" size="mini" v-model="formGroups.display_name"></el-input>
+            </el-form-item>
+            <el-form-item label="用户成员" prop="users">
+              <el-select class="form-content" v-model="formGroups.users" multiple placeholder="请选择">
+                <el-option
+                  v-for="(item, index) in optionsUsers"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="描述">
+              <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
       </new-edit>
     </div>
   </div>
 </template>
 
 <script>
-// import Breadcrumb from '@/components/Breadcrumb'
 import Pagination from '@/components/Pagination'
 import NewEdit from '@/components/NewEdit'
+import * as commonMethods from '@/common/js/validate'
+
 export default {
   components: {
-    // Breadcrumb,
     Pagination,
     NewEdit
   },
@@ -117,8 +143,33 @@ export default {
       inputGroup: '',
       title: '',
       dialogAction: '',
+      width: '30%',
       valueIsBuiltIn: undefined,
       valueIsEnable: undefined,
+      labelPosition: 'right',
+      totalNumber: 0,
+      currentPage: 1,
+      pageSize: 10,
+      loading: false,
+      data: [],
+      formGroups: {
+        name: '',
+        display_name: '',
+        users: [],
+        desc: '',
+      },
+      rulesGroups: {
+        name: [
+          { required: true, message: '请输入组名' },
+          { max: 20, message: '长度在20个字符之内' },
+          { validator: commonMethods.validateNameUnderline }
+        ],
+        display_name: [
+          { required: true, message: '请输入显示名' },
+          { max: 14, message: '长度在14个字符之内' },
+          { validator: commonMethods.validateChName }
+        ],
+      },
       optionsIsBuiltIn: [
         {value: true, label: '是'},
         {value: false, label: '否'},
@@ -127,19 +178,12 @@ export default {
         {value: true, label: '是'},
         {value: false, label: '否'},
       ],
-      totalNumber: 0,
-      currentPage: 1,
-      pageSize: 10,
-      loading: false,
-      data: [],
-      to: [
-        {displayName: '系统管理', path: {path: ''}},
-        {displayName: '角色管理', path: {path: '/group'}},
-      ]
+      optionsUsers: [],
     }
   },
   created() {
     this.search()
+    this.getGroup()
   },
   methods: {
     search() {
@@ -171,22 +215,97 @@ export default {
       this.valueIsEnable = undefined
       this.search()
     },
+    getGroup() {
+      this.$store.dispatch('group/getUserSelect').then(res => {
+        if (res.result) {
+          this.optionsUsers = res.data
+        }
+      })
+    },
     handleEdit(scope) {
       this.dialogAction = 'edit'
-      this.$refs['newEdit'].open()
       this.title = '编辑'
+      this.formGroups.users = []
+      this.$nextTick(() => {
+        this.$refs['newEdit'].open()
+      })
+      this.formGroups = JSON.parse(JSON.stringify(scope.row))
     },
     handleNew() {
       this.dialogAction = 'new'
       this.$refs['newEdit'].open()
+      this.formGroups = {}
+      this.formGroups.users = []
       this.title = '新建'
     },
     handleSuccess(dialogAction) {
+      if (this.dialogAction == 'new') {
+        let params = {
+          name: this.formGroups.name,
+          description: this.formGroups.desc,
+          users: this.formGroups.users
+        }
+        this.$store.dispatch('group/addGroups', params).then(res => {
+          if (res.result) {
+            this.search()
+            this.$message({type: 'success', message: res.message})
+          } else {
+            this.$message({type: 'error', message: res.message})
+          }
+        })
+      } else if (this.dialogAction == 'edit') {
+        let params = this.formGroups
+        this.$store.dispatch('group/editGroups', params).then(res => {
+          if (res.result) {
+            this.$message({type: 'success', message: res.message})
+          } else {
+            this.$message({type: 'error', message: res.message})
+          }
+        })
+      }
       this.$refs['newEdit'].cancel()
+    },
+    checkboxChange(row) {
+      let tipEnable = row.is_enable ? '是否启用' : '是否禁用'
+      let params = {
+        name: [row.id]
+      }
+      this.$confirm(tipEnable, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('group/groupsStatus', params).then(res => {
+          if (res.result) {
+            this.$message({type: 'success', message: res.message})
+          } else {
+            this.$message({type: 'error', message: res.message})
+          }
+        })
+      })
     },
     handleAuthority(scope) {
     },
     handleDelete(scope) {
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          id: scope.row.id
+        }
+        this.$store.dispatch('group/deleteGroups', params).then(res => {
+          if (res.result) {
+            this.search()
+            this.$message({type: 'success', message: res.message})
+          } else {
+            this.$message({type: 'error', message: res.message})
+          }
+        })
+      }).catch(() => {
+        this.$message({type: 'info', message: '已取消'})
+      })
     },
   },
 }
