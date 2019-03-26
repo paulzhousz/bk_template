@@ -67,12 +67,10 @@
             </template>
           </el-table-column>
           <el-table-column
-          label="是否禁用">
+          label="是否启用">
             <template slot-scope="scope">
               <el-checkbox
               v-model="scope.row.is_enable"
-              :true-label="0"
-              :false-label="1"
               @change="checkboxChange(scope.row)">
               </el-checkbox>
             </template>
@@ -288,27 +286,25 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (row.is_enable == 0) {
+        if (row.is_enable == true) {
           let params = {
             groups: [row.id],
             enable: true
           }
           this.$store.dispatch('group/groupsStatus', params).then(res => {
             if (res.result) {
-              row.is_enable = !row.is_enable
               this.$message({type: 'success', message: res.message})
             } else {
               this.$message({type: 'error', message: res.message})
             }
           });
-        } else if (row.is_enable == 1) {
+        } else if (row.is_enable == false) {
           let params = {
             groups: [row.id],
             enable: false
           }
           this.$store.dispatch('group/groupsStatus', params).then(res => {
             if (res.result) {
-              row.is_enable = !row.is_enable
               this.$message({type: 'success', message: res.message})
             } else {
               this.$message({type: 'error', message: res.message})
