@@ -99,7 +99,7 @@
       </pagination>
       <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction" :width="width">
         <div slot="dialog-content">
-          <el-form ref="formGroups" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
+          <el-form ref="formGroups" v-if="showForm == 1" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
             <el-form-item label="组名" prop="name">
               <el-input class="form-content" size="mini" v-model="formGroups.name"></el-input>
             </el-form-item>
@@ -120,6 +120,21 @@
               <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
             </el-form-item>
           </el-form>
+          <el-tabs v-model="activeName" v-if="showForm == 2">
+            <el-tab-pane label="菜单权限" name="first">
+              <el-tree
+                :data="dataMenuTree"
+                show-checkbox
+                default-expand-all
+                node-key="id"
+                ref="tree"
+                highlight-current
+                :default-checked-keys="haveMenuAuthority"
+                :props="defaultMenuProps">
+              </el-tree>
+            </el-tab-pane>
+            <el-tab-pane label="操作权限" name="second"></el-tab-pane>
+          </el-tabs>
         </div>
       </new-edit>
     </div>
@@ -129,20 +144,21 @@
 <script>
 import Pagination from '@/components/Pagination'
 import NewEdit from '@/components/NewEdit'
-// import NewEdit from '@/pages/group/Group'
-import * as commonMethods from '@/common/js/validate'
+import * as commonValidate from '@/common/js/validate'
+import * as commonMethods from '@/common/js/common'
 
 export default {
   components: {
     Pagination,
     NewEdit,
-    // Group,
   },
   data() {
     return {
       inputGroup: '',
       title: '',
       dialogAction: '',
+      showForm: 0,
+      activeName: 'first',
       width: '30%',
       valueIsBuiltIn: undefined,
       valueIsEnable: undefined,
@@ -162,12 +178,12 @@ export default {
         name: [
           { required: true, message: '请输入组名' },
           { max: 20, message: '长度在20个字符之内' },
-          { validator: commonMethods.validateNameUnderline }
+          { validator: commonValidate.validateNameUnderline }
         ],
         display_name: [
           { required: true, message: '请输入显示名' },
           { max: 14, message: '长度在14个字符之内' },
-          { validator: commonMethods.validateChName }
+          { validator: commonValidate.validateChName }
         ],
       },
       optionsIsBuiltIn: [
@@ -179,6 +195,12 @@ export default {
         {value: false, label: '否'},
       ],
       optionsUsers: [],
+      dataMenuTree: [], // 菜单全部树形数据
+      haveMenuAuthority: [], // 当前用户已有的菜单权限
+      defaultMenuProps: {
+        children: 'children',
+        label: 'display_name'
+      }
     }
   },
   created() {
@@ -223,6 +245,7 @@ export default {
       })
     },
     handleEdit(scope) {
+      this.showForm = 1
       this.dialogAction = 'edit'
       this.title = '编辑'
       this.$refs['newEdit'].open()
@@ -235,6 +258,7 @@ export default {
       // }
     },
     handleNew() {
+      this.showForm = 1
       this.dialogAction = 'new'
       this.title = '新建'
       this.formGroups = {users: []}
@@ -242,42 +266,6 @@ export default {
       this.$nextTick(() => {
         this.$refs['formGroups'].clearValidate()
       })
-    },
-    handleSuccess(dialogAction) {
-      if (this.dialogAction == 'new') {
-        let params = {
-          name: this.formGroups.name,
-          description: this.formGroups.desc,
-          users: this.formGroups.users
-        }
-        this.$store.dispatch('group/addGroups', params).then(res => {
-          if (res.result) {
-            this.search()
-            this.$message({type: 'success', message: res.message})
-          } else {
-            this.$message({type: 'error', message: res.message})
-          }
-        }).catch(() => {
-          this.$message({type: 'info', message: '接口调用失败'})
-        })
-      } else if (this.dialogAction == 'edit') {
-        // let params = {
-        //   id: this.formGroups.id,
-        //   omit: 'menus, permissions'
-        // }
-        // delete this.formGroups['permissions']
-        let params = this.formGroups
-        this.$store.dispatch('group/editGroups', params).then(res => {
-          if (res.result) {
-            this.$message({type: 'success', message: res.message})
-          } else {
-            this.$message({type: 'error', message: res.message})
-          }
-        }).catch(() => {
-          this.$message({type: 'info', message: '接口调用失败'})
-        })
-      }
-      this.$refs['newEdit'].cancel()
     },
     checkboxChange(row) {
       let tipEnable = row.is_enable ? '是否启用' : '是否禁用'
@@ -295,6 +283,7 @@ export default {
             if (res.result) {
               this.$message({type: 'success', message: res.message})
             } else {
+              row.is_enable = !row.is_enable
               this.$message({type: 'error', message: res.message})
             }
           });
@@ -307,15 +296,90 @@ export default {
             if (res.result) {
               this.$message({type: 'success', message: res.message})
             } else {
+              row.is_enable = !row.is_enable
               this.$message({type: 'error', message: res.message})
             }
           });
         }
       }).catch(() => {
+        row.is_enable = !row.is_enable
         this.$message({type: 'info', message: '调取接口失败'})
       })
     },
     handleAuthority(scope) {
+      this.showForm = 2
+      this.title = '权限配置'
+      this.$refs['newEdit'].open()
+      this.menuAuthority(scope.row.id)
+    },
+    // 所有菜单数据
+    allMenu() {
+      this.dataMenuTree = []
+      return this.$store.dispatch('leftmenu/getMenuTree').then(res => {
+        if (res.result) {
+          this.dataMenuTree = res.data
+        }
+      })
+    },
+    // 已有菜单权限
+    haveMenu(id) {
+      this.haveMenuAuthority = []
+      let params = {
+        id: id
+      }
+      return this.$store.dispatch('group/getMenuAuthority', params).then(res => {
+        if (res.result) {
+          for (let i = 0; i < res.data.menus.length; i++) {
+            if (res.data.menus[i].parent == null) {
+              let menuNode = commonMethods.pushChildNode(res.data.menus[i], res.data.menus)
+              this.haveMenuAuthority.push(menuNode)
+            }
+          }
+          console.log(res.data.menus)
+          console.log(this.haveMenuAuthority)
+        }
+      })
+    },
+    // 树状菜单数据
+    async menuAuthority(id) {
+      await Promise.all([
+        this.allMenu(),
+        this.haveMenu(id)
+      ])
+    },
+    handleSuccess(dialogAction) {
+      if (this.showForm == 1) {
+        if (this.dialogAction == 'new') {
+          let params = {
+            name: this.formGroups.name,
+            description: this.formGroups.desc,
+            users: this.formGroups.users
+          }
+          this.$store.dispatch('group/addGroups', params).then(res => {
+            if (res.result) {
+              this.search()
+              this.$message({type: 'success', message: res.message})
+            } else {
+              this.$message({type: 'error', message: res.message})
+            }
+          }).catch(() => {
+            this.$message({type: 'info', message: '接口调用失败'})
+          })
+        } else if (this.dialogAction == 'edit') {
+          let params = this.formGroups
+          this.$store.dispatch('group/editGroups', params).then(res => {
+            if (res.result) {
+              this.$message({type: 'success', message: res.message})
+            } else {
+              this.$message({type: 'error', message: res.message})
+            }
+          }).catch(() => {
+            this.$message({type: 'info', message: '接口调用失败'})
+          })
+        }
+      } else if (this.showForm == 2) {
+      }
+      this.$refs['newEdit'].cancel()
     },
     handleDelete(scope) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {

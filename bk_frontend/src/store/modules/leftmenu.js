@@ -30,6 +30,9 @@ const actions = {
   getMenu ({ commit }, param) {
     return commonApi.getMenu()
   },
+  getMenuTree ({ commit }, param) {
+    return commonApi.getMenuTree()
+  },
   getCurrentPermission ({ commit }, param) {
     return commonApi.getCurrentPermission().then(res => {
       if (res.result) {

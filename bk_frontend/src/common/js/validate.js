@@ -4,10 +4,10 @@
  * 校验由英文和下划线组成
  */
 export function validateNameUnderline(rule, value, callback) {
-  if (/^[a-zA-Z_]+$/.test(value)) {
+  if (/^[a-zA-Z0-9_]+$/.test(value)) {
     callback()
   } else {
-    callback(new Error('只能由英文和下划线组成'))
+    callback(new Error('只能由英文、数字、下划线组成'))
   }
 }
 

@@ -28,6 +28,9 @@ const actions = {
   groupsStatus({commit, state}, param) {
     return commonApi.groupsStatus(param)
   },
+  getMenuAuthority({commit, state}, param) {
+    return commonApi.getMenuAuthority(param)
+  },
 }
 
 export default {

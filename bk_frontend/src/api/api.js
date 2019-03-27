@@ -21,6 +21,14 @@ export const getGroups = params => {
 export const getUserSelect = params => {
   return $axios.get('/api/sysmanage/users/select/', { params: params })
 }
+// 获取菜单树状结构数据
+export const getMenuTree = params => {
+  return $axios.get('/api/sysmanage/menus/tree/', { params: params })
+}
+// 获取单个角色的对应权限数据
+export const getMenuAuthority = params => {
+  return $axios.get(`/api/sysmanage/groups/${params.id}/`, params)
+}
 // 编辑角色数据
 export const editGroups = params => {
   return $axios.put(`/api/sysmanage/groups/${params.id}/`, params)
