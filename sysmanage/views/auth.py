@@ -2,7 +2,7 @@
 
 from django.db.models import F
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group, Permission, ContentType
 from django.utils.decorators import method_decorator
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
@@ -354,14 +354,28 @@ class PermViewSet(ModelViewSet):
 
     @list_route(methods=['get'], url_path='tree')
     def get_perm_tree(self, request, *args, **kwargs):
-        """获取权限树状数据"""
+        """获取功能权限树状数据"""
         ret = []
+        app_codename_list = request.user.get_all_permissions()
+        filters = [{'codename': codename.split('.')[1], 'content_type__app_label': codename.split('.')[0]} for codename
+                   in app_codename_list]
+        # 获取当前用户的具有的功能权限列表
+        perm_ids = []
+        for filter in filters:
+            if Permission.objects.filter(permissionprofile__is_enable=True, **filter).exists():
+                permission = Permission.objects.get(permissionprofile__is_enable=True, **filter)
+                perm_ids.append(permission.id)
         per_groups = PermissionGroup.objects.filter(is_enable=True)
         for per_group in per_groups:
             perms = self.get_queryset().filter(permissionprofile__is_enable=True,
                                                permissionprofile__permission_group=per_group)
             per_group_data = PermissionGroupSerializer(instance=per_group).data
             perm_datas = self.serializer_class(instance=perms, many=True).data
+            for perm_data in perm_datas:
+                if perm_data['id'] in perm_ids:
+                    perm_data['has_perms'] = True
+                else:
+                    perm_data['has_perms'] = False
             per_group_data['children'] = perm_datas
             ret.append(per_group_data)
         return Response(ret)
