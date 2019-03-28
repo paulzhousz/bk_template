@@ -54,14 +54,14 @@
                 */
                 let self = this
                 let currentUrl = window.location.href;
-                self.currentMenu = currentUrl.split('#')[1];
+                self.currentMenu = self.$route.meta.currentMenu
             },
             getPath() {
                 /*
                 * 点击浏览器前进后退按钮高亮显示同步
                 */
                 let self = this
-                self.currentMenu = self.$route.path;
+                self.currentMenu = self.$route.meta.currentMenu
             },
             getLeftmenu() {
                 this.$store.dispatch('leftmenu/getMenu').then(res => {

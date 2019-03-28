@@ -47,6 +47,7 @@ let router = new Router({
                 bread: [
                     {displayName: '监控面板', path: {path: '/monitor_panel'}},
                 ],
+                currentMenu: '/monitor_pane'
             }
         },
         {
@@ -58,6 +59,7 @@ let router = new Router({
                     {displayName: '系统管理', path: {path: ''}},
                     {displayName: '用户管理', path: {path: '/user'}},
                 ],
+                currentMenu: '/use'
             }
         },
         {
@@ -69,6 +71,7 @@ let router = new Router({
                     {displayName: '系统管理', path: {path: ''}},
                     {displayName: '角色管理', path: {path: '/group'}},
                 ],
+                currentMenu: '/group'
             },
         },
         {
@@ -81,6 +84,7 @@ let router = new Router({
                   {displayName: '角色管理', path: {path: '/group'}},
                   {displayName: '功能权限', path: {path: ''}},
               ],
+              currentMenu: '/group'
           }
       },
     ]
