@@ -44,8 +44,9 @@ let router = new Router({
             name: 'monitor_panel',
             component: MonitorPanel,
             meta: {
-                bread: [],
-                footer: true
+                bread: [
+                    {displayName: '监控面板', path: {path: '/monitor_panel'}},
+                ],
             }
         },
         {
@@ -68,7 +69,7 @@ let router = new Router({
                     {displayName: '系统管理', path: {path: ''}},
                     {displayName: '角色管理', path: {path: '/group'}},
                 ],
-            }
+            },
         },
         {
           path: '/permission/:groupId',
