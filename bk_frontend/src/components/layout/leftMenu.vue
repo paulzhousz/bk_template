@@ -16,7 +16,7 @@
                                 <span>{{item.display_name}}</span>
                             </template>
                             <el-menu-item v-for="(itemChild, indexChild) in item.children" :index="itemChild.path" :key="indexChild">
-                                <span>{{itemChild.display_name}}</span>
+                              <span v-if="itemChild.is_menu">{{itemChild.display_name}}</span>
                             </el-menu-item>
                         </el-submenu>
                         <el-menu-item :index="item.path" :key="item.path" v-else-if="item.children == 0 && item.is_menu">
