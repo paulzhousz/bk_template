@@ -40,7 +40,7 @@ let router = new Router({
     routes: [
         {
             path: '/monitor_panel',
-            name: '/monitor_panel',
+            name: 'monitor_panel',
             component: MonitorPanel,
             meta: {
                 bread: [],
@@ -49,7 +49,7 @@ let router = new Router({
         },
         {
             path: '/user',
-            name: '/user',
+            name: 'user',
             component: User,
             meta: {
                 bread: [
@@ -59,8 +59,8 @@ let router = new Router({
             }
         },
         {
-            path: '/group',
-            name: '/group',
+            path: '/group/:id',
+            name: 'group',
             component: Group,
             meta: {
                 bread: [

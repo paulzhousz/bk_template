@@ -329,14 +329,15 @@ export default {
       }
       return this.$store.dispatch('group/getMenuAuthority', params).then(res => {
         if (res.result) {
-          for (let i = 0; i < res.data.menus.length; i++) {
-            if (res.data.menus[i].parent == null) {
-              let menuNode = commonMethods.pushChildNode(res.data.menus[i], res.data.menus)
-              this.haveMenuAuthority.push(menuNode)
-            }
-          }
-          console.log(res.data.menus)
-          console.log(this.haveMenuAuthority)
+          // for (let i = 0; i < res.data.menus.length; i++) {
+          //   if (res.data.menus[i].parent == null) {
+          //     let menuNode = commonMethods.pushChildNode(res.data.menus[i], res.data.menus)
+          //     this.haveMenuAuthority.push(menuNode)
+          //   }
+          // }
+          // console.log(res.data.menus)
+          // console.log(this.haveMenuAuthority)
+          this.haveMenuAuthority = res.data.menus.map(item => item.id)
         }
       })
     },
