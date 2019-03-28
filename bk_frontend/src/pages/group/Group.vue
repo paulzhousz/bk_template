@@ -303,12 +303,7 @@ export default {
       })
     },
     handleAuthority(data) {
-      console.log(this.$router)
       this.$router.push(data)
-      // console.log(this.$router)
-      // this.title = '权限配置'
-      // this.$refs['newEdit'].open()
-      // this.menuAuthority(scope.row.id)
     },
     handleSuccess(dialogAction) {
       if (this.dialogAction == 'new') {
