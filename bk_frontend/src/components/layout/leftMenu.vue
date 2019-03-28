@@ -35,7 +35,7 @@
         data() {
             return {
                 only: true,
-                currentMenu: '/home',
+                currentMenu: '/monitor_panel',
                 menusList: [
                     {children: []}
                 ]

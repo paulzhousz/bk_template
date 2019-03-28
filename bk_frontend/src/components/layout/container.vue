@@ -25,7 +25,7 @@
 <style lang="scss" scoped>
     $headerHeight: 60px;
     #main-container {
-        padding: 20px 0 0 20px;
+        padding: 20px 20px 0 20px;
         width: calc(100% - 220px);
         height: calc(100% - 60px);
         background: #f0f2f5;

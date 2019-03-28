@@ -72,7 +72,7 @@ let router = new Router({
             },
         },
         {
-          path: '/permission/:groupId',
+          path: '/permission/:group_id',
           name: 'permission',
           component: Permission,
           meta: {

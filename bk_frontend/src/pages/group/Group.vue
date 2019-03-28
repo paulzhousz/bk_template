@@ -43,7 +43,7 @@
           stripe
           ref=""
           :data="data"
-          v-loading="loading"
+          v-loading="loadingGroup"
           style="width: 100%"
           height="100%">
           <!-- <el-table-column
@@ -87,7 +87,7 @@
             width="150">
             <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope)">编辑</el-button>
-              <el-button type="text" @click="handleAuthority(scope)">权限</el-button>
+              <el-button type="text" @click="handleAuthority({name: 'permission', params: {group_id: scope.row.id}})">权限</el-button>
               <el-button type="text" @click="handleDelete(scope)">删除</el-button>
             </template>
           </el-table-column>
@@ -99,7 +99,7 @@
       </pagination>
       <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction" :width="width">
         <div slot="dialog-content">
-          <el-form ref="formGroups" v-if="showForm == 1" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
+          <el-form ref="formGroups" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
             <el-form-item label="组名" prop="name">
               <el-input class="form-content" size="mini" v-model="formGroups.name"></el-input>
             </el-form-item>
@@ -120,7 +120,7 @@
               <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
             </el-form-item>
           </el-form>
-          <el-tabs v-model="activeName" v-if="showForm == 2">
+          <el-tabs v-model="activeName">
             <el-tab-pane label="菜单权限" name="first">
               <el-tree
                 :data="dataMenuTree"
@@ -133,7 +133,6 @@
                 :props="defaultMenuProps">
               </el-tree>
             </el-tab-pane>
-            <el-tab-pane label="操作权限" name="second"></el-tab-pane>
           </el-tabs>
         </div>
       </new-edit>
@@ -157,7 +156,6 @@ export default {
       inputGroup: '',
       title: '',
       dialogAction: '',
-      showForm: 0,
       activeName: 'first',
       width: '30%',
       valueIsBuiltIn: undefined,
@@ -166,7 +164,7 @@ export default {
       totalNumber: 0,
       currentPage: 1,
       pageSize: 10,
-      loading: false,
+      loadingGroup: false,
       data: [],
       formGroups: {
         name: '',
@@ -217,10 +215,10 @@ export default {
         display_name: this.inputGroup,
         omit: 'menus,permissions'
       }
-      this.loading = true
+      this.loadingGroup = true
       this.$store.dispatch('group/getGroups', params).then(res => {
         if (res.result) {
-          this.loading = false
+          this.loadingGroup = false
           this.data = res.data.items
           this.totalNumber = res.data.count
         }
@@ -245,7 +243,6 @@ export default {
       })
     },
     handleEdit(scope) {
-      this.showForm = 1
       this.dialogAction = 'edit'
       this.title = '编辑'
       this.$refs['newEdit'].open()
@@ -258,7 +255,6 @@ export default {
       // }
     },
     handleNew() {
-      this.showForm = 1
       this.dialogAction = 'new'
       this.title = '新建'
       this.formGroups = {users: []}
@@ -306,79 +302,42 @@ export default {
         this.$message({type: 'info', message: '调取接口失败'})
       })
     },
-    handleAuthority(scope) {
-      this.showForm = 2
-      this.title = '权限配置'
-      this.$refs['newEdit'].open()
-      this.menuAuthority(scope.row.id)
-    },
-    // 所有菜单数据
-    allMenu() {
-      this.dataMenuTree = []
-      return this.$store.dispatch('leftmenu/getMenuTree').then(res => {
-        if (res.result) {
-          this.dataMenuTree = res.data
-        }
-      })
-    },
-    // 已有菜单权限
-    haveMenu(id) {
-      this.haveMenuAuthority = []
-      let params = {
-        id: id
-      }
-      return this.$store.dispatch('group/getMenuAuthority', params).then(res => {
-        if (res.result) {
-          // for (let i = 0; i < res.data.menus.length; i++) {
-          //   if (res.data.menus[i].parent == null) {
-          //     let menuNode = commonMethods.pushChildNode(res.data.menus[i], res.data.menus)
-          //     this.haveMenuAuthority.push(menuNode)
-          //   }
-          // }
-          // console.log(res.data.menus)
-          // console.log(this.haveMenuAuthority)
-          this.haveMenuAuthority = res.data.menus.map(item => item.id)
-        }
-      })
-    },
-    // 树状菜单数据
-    async menuAuthority(id) {
-      await Promise.all([
-        this.allMenu(),
-        this.haveMenu(id)
-      ])
+    handleAuthority(data) {
+      console.log(this.$router)
+      this.$router.push(data)
+      // console.log(this.$router)
+      // this.title = '权限配置'
+      // this.$refs['newEdit'].open()
+      // this.menuAuthority(scope.row.id)
     },
     handleSuccess(dialogAction) {
-      if (this.showForm == 1) {
-        if (this.dialogAction == 'new') {
-          let params = {
-            name: this.formGroups.name,
-            description: this.formGroups.desc,
-            users: this.formGroups.users
-          }
-          this.$store.dispatch('group/addGroups', params).then(res => {
-            if (res.result) {
-              this.search()
-              this.$message({type: 'success', message: res.message})
-            } else {
-              this.$message({type: 'error', message: res.message})
-            }
-          }).catch(() => {
-            this.$message({type: 'info', message: '接口调用失败'})
-          })
-        } else if (this.dialogAction == 'edit') {
-          let params = this.formGroups
-          this.$store.dispatch('group/editGroups', params).then(res => {
-            if (res.result) {
-              this.$message({type: 'success', message: res.message})
-            } else {
-              this.$message({type: 'error', message: res.message})
-            }
-          }).catch(() => {
-            this.$message({type: 'info', message: '接口调用失败'})
-          })
+      if (this.dialogAction == 'new') {
+        let params = {
+          name: this.formGroups.name,
+          description: this.formGroups.desc,
+          users: this.formGroups.users
         }
-      } else if (this.showForm == 2) {
+        this.$store.dispatch('group/addGroups', params).then(res => {
+          if (res.result) {
+            this.search()
+            this.$message({type: 'success', message: res.message})
+          } else {
+            this.$message({type: 'error', message: res.message})
+          }
+        }).catch(() => {
+          this.$message({type: 'info', message: '接口调用失败'})
+        })
+      } else if (this.dialogAction == 'edit') {
+        let params = this.formGroups
+        this.$store.dispatch('group/editGroups', params).then(res => {
+          if (res.result) {
+            this.$message({type: 'success', message: res.message})
+          } else {
+            this.$message({type: 'error', message: res.message})
+          }
+        }).catch(() => {
+          this.$message({type: 'info', message: '接口调用失败'})
+        })
       }
       this.$refs['newEdit'].cancel()
     },
