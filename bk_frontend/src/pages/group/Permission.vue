@@ -18,7 +18,7 @@
           <div class="one-layer" v-for="(item, index) in allOperations" :key="index">
             <span class="one-layer-name">{{item.display_name}}</span>
             <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
-            <el-checkbox v-for="(itemOperation, indexOperations) in item.children" :key="indexOperations" v-model="itemOperation.has_perms"	@change="handleCheckChange">
+            <el-checkbox v-for="(itemOperation, indexOperations) in item.children" :key="indexOperations" v-model="itemOperation.has_perms">
               {{itemOperation.display_name}}
             </el-checkbox>
           </div>
