@@ -5,6 +5,7 @@ import { mapGetters } from 'vuex'
 const MonitorPanel = () => import('@/pages/monitor_panel/MonitorPanel')
 const User = () => import('@/pages/user/user')
 const Group = () => import('@/pages/group/Group')
+const Permission = () => import('@/pages/group/Permission')
 Vue.use(Router);
 
 let routerVue = new Vue({
@@ -59,7 +60,7 @@ let router = new Router({
             }
         },
         {
-            path: '/group/:id',
+            path: '/group',
             name: 'group',
             component: Group,
             meta: {
@@ -69,6 +70,18 @@ let router = new Router({
                 ],
             }
         },
+        {
+          path: '/permission/:groupId',
+          name: 'permission',
+          component: Permission,
+          meta: {
+              bread: [
+                  {displayName: '系统管理', path: {path: ''}},
+                  {displayName: '角色管理', path: {path: '/group'}},
+                  {displayName: '功能权限', path: {path: ''}},
+              ],
+          }
+      },
     ]
 });
 
