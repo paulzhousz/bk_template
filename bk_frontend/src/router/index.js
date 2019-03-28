@@ -5,6 +5,7 @@ import { mapGetters } from 'vuex'
 const MonitorPanel = () => import('@/pages/monitor_panel/MonitorPanel')
 const User = () => import('@/pages/user/user')
 const Group = () => import('@/pages/group/Group')
+const Authority = () => import('@/pages/group/Authority')
 Vue.use(Router);
 
 let routerVue = new Vue({
@@ -43,8 +44,9 @@ let router = new Router({
             name: 'monitor_panel',
             component: MonitorPanel,
             meta: {
-                bread: [],
-                footer: true
+                bread: [
+                    {displayName: '监控面板', path: {path: '/monitor_panel'}},
+                ],
             }
         },
         {
@@ -59,7 +61,7 @@ let router = new Router({
             }
         },
         {
-            path: '/group/:id',
+            path: '/group',
             name: 'group',
             component: Group,
             meta: {
@@ -67,7 +69,13 @@ let router = new Router({
                     {displayName: '系统管理', path: {path: ''}},
                     {displayName: '角色管理', path: {path: '/group'}},
                 ],
-            }
+            },
+            children: [
+                {
+                    path: '/group/:id',
+                    component: Authority
+                }
+            ]
         },
     ]
 });
