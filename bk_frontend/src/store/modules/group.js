@@ -19,8 +19,8 @@ const actions = {
   addGroups({commit, state}, param) {
     return commonApi.addGroups(param)
   },
-  getUserSelect({commit, state}, param) {
-    return commonApi.getUserSelect()
+  getAllUser({commit, state}, param) {
+    return commonApi.getAllUser()
   },
   deleteGroups({commit, state}, param) {
     return commonApi.deleteGroups(param)

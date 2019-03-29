@@ -99,27 +99,73 @@
       </pagination>
       <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction" :width="width">
         <div slot="dialog-content">
-          <el-form ref="formGroups" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
-            <el-form-item label="组名" prop="name">
-              <el-input class="form-content" size="mini" v-model="formGroups.name"></el-input>
-            </el-form-item>
-            <el-form-item label="显示名" prop="display_name">
-              <el-input class="form-content" size="mini" v-model="formGroups.display_name"></el-input>
-            </el-form-item>
-            <el-form-item label="用户成员" prop="users">
-              <el-select class="form-content" v-model="formGroups.users" multiple placeholder="请选择">
-                <el-option
-                  v-for="(item, index) in optionsUsers"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="描述">
-              <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
-            </el-form-item>
-          </el-form>
+          <el-tabs v-model="activeName">
+            <el-tab-pane label="角色信息" name="first">
+              <el-form ref="formGroups" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
+                <el-form-item label="组名" prop="name">
+                  <el-input class="form-content" size="mini" v-model="formGroups.name"></el-input>
+                </el-form-item>
+                <el-form-item label="显示名" prop="display_name">
+                  <el-input class="form-content" size="mini" v-model="formGroups.display_name"></el-input>
+                </el-form-item>
+                <!-- <el-form-item label="用户成员" prop="users">
+                  <el-select class="form-content" v-model="formGroups.users" multiple placeholder="请选择">
+                    <el-option
+                      v-for="(item, index) in optionsUsers"
+                      :key="index"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item> -->
+                <el-form-item label="描述">
+                  <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="分配用户" name="second">
+              <div>
+                <el-row>
+                  <el-col :span="10">
+                    <el-table
+                      :data="leftData"
+                      border
+                      v-loading="loadingLeft"
+                      height="280"
+                      style="width: 100%;margin-bottom: 0px"
+                      @selection-change="handleSelectionChange">
+                      <el-table-column type="selection" prop="value"></el-table-column>
+                      <el-table-column prop="label" label="用户名"></el-table-column>
+                    </el-table>
+                  </el-col>
+                  <el-col :span="4">
+                    <div style="margin-top: 100%;margin-left:21%;margin-right:25%">
+                      <el-button type="primary" @click="addRightItems" icon="icon el-icon-d-arrow-right"></el-button>
+                    </div>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-table
+                      :data="rightData"
+                      height="280"
+                      v-loading="loadingRight"
+                      style="width: 100%;margin-bottom: 0px"
+                      border>
+                      <el-table-column type="selection" prop="value"></el-table-column>
+                      <el-table-column prop="label" label="用户名" show-overflow-tooltip></el-table-column>
+                      <el-table-column label="操作">
+                        <template slot-scope="scope">
+                          <el-button
+                            size="mini"
+                            type="primary"
+                            @click.native.prevent="handleDeleteGroup(scope.$index, scope.row, resultData)">删除</el-button>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </div>
       </new-edit>
     </div>
@@ -142,8 +188,8 @@ export default {
       inputGroup: '',
       title: '',
       dialogAction: '',
-      activeName: 'first',
-      width: '30%',
+      activeName: 'second',
+      width: '40%',
       valueIsBuiltIn: undefined,
       valueIsEnable: undefined,
       labelPosition: 'right',
@@ -151,7 +197,11 @@ export default {
       currentPage: 1,
       pageSize: 10,
       loadingGroup: false,
+      loadingLeft: false,
+      loadingRight: false,
       data: [],
+      leftData: [],
+      rightData: [],
       formGroups: {
         name: '',
         display_name: '',
@@ -178,13 +228,6 @@ export default {
         {value: true, label: '是'},
         {value: false, label: '否'},
       ],
-      optionsUsers: [],
-      dataMenuTree: [], // 菜单全部树形数据
-      haveMenuAuthority: [], // 当前用户已有的菜单权限
-      defaultMenuProps: {
-        children: 'children',
-        label: 'display_name'
-      }
     }
   },
   created() {
@@ -221,24 +264,12 @@ export default {
       this.valueIsEnable = undefined
       this.search()
     },
-    getGroup() {
-      this.$store.dispatch('group/getUserSelect').then(res => {
-        if (res.result) {
-          this.optionsUsers = res.data
-        }
-      })
-    },
     handleEdit(scope) {
       this.dialogAction = 'edit'
       this.title = '编辑'
       this.$refs['newEdit'].open()
-        // this.$refs['formGroups'].clearValidate()
       this.formGroups = JSON.parse(JSON.stringify(scope.row))
       this.formGroups.users = this.formGroups.users.map(item => item.id)
-      // this.formGroups.users = []
-      // for (let i of scope.row.users) {
-      //   this.formGroups.users.push(i.id)
-      // }
     },
     handleNew() {
       this.dialogAction = 'new'
@@ -343,6 +374,20 @@ export default {
         this.$message({type: 'info', message: '已取消'})
       })
     },
+    // 左侧所有用户数据
+    getLeftUser() {
+      this.$store.dispatch('group/getAllUser').then(res => {
+        if (res.result) {
+          this.leftData = res.data
+        }
+      })
+    },
+    // 向右侧添加数据
+    addRightItems() {},
+    // 选择项发生变化
+    handleSelectionChange() {},
+    // 右侧数据移除
+    handleDeleteGroup() {},
   },
 }
 </script>

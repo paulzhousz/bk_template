@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       checked: [],
-      activeName: 'second',
+      activeName: 'first',
       dataMenuTree: [],
       haveMenuAuthority: [],
       checkeditem: [], // 勾选的操作
@@ -79,7 +79,7 @@ export default {
         this.haveMenu(id)
       ])
     },
-    // 权限树状数据
+    // 操作权限树状数据
     getPerm() {
       this.allOperations = []
       let param = {id: this.$route.params.group_id}
@@ -89,8 +89,12 @@ export default {
         }
       })
     },
-    // 确认权限
+    // 确认操作权限
     checkConfirm() {
+      // 菜单权限id数组
+      let menuList = this.$refs.tree.getCheckedNodes()
+      menuList = menuList.map(item => item.id)
+      // 操作功能权限id数组
       let permIdList = []
       for (let i of this.allOperations) {
         if (i.children.length !== 0) {
@@ -104,13 +108,13 @@ export default {
       let params = {
         id: this.$route.params.group_id,
         permissions: permIdList,
-        users: this.haveMenuAuthority,
+        users: menuList,
       }
       this.$store.dispatch('group/editGroups', params).then(res => {
         if (res.result) {
-          this.$message({type: 'success', message: '操作权限设置成功'})
+          this.$message({type: 'success', message: '权限设置成功'})
         } else {
-          this.$message({type: 'error', message: '操作权限设置失败'})
+          this.$message({type: 'error', message: '权限设置失败'})
         }
       })
     }
