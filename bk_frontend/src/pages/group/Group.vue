@@ -120,20 +120,6 @@
               <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
             </el-form-item>
           </el-form>
-          <el-tabs v-model="activeName">
-            <el-tab-pane label="菜单权限" name="first">
-              <el-tree
-                :data="dataMenuTree"
-                show-checkbox
-                default-expand-all
-                node-key="id"
-                ref="tree"
-                highlight-current
-                :default-checked-keys="haveMenuAuthority"
-                :props="defaultMenuProps">
-              </el-tree>
-            </el-tab-pane>
-          </el-tabs>
         </div>
       </new-edit>
     </div>

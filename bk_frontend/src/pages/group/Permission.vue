@@ -17,12 +17,14 @@
         <el-tab-pane label="操作权限" name="second">
           <div class="one-layer" v-for="(item, index) in allOperations" :key="index">
             <span class="one-layer-name">{{item.display_name}}</span>
-            <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
             <el-checkbox v-for="(itemOperation, indexOperations) in item.children" :key="indexOperations" v-model="itemOperation.has_perms">
               {{itemOperation.display_name}}
             </el-checkbox>
           </div>
         </el-tab-pane>
+        <div class="check-confirm">
+          <el-button type="primary" size="mini" @click="checkConfirm">保存</el-button>
+        </div>
       </el-tabs>
     </div>
   </div>
@@ -86,8 +88,31 @@ export default {
         }
       })
     },
-    handleCheckChange() {
-    },
+    // 确认权限
+    checkConfirm() {
+      let permIdList = []
+      for (let i of this.allOperations) {
+        if (i.children.length !== 0) {
+          for (let j of i.children) {
+            if (j.has_perms == true) {
+              permIdList.push(j.id)
+            }
+          }
+        }
+      }
+      let params = {
+        id: this.$route.params.group_id,
+        permissions: permIdList,
+        users: this.haveMenuAuthority,
+      }
+      this.$store.dispatch('group/editGroups', params).then(res => {
+        if (res.result) {
+          this.$message({type: 'success', message: '操作权限设置成功'})
+        } else {
+          this.$message({type: 'error', message: '操作权限设置失败'})
+        }
+      })
+    }
   }
 }
 </script>
@@ -100,12 +125,27 @@ export default {
       height: 100%;
       padding: 15px 20px 0 20px;
       background: #fff;
-      .one-layer {
+      .check-confirm {
         padding: 20px;
-        .one-layer-name {
-          display: block;
-          font-size: 1.5em;
-          margin-bottom: 20px;
+        position: absolute;
+        bottom: 0;
+      }
+      .el-tabs.el-tabs--top {
+        height: 100%;
+        .el-tabs__content {
+          height: calc(100% - 55px);
+          .el-tab-pane {
+            height: 100%;
+            .one-layer {
+              padding: 20px;
+              border-bottom: 1px solid #f1eded;
+              .one-layer-name {
+                display: block;
+                font-size: 1.5em;
+                margin-bottom: 20px;
+              }
+            }
+          }
         }
       }
     }
