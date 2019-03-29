@@ -22,6 +22,9 @@
               {{itemOperation.display_name}}
             </el-checkbox>
           </div>
+          <div class="check-confirm">
+            <el-button type="primary" size="mini" @click="checkConfirm">保存</el-button>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -86,8 +89,30 @@ export default {
         }
       })
     },
-    handleCheckChange() {
-    },
+    // 编辑操作权限
+    checkConfirm() {
+      let permIdList = []
+      for (let i of this.allOperations) {
+        if (i.children.length !== 0) {
+          for (let j of i.children) {
+            if (j.has_perms == true) {
+              permIdList.push(j.id)
+            }
+          }
+        }
+      }
+      let params = {
+        id: this.$route.params.group_id,
+        permissions: permIdList
+      }
+      this.$store.dispatch('group/editGroups', params).then(res => {
+        if (res.result) {
+          this.$message({type: 'success', message: '操作权限设置成功'})
+        } else {
+          this.$message({type: 'error', message: '操作权限设置失败'})
+        }
+      })
+    }
   }
 }
 </script>
@@ -107,6 +132,8 @@ export default {
           font-size: 1.5em;
           margin-bottom: 20px;
         }
+      }
+      .check-confirm {
       }
     }
   }

@@ -47,7 +47,7 @@ let router = new Router({
                 bread: [
                     {displayName: '监控面板', path: {path: '/monitor_panel'}},
                 ],
-                currentMenu: '/monitor_pane'
+                currentMenu: '/monitor_panel'
             }
         },
         {
@@ -59,7 +59,7 @@ let router = new Router({
                     {displayName: '系统管理', path: {path: ''}},
                     {displayName: '用户管理', path: {path: '/user'}},
                 ],
-                currentMenu: '/use'
+                currentMenu: '/user'
             }
         },
         {
