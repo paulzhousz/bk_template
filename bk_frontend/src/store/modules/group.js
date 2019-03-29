@@ -31,6 +31,9 @@ const actions = {
   getMenuAuthority({commit, state}, param) {
     return commonApi.getMenuAuthority(param)
   },
+  getPermsTree({commit, state}, param) {
+    return commonApi.getPermsTree(param)
+  }
 }
 
 export default {

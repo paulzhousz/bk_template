@@ -312,6 +312,27 @@ class GroupViewSet(ModelViewSet):
         GroupProfile.objects.filter(group_id__in=groups_ids).update(is_enable=enable)
         return Response()
 
+    @detail_route(methods=['get'], url_path='perm_tree')
+    def get_perm_tree(self, request, *args, **kwargs):
+        """获取指定角色功能权限树状数据"""
+        ret = []
+        instance = self.get_object()
+        perm_ids = instance.permissions.filter(permissionprofile__is_enable=True).values_list('id', flat=True)
+        per_groups = PermissionGroup.objects.filter(is_enable=True)
+        for per_group in per_groups:
+            perms = Permission.objects.filter(permissionprofile__is_enable=True,
+                                              permissionprofile__permission_group=per_group)
+            per_group_data = PermissionGroupSerializer(instance=per_group).data
+            perm_datas = PermissionSerializer(instance=perms, many=True).data
+            for perm_data in perm_datas:
+                if perm_data['id'] in perm_ids:
+                    perm_data['has_perms'] = True
+                else:
+                    perm_data['has_perms'] = False
+            per_group_data['children'] = perm_datas
+            ret.append(per_group_data)
+        return Response(ret)
+
     @detail_route(methods=['get'], url_path='search/perm')
     def get_perms(self, request, *args, **kwargs):
         """获取对象关联权限"""

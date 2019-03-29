@@ -10,9 +10,6 @@ const mutations = {
 }
 
 const actions = {
-  getPermsTree({commit, state}, param) {
-    return commonApi.getPermsTree()
-  },
 }
 
 export default {

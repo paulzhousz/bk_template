@@ -82,7 +82,8 @@ export default {
     // 权限树状数据
     getPerm() {
       this.allOperations = []
-      this.$store.dispatch('perm/getPermsTree').then(res => {
+      let param = {id: this.$route.params.group_id}
+      this.$store.dispatch('group/getPermsTree', param).then(res => {
         if (res.result) {
           this.allOperations = res.data
         }

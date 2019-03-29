@@ -27,7 +27,7 @@ export const getMenuTree = params => {
 }
 // 获取操作（功能）权限树状数据
 export const getPermsTree = params => {
-  return $axios.get('/api/sysmanage/perms/tree/', { params: params })
+  return $axios.get(`/api/sysmanage/groups/${params.id}/perm_tree/`)
 }
 // 获取单个角色的对应权限数据
 export const getMenuAuthority = params => {
