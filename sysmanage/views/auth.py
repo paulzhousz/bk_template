@@ -135,7 +135,7 @@ class UserViewSet(ModelViewSet):
 
     @list_route(methods=['get'], url_path='select')
     def get_select(self, request, *args, **kwargs):
-        """获取所有用户的下拉框数据"""
+        """获取所有APP用户的下拉框数据"""
         ret = self.queryset.filter(is_enable=True, is_in_app=True).annotate(label=F('chname'),
                                                                             value=F('id')).values('label', 'value')
         return Response(list(ret))
