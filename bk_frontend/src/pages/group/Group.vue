@@ -135,7 +135,8 @@
                       style="width: 100%;margin-bottom: 0px"
                       @selection-change="handleSelectionChange">
                       <el-table-column type="selection" prop="value"></el-table-column>
-                      <el-table-column prop="label" label="用户名"></el-table-column>
+                      <el-table-column prop="username" label="用户名"></el-table-column>
+                      <el-table-column prop="chname" label="中文名"></el-table-column>
                     </el-table>
                   </el-col>
                   <el-col :span="4">
@@ -151,15 +152,8 @@
                       style="width: 100%;margin-bottom: 0px"
                       border>
                       <el-table-column type="selection" prop="value"></el-table-column>
-                      <el-table-column prop="label" label="用户名" show-overflow-tooltip></el-table-column>
-                      <el-table-column label="操作">
-                        <template slot-scope="scope">
-                          <el-button
-                            size="mini"
-                            type="primary"
-                            @click.native.prevent="handleDeleteGroup(scope.$index, scope.row, resultData)">删除</el-button>
-                        </template>
-                      </el-table-column>
+                      <el-table-column label="用户名" prop="username"></el-table-column>
+                      <el-table-column prop="chname" label="中文名" show-overflow-tooltip></el-table-column>
                     </el-table>
                   </el-col>
                 </el-row>
@@ -232,7 +226,7 @@ export default {
   },
   created() {
     this.search()
-    this.getGroup()
+    this.getLeftUser()
   },
   methods: {
     search() {
@@ -270,11 +264,14 @@ export default {
       this.$refs['newEdit'].open()
       this.formGroups = JSON.parse(JSON.stringify(scope.row))
       this.formGroups.users = this.formGroups.users.map(item => item.id)
+      this.rightData = scope.row.users
     },
     handleNew() {
       this.dialogAction = 'new'
       this.title = '新建'
       this.formGroups = {users: []}
+      this.rightData = []
+      this.leftData = []
       this.$refs['newEdit'].open()
       this.$nextTick(() => {
         this.$refs['formGroups'].clearValidate()
@@ -386,8 +383,6 @@ export default {
     addRightItems() {},
     // 选择项发生变化
     handleSelectionChange() {},
-    // 右侧数据移除
-    handleDeleteGroup() {},
   },
 }
 </script>

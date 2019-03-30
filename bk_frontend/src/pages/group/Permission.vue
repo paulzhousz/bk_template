@@ -66,7 +66,7 @@ export default {
       let params = {
         id: this.$route.params.group_id
       }
-      return this.$store.dispatch('group/getMenuAuthority', params).then(res => {
+      return this.$store.dispatch('group/getAuthority', params).then(res => {
         if (res.result) {
           this.haveMenuAuthority = res.data.menus.map(item => item.id)
         }
@@ -108,7 +108,7 @@ export default {
       let params = {
         id: this.$route.params.group_id,
         permissions: permIdList,
-        users: menuList,
+        menus: menuList,
       }
       this.$store.dispatch('group/editGroups', params).then(res => {
         if (res.result) {
