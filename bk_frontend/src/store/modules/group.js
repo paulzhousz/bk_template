@@ -28,8 +28,8 @@ const actions = {
   groupsStatus({commit, state}, param) {
     return commonApi.groupsStatus(param)
   },
-  getMenuAuthority({commit, state}, param) {
-    return commonApi.getMenuAuthority(param)
+  getAuthority({commit, state}, param) {
+    return commonApi.getAuthority(param)
   },
   getPermsTree({commit, state}, param) {
     return commonApi.getPermsTree(param)

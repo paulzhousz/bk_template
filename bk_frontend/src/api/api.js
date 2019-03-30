@@ -30,7 +30,7 @@ export const getPermsTree = params => {
   return $axios.get(`/api/sysmanage/groups/${params.id}/perm_tree/`)
 }
 // 获取单个角色的对应权限数据
-export const getMenuAuthority = params => {
+export const getAuthority = params => {
   return $axios.get(`/api/sysmanage/groups/${params.id}/`, params)
 }
 // 编辑角色数据
