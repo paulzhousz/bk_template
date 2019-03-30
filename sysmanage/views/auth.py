@@ -11,10 +11,10 @@ from blueking.component.shortcuts import get_client_by_user
 from component.drf.viewsets import ModelViewSet
 from component.drf.serializer import CustomSerializer
 from component.drf.generics import validate_fields
-from sysmanage.serializers import (UserSerializer, PermissionSerializer, GroupSerializer, MenuSerializer,
-                                   PermissionGroupSerializer)
+from sysmanage.serializers import (BasicUserSerializer, UserSerializer, PermissionSerializer, GroupSerializer,
+                                   MenuSerializer, PermissionGroupSerializer)
 from sysmanage.models import Menu, PermissionGroup, GroupProfile
-from sysmanage.filters import GroupFilter
+from sysmanage.filters import GroupFilter, UserFilter
 from sysmanage.utils import (get_mapping, get_perms_with_groups, set_perms_obj)
 from sysmanage.decorators import surperuser_required
 
@@ -24,13 +24,23 @@ class UserViewSet(ModelViewSet):
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     http_method_names = ['get', 'post', 'put', 'delete']
+    filter_class = UserFilter
 
     def retrieve(self, request, *args, **kwargs):
         """获取指定用户的详情"""
         return super(UserViewSet, self).retrieve(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        """获取所有APP用户"""
+        """
+        获取所有APP用户
+
+            /api/sysmanage/users/?username=kris&is_in_app=true&is_enable=true&email=kris@canway.net&chname=kris
+            -username 用户名 String【选填】
+            -chname 中文名 String【选填】
+            -is_in_app 是否该APP用户 Bollean【选填】
+            -is_enable 是否启用 Bollean【选填】
+            -email 邮箱 String【选填】
+        """
         queryset = self.filter_queryset(self.get_queryset().filter(is_in_app=True))
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -139,6 +149,24 @@ class UserViewSet(ModelViewSet):
         ret = self.queryset.filter(is_enable=True, is_in_app=True).annotate(label=F('chname'),
                                                                             value=F('id')).values('label', 'value')
         return Response(list(ret))
+
+    @list_route(methods=['get'], url_path='all')
+    def get_all_users(self, request, *args, **kwargs):
+        """
+        获取所有APP用户
+
+            /api/sysmanage/users/all/?username=kris&is_in_app=true&is_enable=true&email=kris@canway.net&chname=kris
+            -username 用户名 String【选填】
+            -chname 中文名 String【选填】
+            -is_in_app 是否该APP用户 Bollean【选填】
+            -is_enable 是否启用 Bollean【选填】
+            -email 邮箱 String【选填】
+        """
+        queryset = self.filter_queryset(self.get_queryset().filter(is_in_app=True))
+        serializer_class = BasicUserSerializer
+        kwargs['context'] = self.get_serializer_context()
+        serializer = serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
     @list_route(methods=['get'], url_path='add/select')
     def get_add_select(self, request, *args, **kwargs):
