@@ -32,7 +32,7 @@ class UserViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         """
-        获取所有APP用户
+        获取所有APP用户（有分页）
 
             /api/sysmanage/users/?username=kris&is_in_app=true&is_enable=true&email=kris@canway.net&chname=kris
             -username 用户名 String【选填】
@@ -153,7 +153,7 @@ class UserViewSet(ModelViewSet):
     @list_route(methods=['get'], url_path='all')
     def get_all_users(self, request, *args, **kwargs):
         """
-        获取所有APP用户
+        获取所有APP用户（无分页）
 
             /api/sysmanage/users/all/?username=kris&is_in_app=true&is_enable=true&email=kris@canway.net&chname=kris
             -username 用户名 String【选填】
