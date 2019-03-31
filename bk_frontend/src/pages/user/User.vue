@@ -1,12 +1,12 @@
 <template>
   <div class="user">
     <div class="search">
-      <!-- <el-autocomplete
+      <el-autocomplete
         v-model="stateUser"
         :fetch-suggestions="querySearchAsync"
         placeholder="请输入用户名"
         @select="handleSelect">
-      </el-autocomplete> -->
+      </el-autocomplete>
     </div>
     <div class="new">
       <el-button size="mini" type="primary" @click="handleNewUser">新建用户</el-button>
@@ -47,9 +47,9 @@
         prop="groups"
         label="所属角色"
         show-overflow-tooltip>
-          <!-- <template slot-scope="scope">
-            <span>{{scope.row.groups.display_name.join(',')}}</span>
-          </template> -->
+          <template slot-scope="scope">
+            <span>{{scope.row.groups | arrayFormat}}</span>
+          </template>
         </el-table-column>
         <el-table-column
         label="是否启用">
@@ -89,9 +89,9 @@ export default {
   data() {
     return {
       loadingUser: false,
-      dataUser: [
-        {groups: []}
-      ],
+      dataUser: [],
+      allUserName: [],
+      allUser: [],
       stateUser: '',
       totalNumber: 0,
       currentPage: 1,
@@ -100,6 +100,7 @@ export default {
   },
   created() {
     this.getUser()
+    this.search()
   },
   methods: {
     getUser() {
@@ -111,8 +112,6 @@ export default {
         if (res.result) {
           this.totalNumber = res.data.count
           this.dataUser = res.data.items
-          // res.data.items.groups = res.data.items.groups.map(item => item.display_name)
-          console.log(res.data.items.groups)
         }
       })
     },
@@ -125,8 +124,37 @@ export default {
     handleEdit(scope) {},
     checkboxChange(scope) {},
     handleDelete(scope) {},
-    // handleSelect() {},
-    // querySearchAsync(queryString, cb) {},
+    handleSelect(item) {
+      for (let i in this.allUserName) {
+        if (this.allUserName[i].display_name == item.value) {
+          // return
+        }
+      }
+      console.log(item)
+    },
+    search() {
+      this.allUserName = []
+      this.$store.dispatch('group/getAllUser').then(res => {
+        if (res.result) {
+          for (let i of res.data) {
+            this.allUserName.push({
+              value: i.display_name
+            })
+          }
+          this.allUser = res.data
+        }
+      })
+    },
+    querySearchAsync(queryString, cb) {
+      let allUserName = this.allUserName;
+      let results = queryString ? allUserName.filter(this.createStateFilter(queryString)) : allUserName;
+      cb(results)
+    },
+    createStateFilter(queryString) {
+      return (username) => {
+        return (username.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
   },
 }
 </script>
@@ -147,7 +175,7 @@ export default {
       height: 40px;
     }
     .table {
-      height: calc(100% - 80px);
+      height: calc(100% - 180px);
       .el-table {
         border-top: 1px solid rgb(235, 238, 245);
       }

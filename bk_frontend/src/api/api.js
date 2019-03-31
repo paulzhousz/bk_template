@@ -17,7 +17,7 @@ export const getCurrentPermission = params => {
 export const getGroups = params => {
   return $axios.get('/api/sysmanage/groups/', { params: params })
 }
-// 新增/编辑角色数据时获取用户
+// 新增/编辑角色数据时获取所有用户
 export const getAllUser = params => {
   return $axios.get('/api/sysmanage/users/all/', { params: params })
 }
