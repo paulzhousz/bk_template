@@ -142,10 +142,10 @@
                   </el-col>
                   <el-col :span="4">
                     <div style="margin-top: 100%;margin-left:25%;margin-right:25%">
-                      <el-button size="mini" type="primary" @click="turnRightItems" icon="icon el-icon-d-arrow-right"></el-button>
-                      <!-- <el-button v-if="!leftButtonColor" size="mini" type="primary" icon="icon el-icon-d-arrow-right"></el-button> -->
-                      <el-button style="margin: 5px 0 0 0" size="mini" type="primary" @click="turnLeftItems" icon="icon el-icon-d-arrow-left"></el-button>
-                      <!-- <el-button v-if="!rightButtonColor" style="margin: 5px 0 0 0" size="mini" type="primary" @click="turnLeftItems" icon="icon el-icon-d-arrow-left"></el-button> -->
+                      <el-button v-if="leftButtonColor" size="mini" type="primary" @click="turnRightItems" icon="icon el-icon-d-arrow-right"></el-button>
+                      <el-button v-if="!leftButtonColor" type="info" disabled size="mini" icon="icon el-icon-d-arrow-right"></el-button>
+                      <el-button v-if="rightButtonColor" style="margin: 5px 0 0 0" size="mini" type="primary" @click="turnLeftItems" icon="icon el-icon-d-arrow-left"></el-button>
+                      <el-button v-if="!rightButtonColor" type="info" disabled class="not-have" style="margin: 5px 0 0 0" size="mini" icon="icon el-icon-d-arrow-left"></el-button>
                     </div>
                   </el-col>
                   <el-col :span="10">
@@ -236,16 +236,20 @@ export default {
     this.search()
   },
   computed: {
-    // leftButtonColor() {
-    //   if (this.leftData.length == 0) {
-    //     return false
-    //   }
-    // },
-    // rightButtonColor() {
-    //   if (this.rightData.length == 0) {
-    //     return false
-    //   }
-    // },
+    leftButtonColor() {
+      if (this.leftData.length == 0) {
+        return false
+      } else {
+        return true
+      }
+    },
+    rightButtonColor() {
+      if (this.rightData.length == 0) {
+        return false
+      } else {
+        return true
+      }
+    },
   },
   methods: {
     search() {
@@ -359,6 +363,8 @@ export default {
           this.$message({type: 'info', message: '接口调用失败'})
         })
       } else if (this.dialogAction == 'edit') {
+        this.rightDataId = this.rightData.map(item => item.id)
+        this.formGroups.users = this.rightDataId
         let params = this.formGroups
         this.$store.dispatch('group/editGroups', params).then(res => {
           if (res.result) {
@@ -412,9 +418,11 @@ export default {
     turnRightItems() {
       // 合并左侧选中数据和右侧数据
       this.rightData.push.apply(this.rightData, this.cacheLeftData)
-      // 删除左侧勾选数据
+      // 删除左侧勾选数据\
+      let indexLeft = 0
       for (let i of this.cacheLeftData) {
-        this.leftData.splice(i.rowIndex, 1)
+        this.leftData.splice(i.rowIndex - indexLeft, 1)
+        indexLeft++
       }
       this.cacheLeftData = []
     },
@@ -423,8 +431,10 @@ export default {
       // 合并左侧选中数据和右侧数据
       this.leftData.push.apply(this.leftData, this.cacheRightData)
       // 删除右侧勾选数据
+      let indexRight = 0
       for (let i of this.cacheRightData) {
-        this.rightData.splice(i.rowIndex, 1)
+        this.rightData.splice(i.indexRight - indexRight, 1)
+        indexRight++
       }
       this.cacheRightData = []
     },
