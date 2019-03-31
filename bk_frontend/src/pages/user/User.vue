@@ -103,12 +103,13 @@ export default {
     this.search()
   },
   methods: {
-    getUser() {
+    getUser(apiParam) {
       let params = {
         page: this.currentPage,
         page_size: this.pageSize,
       }
-      this.$store.dispatch('user/getTableUser').then(res => {
+      params = Object.assign(params, apiParam)
+      this.$store.dispatch('user/getTableUser', params).then(res => {
         if (res.result) {
           this.totalNumber = res.data.count
           this.dataUser = res.data.items
@@ -125,11 +126,7 @@ export default {
     checkboxChange(scope) {},
     handleDelete(scope) {},
     handleSelect(item) {
-      for (let i in this.allUserName) {
-        if (this.allUserName[i].chname == item.value) {
           this.getUser({chname: item.value})
-        }
-      }
     },
     search() {
       this.allUserName = []
