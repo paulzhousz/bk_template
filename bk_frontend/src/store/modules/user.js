@@ -11,6 +11,7 @@ const mutations = {
 
 const actions = {
   getTableUser({commit, state}, param) {
+    debugger
     return commonApi.getTableUser(param)
   }
 }

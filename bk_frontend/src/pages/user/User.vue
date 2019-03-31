@@ -106,7 +106,7 @@ export default {
     getUser() {
       let params = {
         page: this.currentPage,
-        page_size: this.pageSize
+        page_size: this.pageSize,
       }
       this.$store.dispatch('user/getTableUser').then(res => {
         if (res.result) {
@@ -127,7 +127,7 @@ export default {
     handleSelect(item) {
       for (let i in this.allUserName) {
         if (this.allUserName[i].chname == item.value) {
-          this.search({chname: this.allUserName[i].chname})
+          this.getUser({chname: item.value})
         }
       }
     },
