@@ -46,10 +46,10 @@
           v-loading="loadingGroup"
           style="width: 100%"
           height="100%">
-          <!-- <el-table-column
+          <el-table-column
           type="selection"
           width="30">
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column
           prop="name"
           label="组名"
@@ -133,7 +133,8 @@
                       v-loading="loadingLeft"
                       height="280"
                       style="width: 100%;margin-bottom: 0px"
-                      @selection-change="handleLeftChange">
+                      @selection-change="handleLeftChange"
+                      :row-class-name="leftRow">
                       <el-table-column type="selection" prop="value"></el-table-column>
                       <el-table-column prop="username" label="用户名"></el-table-column>
                       <el-table-column prop="chname" label="中文名" show-overflow-tooltip></el-table-column>
@@ -141,7 +142,8 @@
                   </el-col>
                   <el-col :span="4">
                     <div style="margin-top: 100%;margin-left:25%;margin-right:25%">
-                      <el-button size="mini" type="primary" @click="turnRightItems" icon="icon el-icon-d-arrow-right"></el-button>
+                      <el-button v-if="buttonColor" size="mini" type="primary" @click="turnRightItems" icon="icon el-icon-d-arrow-right"></el-button>
+                      <el-button v-if="!buttonColor" size="mini" type="primary" icon="icon el-icon-d-arrow-right"></el-button>
                       <el-button style="margin: 5px 0 0 0" size="mini" type="primary" @click="turnLeftItems" icon="icon el-icon-d-arrow-left"></el-button>
                     </div>
                   </el-col>
@@ -152,7 +154,8 @@
                       v-loading="loadingRight"
                       style="width: 100%;margin-bottom: 0px"
                       border
-                      @selection-change="handleRightChange">
+                      @selection-change="handleRightChange"
+                      :row-class-name="rightRow">
                       <el-table-column type="selection" prop="value"></el-table-column>
                       <el-table-column label="用户名" prop="username"></el-table-column>
                       <el-table-column prop="chname" label="中文名" show-overflow-tooltip></el-table-column>
@@ -231,6 +234,13 @@ export default {
   created() {
     this.search()
   },
+  computed: {
+    buttonColor() {
+      if (this.leftData.length == 0) {
+        return false
+      }
+    }
+  },
   methods: {
     search() {
       let params = {
@@ -269,6 +279,7 @@ export default {
       this.formGroups.users = this.formGroups.users.map(item => item.id)
       this.rightData = scope.row.users
       this.leftData = []
+      this.rightData = []
       this.getLeftUser()
     },
     handleNew() {
@@ -395,18 +406,35 @@ export default {
     turnRightItems() {
       // 合并左侧选中数据和右侧数据
       this.rightData.push.apply(this.rightData, this.cacheLeftData)
-      console.log(this.rightData)
+      // 删除左侧勾选数据
+      for (let i of this.cacheLeftData) {
+        this.leftData.splice(i.rowIndex, 1)
+      }
     },
     // 向左侧添加数据
-    turnLeftItems() {},
+    turnLeftItems() {
+      // 合并左侧选中数据和右侧数据
+      this.leftData.push.apply(this.leftData, this.cacheRightData)
+      // 删除左侧勾选数据
+      for (let i of this.cacheRightData) {
+        this.rightData.splice(i.rowIndex, 1)
+      }
+    },
     // 左侧选择项发生变化
     handleLeftChange(val) {
       this.cacheLeftData = val
-      console.log(val)
     },
     // 右侧选择项发生变化
     handleRightChange(val) {
       this.cacheRightData = val
+    },
+    // 左侧表格的每行数据对象中加入索引字段
+    leftRow({row, rowIndex}) {
+      row.rowIndex = rowIndex
+    },
+    // 右侧表格的每行数据对象中加入索引字段
+    rightRow({row, rowIndex}) {
+      row.rowIndex = rowIndex
     },
   },
 }
