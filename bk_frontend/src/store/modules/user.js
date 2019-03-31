@@ -10,8 +10,8 @@ const mutations = {
 }
 
 const actions = {
-  getTableUser({commit, state}) {
-    return commonApi.getTableUser()
+  getTableUser({commit, state}, param) {
+    return commonApi.getTableUser(param)
   }
 }
 

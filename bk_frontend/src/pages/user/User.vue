@@ -126,11 +126,10 @@ export default {
     handleDelete(scope) {},
     handleSelect(item) {
       for (let i in this.allUserName) {
-        if (this.allUserName[i].display_name == item.value) {
-          // return
+        if (this.allUserName[i].chname == item.value) {
+          this.search({chname: this.allUserName[i].chname})
         }
       }
-      console.log(item)
     },
     search() {
       this.allUserName = []
@@ -138,7 +137,7 @@ export default {
         if (res.result) {
           for (let i of res.data) {
             this.allUserName.push({
-              value: i.display_name
+              value: i.chname
             })
           }
           this.allUser = res.data
