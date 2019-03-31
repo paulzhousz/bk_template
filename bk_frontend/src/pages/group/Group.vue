@@ -293,13 +293,11 @@ export default {
     handleNew() {
       this.dialogAction = 'new'
       this.title = '新建'
-      this.formGroups = {users: []}
-      this.rightData = []
-      this.leftData = []
       this.$refs['newEdit'].open()
       this.$nextTick(() => {
         this.$refs['formGroups'].clearValidate()
       })
+     this.getLeftUser()
     },
     checkboxChange(row) {
       let tipEnable = row.is_enable ? '是否启用' : '是否禁用'
@@ -402,14 +400,18 @@ export default {
     getLeftUser() {
       this.$store.dispatch('group/getAllUser').then(res => {
         if (res.result) {
-          this.leftData = res.data.filter((item) => {
-            for (let i of this.rightData) {
-              if (item.id == i.id) {
-                return false
+          if (this.dialogAction == 'new') {
+            this.leftData = res.data
+          } else if (this.dialogAction == 'edit') {
+            this.leftData = res.data.filter((item) => {
+              for (let i of this.rightData) {
+                if (item.id == i.id) {
+                  return false
+                }
               }
-            }
-            return true
-          })
+              return true
+            })
+          }
         }
       })
     },
