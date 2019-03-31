@@ -136,7 +136,7 @@
                       @selection-change="handleSelectionChange">
                       <el-table-column type="selection" prop="value"></el-table-column>
                       <el-table-column prop="username" label="用户名"></el-table-column>
-                      <el-table-column prop="chname" label="中文名"></el-table-column>
+                      <el-table-column prop="chname" label="中文名" show-overflow-tooltip></el-table-column>
                     </el-table>
                   </el-col>
                   <el-col :span="4">
@@ -226,7 +226,6 @@ export default {
   },
   created() {
     this.search()
-    this.getLeftUser()
   },
   methods: {
     search() {
@@ -265,6 +264,8 @@ export default {
       this.formGroups = JSON.parse(JSON.stringify(scope.row))
       this.formGroups.users = this.formGroups.users.map(item => item.id)
       this.rightData = scope.row.users
+      this.leftData = []
+      this.getLeftUser()
     },
     handleNew() {
       this.dialogAction = 'new'
@@ -375,7 +376,11 @@ export default {
     getLeftUser() {
       this.$store.dispatch('group/getAllUser').then(res => {
         if (res.result) {
-          this.leftData = res.data
+          for (let i of res.data) {
+            if (this.rightData.indexOf(res.data[i] == -1)) {
+              this.leftData.push(res.data[i])
+            }
+          }
         }
       })
     },
