@@ -143,7 +143,7 @@ class GroupSerializer(BasicGroupSerializer):
         获取当前角色关联的用户
         """
         users = obj.user_set.all()
-        return UserSerializer(instance=users, many=True).data
+        return BasicUserSerializer(instance=users, many=True).data
 
     def to_internal_value(self, data):
         """传入参数格式化校验数据"""
