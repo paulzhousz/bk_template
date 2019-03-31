@@ -20,6 +20,12 @@ Vue.prototype.$ = $;
 library.add(faTachometerAlt, faEdit)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
+// 过滤器
+Vue.filter('arrayFormat', function(value) {
+  value = value.map(item => item.display_name)
+  return value.join(',')
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

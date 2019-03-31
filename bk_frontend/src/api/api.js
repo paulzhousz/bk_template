@@ -17,13 +17,17 @@ export const getCurrentPermission = params => {
 export const getGroups = params => {
   return $axios.get('/api/sysmanage/groups/', { params: params })
 }
-// 新增/编辑角色数据时获取用户
+// 新增/编辑角色数据时获取所有用户
 export const getAllUser = params => {
   return $axios.get('/api/sysmanage/users/all/', { params: params })
 }
 // 获取菜单树状结构数据
 export const getMenuTree = params => {
   return $axios.get('/api/sysmanage/menus/tree/', { params: params })
+}
+// 用户列表
+export const getTableUser = params => {
+  return $axios.get('/api/sysmanage/users/', { params: params })
 }
 // 获取操作（功能）权限树状数据
 export const getPermsTree = params => {
