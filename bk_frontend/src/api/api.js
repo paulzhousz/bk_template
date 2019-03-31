@@ -25,6 +25,10 @@ export const getAllUser = params => {
 export const getMenuTree = params => {
   return $axios.get('/api/sysmanage/menus/tree/', { params: params })
 }
+// 用户列表
+export const getTableUser = params => {
+  return $axios.get('/api/sysmanage/users/', { params: params })
+}
 // 获取操作（功能）权限树状数据
 export const getPermsTree = params => {
   return $axios.get(`/api/sysmanage/groups/${params.id}/perm_tree/`)
