@@ -188,7 +188,7 @@ export default {
       inputGroup: '',
       title: '',
       dialogAction: '',
-      activeName: 'second',
+      activeName: 'first',
       width: '40%',
       valueIsBuiltIn: undefined,
       valueIsEnable: undefined,
@@ -288,8 +288,6 @@ export default {
       this.formGroups = JSON.parse(JSON.stringify(scope.row))
       this.formGroups.users = this.formGroups.users.map(item => item.id)
       this.rightData = scope.row.users
-      this.leftData = []
-      this.rightData = []
       this.getLeftUser()
     },
     handleNew() {
@@ -368,6 +366,7 @@ export default {
         let params = this.formGroups
         this.$store.dispatch('group/editGroups', params).then(res => {
           if (res.result) {
+            this.search()
             this.$message({type: 'success', message: res.message})
           } else {
             this.$message({type: 'error', message: res.message})
