@@ -1,7 +1,9 @@
 <template>
     <div id="main-container">
         <breadcrumb :to="$route.meta.bread"></breadcrumb>
-        <router-view/>
+        <div class="container">
+            <router-view/>
+        </div>
         <app-footer></app-footer>
     </div>
 </template>
@@ -31,5 +33,9 @@
         background: #f0f2f5;
         float: left;
         overflow: hidden;
+        .container {
+            height: calc(100% - 55px);
+            width: 100%;
+        }
     }
 </style>

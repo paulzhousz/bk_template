@@ -1,6 +1,6 @@
 <template>
   <div class="group">
-    <div class="contain">
+    <!-- <div class="contain"> -->
       <div class="search">
         <el-row>
           <el-col :span="6">
@@ -168,7 +168,7 @@
           </el-tabs>
         </div>
       </new-edit>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -461,12 +461,12 @@ export default {
 
 <style lang="scss">
   .group {
-    height: calc(100% - 55px);
-    width: 100%;
-    .contain {
-      height: 100%;
-      padding: 15px 20px 0 20px;
-      background: #fff;
+    height: 100%;
+    padding: 15px 20px 0 20px;
+    background: #fff;
+    // height: calc(100% - 55px);
+    // width: 100%;
+    // .contain {
       .search {
         height: 50px;
         line-height: 50px;
@@ -483,6 +483,6 @@ export default {
           border-top: 1px solid rgb(235, 238, 245);
         }
       }
-    }
+    // }
   }
 </style>
