@@ -18,7 +18,7 @@
         },
         components: {
             'app-footer': Footer,
-            Breadcrumb
+            'breadcrumb': Breadcrumb
         },
         methods: {}
     }

@@ -76,15 +76,42 @@
       :total="totalNumber"
       @page-size-change="pageSizeChange">
     </pagination>
+    <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction" :width="width">
+      <div slot="dialog-content">
+        <el-form ref="formUser" :label-position="labelPosition" label-width="120px" :model="formUser" :rules="rulesUser">
+          <el-form-item label="用户名" prop="name">
+            <el-autocomplete
+              size="small"
+              class="inline-input"
+              v-model="formUser.username"
+              :fetch-suggestions="querySearchAsync"
+              placeholder="请输入用户名"
+              @select="handleSelectDialog">
+            </el-autocomplete>
+          </el-form-item>
+          <el-form-item label="电话" prop="display_name">
+            <!-- <el-input class="form-content" size="mini" v-model="formGroups.display_name"></el-input> -->
+          </el-form-item>
+          <el-form-item label="邮箱" prop="display_name">
+            <!-- <el-input class="form-content" size="mini" v-model="formGroups.display_name"></el-input> -->
+          </el-form-item>
+          <el-form-item label="描述">
+            <!-- <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input> -->
+          </el-form-item>
+        </el-form>
+      </div>
+    </new-edit>
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination'
+import NewEdit from '@/components/NewEdit'
 
 export default {
   components: {
-    Pagination
+    'pagination': Pagination,
+    'new-edit': NewEdit,
   },
   data() {
     return {
@@ -92,7 +119,13 @@ export default {
       dataUser: [],
       allUserName: [],
       allUser: [],
+      formUser: {},
+      rulesUser: {},
+      username: '',
       stateUser: '',
+      title: '',
+      width: '35%',
+      labelPosition: '120px',
       totalNumber: 0,
       currentPage: 1,
       pageSize: 10,
@@ -103,6 +136,7 @@ export default {
     this.search()
   },
   methods: {
+    // 获取用户页面表格数据
     getUser(apiParam) {
       let params = {
         page: this.currentPage,
@@ -116,18 +150,37 @@ export default {
         }
       })
     },
+    // 表格分页
     pageSizeChange(val) {
       this.currentPage = val.currentPage
       this.pageSize = val.pageSize
       this.getUser({page: this.currentPage, page_size: this.pageSize})
     },
-    handleNewUser() {},
-    handleEdit(scope) {},
+    handleNewUser() {
+      this.formUser = {}
+      this.dialogAction = 'new'
+      this.title = '新建'
+      this.$refs['newEdit'].open()
+    },
+    handleEdit(scope) {
+      this.dialogAction = 'edit'
+      this.title = '编辑'
+      this.$refs['newEdit'].open()
+      this.formUser = JSON.parse(JSON.stringify(scope.row))
+    },
+    handleSuccess(dialogAction) {
+      if (this.dialogAction == 'new') {} else if (this.dialogAction == 'edit') {}
+    },
     checkboxChange(scope) {},
     handleDelete(scope) {},
+    // 关键字提醒后点击某一关键字后操作
     handleSelect(item) {
-          this.getUser({chname: item.value})
+      this.getUser({chname: item.value})
     },
+    handleSelectDialog(item) {
+      this.username = item.value
+    },
+    // 获取所有用户（用于关键字提醒）
     search() {
       this.allUserName = []
       this.$store.dispatch('group/getAllUser').then(res => {
@@ -136,16 +189,19 @@ export default {
             this.allUserName.push({
               value: i.chname
             })
+            // this.formUserList = res.data
           }
           this.allUser = res.data
         }
       })
     },
+    // 匹配输入字符
     querySearchAsync(queryString, cb) {
       let allUserName = this.allUserName;
       let results = queryString ? allUserName.filter(this.createStateFilter(queryString)) : allUserName;
       cb(results)
     },
+    // 匹配位置
     createStateFilter(queryString) {
       return (username) => {
         return (username.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);

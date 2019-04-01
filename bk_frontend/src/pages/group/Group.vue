@@ -107,16 +107,6 @@
               <el-form-item label="显示名" prop="display_name">
                 <el-input class="form-content" size="mini" v-model="formGroups.display_name"></el-input>
               </el-form-item>
-              <!-- <el-form-item label="用户成员" prop="users">
-                <el-select class="form-content" v-model="formGroups.users" multiple placeholder="请选择">
-                  <el-option
-                    v-for="(item, index) in optionsUsers"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item> -->
               <el-form-item label="描述">
                 <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
               </el-form-item>
@@ -178,8 +168,8 @@ import * as commonMethods from '@/common/js/common'
 
 export default {
   components: {
-    Pagination,
-    NewEdit,
+    'pagination': Pagination,
+    'new-edit': NewEdit,
   },
   data() {
     return {
