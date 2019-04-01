@@ -108,7 +108,7 @@ class BasicGroupSerializer(ModelSerializer):
 class BasicUserSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'chname', 'email')
+        fields = ('id', 'username', 'chname', 'email', 'phone')
 
 
 class UserSerializer(BasicUserSerializer):
