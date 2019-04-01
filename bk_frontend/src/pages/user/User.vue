@@ -84,20 +84,20 @@
               size="small"
               class="inline-input"
               v-model="formUser.username"
-              :fetch-suggestions="querySearchAsync"
+              :fetch-suggestions="querySearchDetail"
               placeholder="请输入用户名"
               @select="handleSelectDialog">
             </el-autocomplete>
           </el-form-item>
-          <el-form-item label="电话" prop="display_name">
-            <!-- <el-input class="form-content" size="mini" v-model="formGroups.display_name"></el-input> -->
+          <el-form-item label="电话" prop="phone">
+            <span class="form-content">{{formUser.phone}}</span>
           </el-form-item>
-          <el-form-item label="邮箱" prop="display_name">
-            <!-- <el-input class="form-content" size="mini" v-model="formGroups.display_name"></el-input> -->
+          <el-form-item label="邮箱" prop="email">
+            <span class="form-content">{{formUser.email}}</span>
           </el-form-item>
-          <el-form-item label="描述">
-            <!-- <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input> -->
-          </el-form-item>
+          <!-- <el-form-item label="描述">
+            <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
+          </el-form-item> -->
         </el-form>
       </div>
     </new-edit>
@@ -119,9 +119,13 @@ export default {
       dataUser: [],
       allUserName: [],
       allUser: [],
-      formUser: {},
+      formUser: {
+        username: '',
+        phone: '',
+        email: '',
+      },
       rulesUser: {},
-      username: '',
+      userDetail: [],
       stateUser: '',
       title: '',
       width: '35%',
@@ -178,7 +182,8 @@ export default {
       this.getUser({chname: item.value})
     },
     handleSelectDialog(item) {
-      this.username = item.value
+      this.formUser.phone = item.phone
+      this.formUser.email = item.email
     },
     // 获取所有用户（用于关键字提醒）
     search() {
@@ -189,11 +194,27 @@ export default {
             this.allUserName.push({
               value: i.chname
             })
-            // this.formUserList = res.data
+            this.userDetail.push({
+              value: i.chname,
+              phone: i.phone,
+              email: i.email,
+            })
           }
           this.allUser = res.data
         }
       })
+    },
+    // 匹配输入字符
+    querySearchDetail(queryString, cb) {
+      let userDetail = this.userDetail;
+      let results = queryString ? userDetail.filter(this.createStateFilterDetail(queryString)) : userDetail;
+      cb(results)
+    },
+    // 匹配位置
+    createStateFilterDetail(queryString) {
+      return (usernameDetail) => {
+        return (usernameDetail.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
     },
     // 匹配输入字符
     querySearchAsync(queryString, cb) {
