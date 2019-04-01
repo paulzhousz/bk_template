@@ -5,7 +5,8 @@
         v-model="stateUser"
         :fetch-suggestions="querySearchAsync"
         placeholder="请输入用户名"
-        @select="handleSelect">
+        @select="handleSelect"
+        clearable>
       </el-autocomplete>
     </div>
     <div class="new">
@@ -81,6 +82,7 @@
         <el-form ref="formUser" :label-position="labelPosition" label-width="120px" :model="formUser" :rules="rulesUser">
           <el-form-item label="用户名" prop="name">
             <el-autocomplete
+              clearable
               size="small"
               class="inline-input"
               v-model="formUser.username"
