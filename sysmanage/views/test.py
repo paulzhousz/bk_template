@@ -23,7 +23,14 @@ class MockViewSet(ViewSet):
         bulk_list = []
         for i in range(count):
             bulk_list.append(
-                get_user_model()(username=faker.user_name(), chname=faker.name(), is_in_app=True, is_enable=True)
+                get_user_model()(
+                    username=faker.user_name(),
+                    chname=faker.name(),
+                    phone=faker.phone_number(),
+                    email=faker.safe_email(),
+                    is_in_app=True,
+                    is_enable=True
+                )
             )
         get_user_model().objects.bulk_create(bulk_list)
         return Response()
