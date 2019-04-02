@@ -100,9 +100,9 @@
         </el-form>
       </div>
       <div slot="dialog-content" v-if="!showForm">
-        <div v-for="(item, index) in userAuthorityList" :key="index">
-          <span>{{item.display_name}}</span>
-          <!-- <div v-for="(item.)"></div> -->
+        <div class="label-position" v-for="(item, index) in userAuthorityList" :key="index">
+          <span class="label-position-content">{{item.display_name}}</span>
+          <div></div>
         </div>
       </div>
     </new-edit>
@@ -338,6 +338,13 @@ export default {
       height: calc(100% - 180px);
       .el-table {
         border-top: 1px solid rgb(235, 238, 245);
+      }
+    }
+    .label-position {
+      margin: 0 0 15px 0;
+      .label-position-content {
+        // float: left;
+        width: 80px;
       }
     }
   }
