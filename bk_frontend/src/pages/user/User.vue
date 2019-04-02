@@ -98,11 +98,11 @@
             <span class="form-content">{{formUser.email}}</span>
           </el-form-item>
         </el-form>
-        <div v-if="!showForm">
-          <div v-for="(item, index) in userAuthorityList" :key="index">
-            <span>{{item.display_name}}</span>
-            <!-- <div v-for="(item.)"></div> -->
-          </div>
+      </div>
+      <div slot="dialog-content" v-if="!showForm">
+        <div v-for="(item, index) in userAuthorityList" :key="index">
+          <span>{{item.display_name}}</span>
+          <!-- <div v-for="(item.)"></div> -->
         </div>
       </div>
     </new-edit>
