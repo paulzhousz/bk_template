@@ -114,6 +114,7 @@ export default {
         if (res.result) {
           this.$message({type: 'success', message: '权限设置成功'})
         } else {
+          this.getPerm()
           this.$message({type: 'error', message: '权限设置失败'})
         }
       })
