@@ -28,6 +28,9 @@ const actions = {
   getUserAuthority({commit, state}, param) {
     return commonApi.getUserAuthority(param)
   },
+  getAllGroup({commit, state}) {
+    return commonApi.getAllGroup()
+  },
 }
 
 export default {

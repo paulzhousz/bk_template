@@ -21,6 +21,10 @@ export const getGroups = params => {
 export const getAllUser = params => {
   return $axios.get('/api/sysmanage/users/all/', { params: params })
 }
+// 新增/编辑角色数据时获取所有用户
+export const getAllGroup = params => {
+  return $axios.get('/api/sysmanage/groups/select/', { params: params })
+}
 // 获取菜单树状结构数据
 export const getMenuTree = params => {
   return $axios.get('/api/sysmanage/menus/tree/', { params: params })

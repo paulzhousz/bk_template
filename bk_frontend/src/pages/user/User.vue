@@ -100,9 +100,20 @@
         </el-form>
       </div>
       <div slot="dialog-content" v-if="!showForm">
-        <div class="label-position" v-for="(item, index) in userAuthorityList" :key="index">
-          <span class="label-position-content">{{item.display_name}}</span>
-          <div></div>
+        <div>
+          <div class="label-position" v-for="(item, index) in userAuthorityList" :key="index">
+            <label class="label-position-left">{{item.display_name}}</label>
+            <div class="label-position-right">
+              <el-select size="mini" v-model="valueGroup" multiple placeholder="请选择角色">
+                <el-option
+                  v-for="(item, index) in optionsGroup"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
+          </div>
         </div>
       </div>
     </new-edit>
@@ -125,6 +136,7 @@ export default {
       dataUser: [],
       allUserName: [],
       allUser: [],
+      optionsGroup: [],
       formUser: {
         username: '',
         phone: '',
@@ -134,6 +146,7 @@ export default {
       rulesUser: {},
       userDetail: [],
       userAuthorityList: [],
+      valueGroup: [],
       stateUser: '',
       title: '',
       width: '35%',
@@ -185,6 +198,11 @@ export default {
       this.$store.dispatch('user/getUserAuthority', params).then(res => {
         if (res.result) {
           this.userAuthorityList = res.data
+        }
+      })
+      this.$store.dispatch('user/getAllGroup').then(res => {
+        if (res.result) {
+          this.optionsGroup = res.data
         }
       })
     },
@@ -342,9 +360,26 @@ export default {
     }
     .label-position {
       margin: 0 0 15px 0;
-      .label-position-content {
-        // float: left;
-        width: 80px;
+      height: 40px;
+      display: block;
+      .label-position-left {
+        width: 120px;
+        text-align: right;
+        vertical-align: middle;
+        float: left;
+        font-size: 14px;
+        color: #606266;
+        line-height: 40px;
+        padding: 0 12px 0 0;
+      }
+      .label-position-right {
+        line-height: 40px;
+        position: relative;
+        font-size: 14px;
+        margin-left: 120px;
+        .el-select.el-select--mini {
+          width: 80%
+        }
       }
     }
   }
