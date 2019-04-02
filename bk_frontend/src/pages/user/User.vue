@@ -10,7 +10,7 @@
       </el-autocomplete>
     </div>
     <div class="new">
-      <el-button size="mini" type="primary" @click="handleNewUser">新建用户</el-button>
+      <el-button size="mini" type="primary" @click="handleNewUser">添加用户</el-button>
     </div>
     <div class="table">
       <el-table
@@ -67,7 +67,7 @@
           fixed="right"
           width="100">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope)">编辑</el-button>
+            <el-button type="text" @click="handleAuthority(scope)">权限</el-button>
             <el-button type="text" @click="handleDelete(scope)">删除</el-button>
           </template>
         </el-table-column>
@@ -78,7 +78,7 @@
       @page-size-change="pageSizeChange">
     </pagination>
     <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction" :width="width">
-      <div slot="dialog-content">
+      <div slot="dialog-content" v-if="showForm">
         <el-form ref="formUser" :label-position="labelPosition" label-width="120px" :model="formUser" :rules="rulesUser">
           <el-form-item label="用户名" prop="name">
             <el-autocomplete
@@ -97,10 +97,13 @@
           <el-form-item label="邮箱" prop="email">
             <span class="form-content">{{formUser.email}}</span>
           </el-form-item>
-          <!-- <el-form-item label="描述">
-            <el-input class="form-content" type="textarea" v-model="formGroups.desc"></el-input>
-          </el-form-item> -->
         </el-form>
+        <div v-if="!showForm">
+          <div v-for="(item, index) in userAuthorityList" :key="index">
+            <span>{{item.display_name}}</span>
+            <!-- <div v-for="(item.)"></div> -->
+          </div>
+        </div>
       </div>
     </new-edit>
   </div>
@@ -118,6 +121,7 @@ export default {
   data() {
     return {
       loadingUser: false,
+      showForm: true,
       dataUser: [],
       allUserName: [],
       allUser: [],
@@ -126,8 +130,10 @@ export default {
         phone: '',
         email: '',
       },
+      userID: '',
       rulesUser: {},
       userDetail: [],
+      userAuthorityList: [],
       stateUser: '',
       title: '',
       width: '35%',
@@ -163,27 +169,105 @@ export default {
       this.getUser({page: this.currentPage, page_size: this.pageSize})
     },
     handleNewUser() {
+      this.showForm = true
       this.formUser = {}
       this.dialogAction = 'new'
       this.title = '新建'
       this.$refs['newEdit'].open()
     },
-    handleEdit(scope) {
-      this.dialogAction = 'edit'
-      this.title = '编辑'
+    handleAuthority(scope) {
+      this.showForm = false
+      this.title = '权限管理'
       this.$refs['newEdit'].open()
-      this.formUser = JSON.parse(JSON.stringify(scope.row))
+      let params = {
+        id: scope.row.id
+      }
+      this.$store.dispatch('user/getUserAuthority', params).then(res => {
+        if (res.result) {
+          this.userAuthorityList = res.data
+        }
+      })
     },
-    handleSuccess(dialogAction) {
-      if (this.dialogAction == 'new') {} else if (this.dialogAction == 'edit') {}
+    handleSuccess() {
+      let params = {
+        id: this.userID
+      }
+      this.$store.dispatch('user/addUser', params).then(res => {
+        if (res.result) {
+          this.getUser()
+          this.$message({type: 'success', message: '添加用户成功'})
+        } else {
+          this.$message({type: 'error', message: '添加用户失败'})
+        }
+      })
+      this.$refs['newEdit'].cancel()
     },
-    checkboxChange(scope) {},
-    handleDelete(scope) {},
+    checkboxChange(row) {
+      let tipEnable = row.is_enable ? '是否启用' : '是否禁用'
+      this.$confirm(tipEnable, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (row.is_enable == true) {
+          let params = {
+            users: [row.id],
+            enable: true
+          }
+          this.$store.dispatch('user/usersStatus', params).then(res => {
+            if (res.result) {
+              this.$message({type: 'success', message: res.message})
+            } else {
+              row.is_enable = !row.is_enable
+              this.$message({type: 'error', message: res.message})
+            }
+          });
+        } else if (row.is_enable == false) {
+          let params = {
+            users: [row.id],
+            enable: false
+          }
+          this.$store.dispatch('user/usersStatus', params).then(res => {
+            if (res.result) {
+              this.$message({type: 'success', message: res.message})
+            } else {
+              row.is_enable = !row.is_enable
+              this.$message({type: 'error', message: res.message})
+            }
+          });
+        }
+      }).catch(() => {
+        row.is_enable = !row.is_enable
+        this.$message({type: 'info', message: '调取接口失败'})
+      })
+    },
+    handleDelete(scope) {
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          id: scope.row.id
+        }
+        this.$store.dispatch('user/deleteUser', params).then(res => {
+          if (res.result) {
+            this.getUser()
+            this.$message({type: 'success', message: '删除用户成功'})
+          } else {
+            this.$message({type: 'error', message: '删除用户失败'})
+          }
+        })
+      }).catch(() => {
+        this.$message({type: 'info', message: '已取消'})
+      })
+    },
     // 关键字提醒后点击某一关键字后操作
     handleSelect(item) {
       this.getUser({chname: item.value})
     },
     handleSelectDialog(item) {
+      this.userID = item.id
       this.formUser.phone = item.phone
       this.formUser.email = item.email
     },
@@ -200,31 +284,32 @@ export default {
               value: i.chname,
               phone: i.phone,
               email: i.email,
+              id: i.id,
             })
           }
           this.allUser = res.data
         }
       })
     },
-    // 匹配输入字符
+    // 添加用户时用户输入匹配输入字符
     querySearchDetail(queryString, cb) {
       let userDetail = this.userDetail;
       let results = queryString ? userDetail.filter(this.createStateFilterDetail(queryString)) : userDetail;
       cb(results)
     },
-    // 匹配位置
+    // 添加用户时用户输入匹配位置
     createStateFilterDetail(queryString) {
       return (usernameDetail) => {
         return (usernameDetail.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    // 匹配输入字符
+    // 表格页匹配输入字符
     querySearchAsync(queryString, cb) {
       let allUserName = this.allUserName;
       let results = queryString ? allUserName.filter(this.createStateFilter(queryString)) : allUserName;
       cb(results)
     },
-    // 匹配位置
+    // 表格页匹配位置
     createStateFilter(queryString) {
       return (username) => {
         return (username.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);

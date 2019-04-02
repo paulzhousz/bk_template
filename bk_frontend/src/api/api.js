@@ -37,19 +37,39 @@ export const getPermsTree = params => {
 export const getAuthority = params => {
   return $axios.get(`/api/sysmanage/groups/${params.id}/`, params)
 }
+// 获取用户的关联权限数据
+export const getUserAuthority = params => {
+  return $axios.get(`api/sysmanage/users/${params.id}/search/perm/`, { params: params })
+}
 // 编辑角色数据
 export const editGroups = params => {
   return $axios.put(`/api/sysmanage/groups/${params.id}/`, params)
+}
+// 编辑角色数据
+export const editUser = params => {
+  return $axios.put(`/api/sysmanage/users/${params.id}/`, params)
 }
 // 添加角色数据
 export const addGroups = params => {
   return $axios.post('/api/sysmanage/groups/', params)
 }
+// 添加用户数据
+export const addUser = params => {
+  return $axios.post('/api/sysmanage/users/', params)
+}
 // 删除角色数据
 export const deleteGroups = params => {
   return $axios.delete(`/api/sysmanage/groups/${params.id}/`, params)
 }
+// 删除角色数据
+export const deleteUser = params => {
+  return $axios.delete(`/api/sysmanage/users/${params.id}/`, params)
+}
 // 启用/禁用角色
 export const groupsStatus = params => {
   return $axios.put('/api/sysmanage/groups/status/', params)
+}
+// 启用/禁用角色
+export const usersStatus = params => {
+  return $axios.put('/api/sysmanage/users/status/', params)
 }
