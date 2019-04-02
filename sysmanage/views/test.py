@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# from faker import Faker
+from faker import Faker
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
