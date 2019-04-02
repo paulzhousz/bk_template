@@ -61,6 +61,10 @@ export const addGroups = params => {
 export const addUser = params => {
   return $axios.post('/api/sysmanage/users/', params)
 }
+// 设置用户权限
+export const setUserPerm = params => {
+  return $axios.post(`/api/sysmanage/users/${params.id}/set/perm/`, params.params)
+}
 // 删除角色数据
 export const deleteGroups = params => {
   return $axios.delete(`/api/sysmanage/groups/${params.id}/`, params)

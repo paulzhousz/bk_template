@@ -104,7 +104,7 @@
           <div class="label-position" v-for="(item, index) in userAuthorityList" :key="index">
             <label class="label-position-left">{{item.display_name}}</label>
             <div class="label-position-right">
-              <el-select size="mini" v-model="valueGroup" multiple placeholder="请选择角色">
+              <el-select clearable size="mini" v-model="item.groups" multiple placeholder="请选择角色">
                 <el-option
                   v-for="(item, index) in optionsGroup"
                   :key="index"
@@ -142,7 +142,8 @@ export default {
         phone: '',
         email: '',
       },
-      userID: '',
+      addUserId: '',
+      authUserId: '',
       rulesUser: {},
       userDetail: [],
       userAuthorityList: [],
@@ -192,8 +193,9 @@ export default {
       this.showForm = false
       this.title = '权限管理'
       this.$refs['newEdit'].open()
+      this.authUserId = scope.row.id
       let params = {
-        id: scope.row.id
+        id: this.authUserId
       }
       this.$store.dispatch('user/getUserAuthority', params).then(res => {
         if (res.result) {
@@ -207,17 +209,32 @@ export default {
       })
     },
     handleSuccess() {
-      let params = {
-        id: this.userID
-      }
-      this.$store.dispatch('user/addUser', params).then(res => {
-        if (res.result) {
-          this.getUser()
-          this.$message({type: 'success', message: '添加用户成功'})
-        } else {
-          this.$message({type: 'error', message: '添加用户失败'})
+      if (this.showForm == true) {
+        let params = {
+          id: this.addUserId
         }
-      })
+        this.$store.dispatch('user/addUser', params).then(res => {
+          if (res.result) {
+            this.getUser()
+            this.$message({type: 'success', message: '添加用户成功'})
+          } else {
+            this.$message({type: 'error', message: '添加用户失败'})
+          }
+        })
+      } else if (this.showForm == false) {
+        let params = {
+          id: this.authUserId,
+          params: this.userAuthorityList
+        }
+        this.$store.dispatch('user/setUserPerm', params).then(res => {
+          if (res.result) {
+            this.getUser()
+            this.$message({type: 'success', message: '设置用户权限成功'})
+          } else {
+            this.$message({type: 'error', message: '设置用户权限失败'})
+          }
+        })
+      }
       this.$refs['newEdit'].cancel()
     },
     checkboxChange(row) {
@@ -285,7 +302,7 @@ export default {
       this.getUser({chname: item.value})
     },
     handleSelectDialog(item) {
-      this.userID = item.id
+      this.addUserId = item.id
       this.formUser.phone = item.phone
       this.formUser.email = item.email
     },

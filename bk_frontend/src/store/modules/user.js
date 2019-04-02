@@ -31,6 +31,9 @@ const actions = {
   getAllGroup({commit, state}) {
     return commonApi.getAllGroup()
   },
+  setUserPerm({commit, state}, param) {
+    return commonApi.setUserPerm(param)
+  },
 }
 
 export default {
