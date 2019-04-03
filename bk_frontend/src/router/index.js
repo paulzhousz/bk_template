@@ -40,6 +40,10 @@ let routerVue = new Vue({
 let router = new Router({
     routes: [
         {
+            path: '/',
+            redirect: 'user'
+        },
+        {
             path: '/monitor_panel',
             name: 'monitor_panel',
             component: MonitorPanel,

@@ -14,7 +14,7 @@ class LoginMiddleware(object):
     def process_view(self, request, view, args, kwargs):
         """process_view."""
         # 模拟登录账号
-        username = 'admin'
+        username = 'janna'
         user_model = get_user_model()
         if user_model.objects.filter(username=username).exists():
             user = user_model.objects.get(username=username)

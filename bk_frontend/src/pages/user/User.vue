@@ -10,8 +10,8 @@
       </el-autocomplete>
     </div>
     <div class="new">
-      <el-button size="mini" type="primary" @click="handleNewUser">添加用户</el-button>
-      <!-- <el-button size="mini" v-if="!showAdd" type="primary" disabled>添加用户</el-button> -->
+      <el-button size="mini" v-if="showAdd" type="primary" @click="handleNewUser">添加用户</el-button>
+      <el-button size="mini" v-if="!showAdd" type="primary" disabled>添加用户</el-button>
     </div>
     <div class="table">
       <el-table
@@ -135,6 +135,7 @@ export default {
     return {
       loadingUser: false,
       showForm: true,
+      showAdd: true,
       dataUser: [],
       allUserName: [],
       allUser: [],
@@ -165,15 +166,18 @@ export default {
   },
   computed: {
     ...mapGetters('leftmenu', ['permissions']),
-    // showAdd() {
-    //   for (let i of this.permissions) {
-    //     if (i.codename == 'add_bkuser') {
-    //       return true
-    //     } else {
-    //       return false
-    //     }
-    //   }
-    // }
+  },
+  watch: {
+    permissions(val) {
+      console.log(val)
+      for (let i of val) {
+        if (i.codename == 'add_bkuser') {
+          this.showAdd = true
+          return
+        }
+      }
+      this.showAdd = false
+    }
   },
   methods: {
     // 获取用户页面表格数据
