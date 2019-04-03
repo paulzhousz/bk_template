@@ -135,7 +135,7 @@ export default {
     return {
       loadingUser: false,
       showForm: true,
-      showAdd: true,
+      showAdd: false,
       dataUser: [],
       allUserName: [],
       allUser: [],
