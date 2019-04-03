@@ -21,11 +21,19 @@ axios.interceptors.response.use(response => {
   }
   return response.data
 }, error => {
-  return {
-      code: 500,
-      message: '未知错误，请刷新重试',
+  if (error.response.status) {
+    return {
+      code: 403,
+      message: error.response.data.message,
       error: error,
       result: false
+    }
+  }
+  return {
+    code: 500,
+    message: '未知错误，请刷新重试',
+    error: error,
+    result: false
   }
 });
 Vue.prototype.$http = axios;

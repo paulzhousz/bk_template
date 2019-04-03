@@ -11,6 +11,7 @@
     </div>
     <div class="new">
       <el-button size="mini" type="primary" @click="handleNewUser">添加用户</el-button>
+      <!-- <el-button size="mini" v-if="!showAdd" type="primary" disabled>添加用户</el-button> -->
     </div>
     <div class="table">
       <el-table
@@ -123,6 +124,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import NewEdit from '@/components/NewEdit'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -160,6 +162,18 @@ export default {
   created() {
     this.getUser()
     this.search()
+  },
+  computed: {
+    ...mapGetters('leftmenu', ['permissions']),
+    // showAdd() {
+    //   for (let i of this.permissions) {
+    //     if (i.codename == 'add_bkuser') {
+    //       return true
+    //     } else {
+    //       return false
+    //     }
+    //   }
+    // }
   },
   methods: {
     // 获取用户页面表格数据
@@ -398,6 +412,9 @@ export default {
           width: 80%
         }
       }
+    }
+    .inline-input {
+      width: 80%;
     }
   }
 </style>

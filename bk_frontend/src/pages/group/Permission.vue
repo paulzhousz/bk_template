@@ -125,7 +125,7 @@ export default {
 
 <style lang="scss">
   .permission {
-    height: calc(100% - 55px);
+    height: 100%;
     width: 100%;
     .contain {
       height: 100%;

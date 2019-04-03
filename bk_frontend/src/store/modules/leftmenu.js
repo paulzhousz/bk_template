@@ -1,4 +1,5 @@
 import * as commonApi from '@/api/api'
+import * as commonMethods from '@/common/js/common.js'
 
 const state = {
   isAdmin: window.isAdmin === '1', // 管理员
@@ -37,7 +38,15 @@ const actions = {
     return commonApi.getCurrentPermission().then(res => {
       if (res.result) {
         commit('setIsGetUserPerm', true)
-        commit('setRouterMenuList', res.data.menus)
+        let haveAllMenu = res.data.menus
+        let haveMenuTree = []
+        for (let i = 0; i < haveAllMenu.length; i++) {
+          if (haveAllMenu[i].parent == null) {
+            let haveMenu = commonMethods.pushChildNode(haveAllMenu[i], haveAllMenu)
+            haveMenuTree.push(haveMenu)
+          }
+        }
+        commit('setRouterMenuList', haveMenuTree)
         commit('setPermissions', res.data.permissions)
       }
     })

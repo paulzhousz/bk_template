@@ -9,7 +9,8 @@
                 text-color="#fff"
                 active-text-color="#ffd04b"
                 :unique-opened="only">
-                    <template v-for="(item, index) in menusList">
+                    <!-- <template v-for="(item, index) in menusList"> -->
+                    <template v-for="(item, index) in routerMenuList">
                         <el-submenu :index="index + ''" :key="index" v-if="item.children.length > 0 && item.is_menu">
                             <template slot="title">
                                 <font-awesome-icon :icon="item.icon"></font-awesome-icon>
@@ -31,6 +32,8 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
         data() {
             return {
@@ -43,7 +46,10 @@
         },
        created() {
             this.getUrl()
-            this.getLeftmenu()
+            // this.getLeftmenu()
+        },
+        computed: {
+            ...mapGetters('leftmenu', ['routerMenuList'])
         },
         methods: {
             getUrl() {
@@ -63,13 +69,14 @@
                 let self = this
                 self.currentMenu = self.$route.meta.currentMenu
             },
-            getLeftmenu() {
-                this.$store.dispatch('leftmenu/getMenu').then(res => {
-                    if (res.result) {
-                        this.menusList = res.data
-                    }
-                })
-            }
+            // getLeftmenu() {
+            //     this.$store.dispatch('leftmenu/getMenu').then(res => {
+            //         if (res.result) {
+            //             this.menusList = res.data
+            //             console.log(this.menusList)
+            //         }
+            //     })
+            // }
         },
         watch: {
             /*
