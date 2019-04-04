@@ -23,8 +23,8 @@ let routerVue = new Vue({
                 return true
             }
             let authorityRes = false
-            for(let i = 0; i < this.routerMenuList; i++) {
-                if (this.routerMenuList[i].name === routerName) {
+            for(let i = 0; i < this.routerList.length; i++) {
+                if (this.routerList[i].name == routerName) {
                     authorityRes = true
                     break
                 }
@@ -33,12 +33,24 @@ let routerVue = new Vue({
         }
     },
     computed: {
-        ...mapGetters('leftmenu', ['isAdmin', 'isGetUserPerm', 'routerMenuList'])
+        ...mapGetters('leftmenu', ['isAdmin', 'isGetUserPerm', 'routerList'])
     }
 })
 
 let router = new Router({
     routes: [
+        {
+            path: '/',
+            redirect: '/user'
+        },
+        {
+          path: '/403',
+          component: resolve => require(['@/pages/403'], resolve)
+        },
+        {
+          path: '/404',
+          component: resolve => require(['@/pages/404'], resolve)
+        },
         {
             path: '/monitor_panel',
             name: 'monitor_panel',
@@ -90,12 +102,12 @@ let router = new Router({
     ]
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     if (to.matched.length === 0) {
-        from.name ? next({name: from.name}) : next('/');
+        from.name ? next({name: from.name}) : next('/404');
     } else {
-        let authorityResult = routerVue.isRouterNameAuthority(to.name)
-        if (authorityResult || ['/403', '/404'].indexOf(to.path != -1)) {
+        let authorityResult = await routerVue.isRouterNameAuthority(to.name)
+        if (authorityResult || ['/403', '/404'].indexOf(to.path) != -1) {
             next();
         } else {
             next('/403');
