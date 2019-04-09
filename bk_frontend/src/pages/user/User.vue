@@ -163,23 +163,20 @@ export default {
   created() {
     this.getUser()
     this.search()
+    this.showAdd = this.requirePerm('add_bkuser')
   },
   computed: {
     ...mapGetters('leftmenu', ['permissions']),
   },
-  watch: {
-    permissions(val) {
-      console.log(val)
-      for (let i of val) {
-        if (i.codename == 'add_bkuser') {
-          this.showAdd = true
-          return
+  methods: {
+    requirePerm(permission) {
+      for (let i of this.permissions) {
+        if (i.codename == permission) {
+          return true
         }
       }
-      this.showAdd = false
-    }
-  },
-  methods: {
+      return false
+    },
     // 获取用户页面表格数据
     getUser(apiParam) {
       let params = {

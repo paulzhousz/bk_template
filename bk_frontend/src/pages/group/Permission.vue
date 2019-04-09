@@ -17,7 +17,10 @@
         <el-tab-pane label="操作权限" name="second">
           <div class="one-layer" v-for="(item, index) in allOperations" :key="index">
             <span class="one-layer-name">{{item.display_name}}</span>
-            <el-checkbox v-for="(itemOperation, indexOperations) in item.children" :key="indexOperations" v-model="itemOperation.has_perms">
+            <el-checkbox
+            v-for="(itemOperation, indexOperations) in item.children"
+            :key="indexOperations"
+            v-model="itemOperation.has_perms">
               {{itemOperation.display_name}}
             </el-checkbox>
           </div>
@@ -79,7 +82,7 @@ export default {
         this.haveMenu(id)
       ])
     },
-    // 操作权限树状数据
+    // 操作权限数据
     getPerm() {
       this.allOperations = []
       let param = {id: this.$route.params.group_id}
