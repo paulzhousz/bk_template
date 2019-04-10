@@ -6,7 +6,11 @@ const state = {
   isGetUserPerm: false, // 获取到当前用户的路由权限
   routerMenuList: [], // 当前用户的路由菜单权限
   permissions: [], // 当前用户的操作权限
+<<<<<<< HEAD
   routerList: [], // 当前用户能跳转的路由
+=======
+  routerList: [], // 当前用户的路由列表
+>>>>>>> origin/kris
 }
 
 const getters = {
@@ -14,7 +18,11 @@ const getters = {
   isGetUserPerm: state => state.isGetUserPerm,
   routerMenuList: state => state.routerMenuList,
   permissions: state => state.permissions,
+<<<<<<< HEAD
   routerList: state => state.routerList
+=======
+  routerList: state => state.routerList,
+>>>>>>> origin/kris
 }
 
 const mutations = {
@@ -29,7 +37,11 @@ const mutations = {
   },
   setRouterList(state, routerList) {
     state.routerList = routerList
+<<<<<<< HEAD
   },
+=======
+  }
+>>>>>>> origin/kris
 }
 
 const actions = {

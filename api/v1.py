@@ -7,5 +7,6 @@ urlpatterns = patterns(
     '',
     # 权限管理
     url(r'^sysmanage/', include('sysmanage.urls')),
+    url(r'^monitor/', include('monitor.urls')),
     url(r'^', include('home_application.urls'))
 )
