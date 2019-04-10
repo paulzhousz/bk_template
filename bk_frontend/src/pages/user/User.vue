@@ -158,7 +158,6 @@ export default {
       totalNumber: 0,
       currentPage: 1,
       pageSize: 10,
-      showAdd: false
     }
   },
   created() {
