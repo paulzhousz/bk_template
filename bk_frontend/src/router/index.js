@@ -41,7 +41,7 @@ let router = new Router({
     routes: [
         {
             path: '/',
-            redirect: 'user'
+            redirect: 'monitor_panel'
         },
         {
             path: '/403',

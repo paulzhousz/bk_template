@@ -17,6 +17,10 @@ export const getServerSelect = params => {
 export const getServerPerformance = params => {
   return $axios.get(`/api/monitor/mocks/${params.id}/server/performance/`, { params: params })
 }
+// 获取CPU状态折线图
+export const getBizServer = params => {
+  return $axios.get('/api/monitor/mocks/biz/server/', { params: params })
+}
 
 // 获取左侧菜单数据
 export const getMenu = params => {

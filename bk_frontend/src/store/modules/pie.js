@@ -19,6 +19,9 @@ const actions = {
   getServerPerformance({commit, state}, param) {
     return commonApi.getServerPerformance(param)
   },
+  getBizServer({commit, state}) {
+    return commonApi.getBizServer()
+  },
 }
 
 export default {
