@@ -5,7 +5,7 @@
       <div class="grid-content bg-purple">任务统计</div>
     </el-col>
     <el-col :span="12">
-      <div class="grid-content bg-purple-light">CPU状态</div>
+      <div class="grid-content bg-purple-light">性能状态</div>
     </el-col>
   </el-row>
   <el-row :gutter="20" type="flex" class="row_middle" justify="space-between">
@@ -127,6 +127,7 @@ export default {
     // 下拉框数据发生改变时触发
     serverChange(val) {
       this.serverId = val
+      this.initCpuChart(val)
     },
     // 初始化cpu折线图
     initCpuChart() {
@@ -137,47 +138,50 @@ export default {
       let data = []
       let cpuData = []
       let memoryData = []
-      // let seriesData = []
       this.$store.dispatch('pie/getServerPerformance', params).then(res => {
         if (res.result) {
           data = res.data.map(item => item.product)
           cpuData = res.data.map(item => item.cpu)
           memoryData = res.data.map(item => item.mem)
+          let option = {
+            title: {
+              // text: 'Cpu、内存使用率'
+            },
+            tooltip: {
+              trigger: 'axis'
+            },
+            legend: {
+              data: ['CPU', '内存']
+            },
+            xAxis: {
+              type: 'category',
+              data: data
+            },
+            yAxis: {
+              type: 'value',
+              min: 0
+            },
+            series: [
+              {
+                name: 'CPU',
+                color: '#fa541c',
+                data: cpuData,
+                type: 'line',
+                smooth: true
+              },
+              {
+                name: '内存',
+                data: memoryData,
+                color: '#a0d911',
+                type: 'line',
+                smooth: true
+              },
+            ]
+          }
+          cpuChart.setOption(option)
         }
       })
-      seriesData = []
-      let option = {
-        title: {
-          // text: 'Cpu、内存使用率'
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        legend: {
-          data: ['CPU', '内存']
-        },
-        xAxis: {
-          type: 'category',
-          data: data
-        },
-        yAxis: {
-          type: 'value',
-          min: 0
-        },
-        series: [
-          {
-            name: 'CPU',
-            data: cpuData,
-            type: 'line'
-          },
-          {
-            name: '内存',
-            data: memoryData,
-            type: 'line'
-          },
-        ]
-      }
-      cpuChart.setOption(option)
+      // seriesData = []
       // 浏览器放大或缩小时无需刷新图表自动随页面的大小而变化
       window.onresize = function() {
         cpuChart.resize()
