@@ -137,6 +137,7 @@ export default {
       let data = []
       let cpuData = []
       let memoryData = []
+      // let seriesData = []
       this.$store.dispatch('pie/getServerPerformance', params).then(res => {
         if (res.result) {
           data = res.data.map(item => item.product)
@@ -144,6 +145,7 @@ export default {
           memoryData = res.data.map(item => item.mem)
         }
       })
+      seriesData = []
       let option = {
         title: {
           // text: 'Cpu、内存使用率'
