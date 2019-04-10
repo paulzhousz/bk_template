@@ -206,23 +206,8 @@ export default {
       let bizServerChart = this.$echarts.init(document.getElementById('server_pic'))
       await this.$store.dispatch('pie/getBizServer').then(res => {
         if (res.result) {
-          let dataSource = []
-          // let productList = []
-          // let linuxList = []
-          // let windowsList = []
-          // for (let i in res.data) {
-          //   productList.push(res.data[i].product)
-          //   linuxList.push(res.data[i].linux)
-          //   windowsList.push(res.data[i].windows)
-          // }
-          // productList.splice(0, 0, 'product')
-          // linuxList.splice(0, 0, 'linux')
-          // windowsList.splice(0, 0, 'windows')
-          // dataSource[2] = productList
-          // dataSource[0] = linuxList
-          // dataSource[1] = windowsList
+          let dataSource = [['product', 'windows', 'linux']]
           Object.keys(res.data).forEach((i) => {
-            console.log(i)
             dataSource.push([res.data[i].product, res.data[i].windows, res.data[i].linux])
           })
           let option = {
@@ -230,16 +215,6 @@ export default {
             tooltip: {},
             dataset: {
               source: dataSource
-              // [
-                // productList,
-                // linuxList,
-                // windowsList,
-                // ['product', '2015', '2016', '2017'],
-                // ['Matcha Latte', 43.3, 85.8, 93.7],
-                // ['Milk Tea', 83.1, 73.4, 55.1],
-                // ['Cheese Cocoa', 86.4, 65.2, 82.5],
-                // ['Walnut Brownie', 72.4, 53.9, 39.1]
-              // ]
             },
             xAxis: {type: 'category'},
             yAxis: {},
