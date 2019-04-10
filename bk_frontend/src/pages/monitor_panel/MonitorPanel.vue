@@ -49,10 +49,11 @@ export default {
     this.initTaskChart()
     this.getServerData()
     this.initCpuChart()
+    this.setTime()
   },
   methods: {
     // 初始化任务饼图
-    initTaskChart() {
+    async initTaskChart() {
       // 基于准备好的dom，开始初始化任务饼图
       let taskChart = this.$echarts.init(document.getElementById('task_pic'));
       let option = {
@@ -75,7 +76,8 @@ export default {
         success: '已成功',
         fail: '已失败'
       }
-      this.$store.dispatch('pie/getTaskState').then(res => {
+      taskChart.showLoading()
+      await this.$store.dispatch('pie/getTaskState').then(res => {
         if (res.result) {
           let data = [];
           Object.keys(res.data).forEach((i) => {
@@ -110,6 +112,7 @@ export default {
           );
         }
       })
+      taskChart.hideLoading()
       // 浏览器放大或缩小时无需刷新图表自动随页面的大小而变化
       window.onresize = function() {
         taskChart.resize()
@@ -130,7 +133,7 @@ export default {
       this.initCpuChart(val)
     },
     // 初始化cpu折线图
-    initCpuChart() {
+    async initCpuChart() {
       let cpuChart = this.$echarts.init(document.getElementById('cpu_pic'))
       let params = {
         id: this.serverId
@@ -138,7 +141,8 @@ export default {
       let data = []
       let cpuData = []
       let memoryData = []
-      this.$store.dispatch('pie/getServerPerformance', params).then(res => {
+      cpuChart.showLoading({ text: '正在努力加载数据...' })
+      await this.$store.dispatch('pie/getServerPerformance', params).then(res => {
         if (res.result) {
           data = res.data.map(item => item.product)
           cpuData = res.data.map(item => item.cpu)
@@ -181,11 +185,18 @@ export default {
           cpuChart.setOption(option)
         }
       })
-      // seriesData = []
+      cpuChart.hideLoading()
       // 浏览器放大或缩小时无需刷新图表自动随页面的大小而变化
       window.onresize = function() {
         cpuChart.resize()
       }
+    },
+    // 定时器
+    setTime() {
+      var app = {};
+      app.timeTicket = setInterval(() => { //定时刷新图表
+        this.initCpuChart();
+      }, 3000);
     }
   }
 }
