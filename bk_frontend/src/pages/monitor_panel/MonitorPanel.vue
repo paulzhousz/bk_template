@@ -10,10 +10,23 @@
   </el-row>
   <el-row :gutter="20" type="flex" class="row_middle" justify="space-between">
     <el-col :span="12">
-      <div class="task_pic">任务统计</div>
+      <div id="task_pic"></div>
     </el-col>
     <el-col :span="12">
-      <div class="cpu_pic">CPU状态</div>
+      <div class="right_pic">
+        <div class="choose_server">
+          <span>服务器：</span>
+          <el-select size="mini" v-model="server" @change="serverChange" :placeholder="defaultServer">
+            <el-option
+              v-for="(item, index) in optionsServer"
+              :key="index"
+              :label="item.ip"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </div>
+        <div id="cpu_pic"></div>
+      </div>
     </el-col>
   </el-row>
   <el-row type="flex" class="row_end">
@@ -24,6 +37,151 @@
 
 <script>
 export default {
+  data() {
+    return {
+      server: '',
+      serverId: 1,
+      defaultServer: '',
+      optionsServer: [],
+    }
+  },
+  mounted() {
+    this.initTaskChart()
+    this.getServerData()
+    this.initCpuChart()
+  },
+  methods: {
+    // 初始化任务饼图
+    initTaskChart() {
+      // 基于准备好的dom，开始初始化任务饼图
+      let taskChart = this.$echarts.init(document.getElementById('task_pic'));
+      let option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          type: 'scroll',
+          orient: 'vertical',
+          right: 10,
+          top: 20,
+          bottom: 20,
+        },
+      }
+      taskChart.setOption(option);
+      let dataName = {
+        waitting: '等待中',
+        running: '运行中',
+        success: '已成功',
+        fail: '已失败'
+      }
+      this.$store.dispatch('pie/getTaskState').then(res => {
+        if (res.result) {
+          let data = [];
+          Object.keys(res.data).forEach((i) => {
+            Object.keys(dataName).forEach(j => {
+              if (i == j) {
+                data.push({
+                  name: dataName[j],
+                  value: res.data[i]
+                })
+              }
+            })
+          })
+          taskChart.setOption(
+            {
+              series: [
+                {
+                  name: '任务状态',
+                  type: 'pie',
+                  color: ['#fa541c', '#fadb14', '#a0d911', '#1890ff'],
+                  radius: ['30%', '70%'],
+                  data: data,
+                  itemStyle: {
+                    emphasis: {
+                      shadowBlur: 10,
+                      shadowOffsetX: 0,
+                      shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                  }
+                }
+              ]
+            }
+          );
+        }
+      })
+      // 浏览器放大或缩小时无需刷新图表自动随页面的大小而变化
+      window.onresize = function() {
+        taskChart.resize()
+      }
+    },
+    // 获取服务器数据
+    getServerData() {
+      this.$store.dispatch('pie/getServerSelect').then(res => {
+        if (res.result) {
+          this.optionsServer = res.data
+          this.defaultServer = this.optionsServer[1].ip
+        }
+      })
+    },
+    // 下拉框数据发生改变时触发
+    serverChange(val) {
+      this.serverId = val
+    },
+    // 初始化cpu折线图
+    initCpuChart() {
+      let cpuChart = this.$echarts.init(document.getElementById('cpu_pic'))
+      let params = {
+        id: this.serverId
+      }
+      let data = []
+      let cpuData = []
+      let memoryData = []
+      this.$store.dispatch('pie/getServerPerformance', params).then(res => {
+        if (res.result) {
+          data = res.data.map(item => item.product)
+          cpuData = res.data.map(item => item.cpu)
+          memoryData = res.data.map(item => item.mem)
+        }
+      })
+      let option = {
+        title: {
+          // text: 'Cpu、内存使用率'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['CPU', '内存']
+        },
+        xAxis: {
+          type: 'category',
+          data: data
+        },
+        yAxis: {
+          type: 'value',
+          min: 0
+        },
+        series: [
+          {
+            name: 'CPU',
+            data: cpuData,
+            type: 'line'
+          },
+          {
+            name: '内存',
+            data: memoryData,
+            type: 'line'
+          },
+        ]
+      }
+      cpuChart.setOption(option)
+      // 浏览器放大或缩小时无需刷新图表自动随页面的大小而变化
+      window.onresize = function() {
+        cpuChart.resize()
+      }
+    }
+  }
 }
 </script>
 
@@ -49,13 +207,22 @@ export default {
     .row_middle {
       height: calc((100% - 56px)/2);
       margin-top: 8px;
-      .task_pic {
+      #task_pic {
         height: 100%;
         background: #fff;
       }
-      .cpu_pic {
+      .right_pic {
         height: 100%;
         background: #fff;
+        .choose_server {
+          line-height: 50px;
+          padding-right: 20px;
+          text-align: right;
+        }
+        #cpu_pic {
+          width: 100%;
+          height: calc(100% - 50px);
+        }
       }
     }
     .row_end {

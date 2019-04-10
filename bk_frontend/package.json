@@ -17,6 +17,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "axios": "^0.16.2",
     "cross-env": "^5.2.0",
+    "echarts": "^4.2.1",
     "element-ui": "^2.4.0",
     "jquery": "^2.2.4",
     "vue": "^2.5.2",

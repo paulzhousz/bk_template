@@ -18,6 +18,7 @@ import leftmenu from './modules/leftmenu'
 import group from './modules/group'
 import perm from './modules/perm'
 import user from './modules/user'
+import pie from './modules/pie'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -25,6 +26,8 @@ export default new Vuex.Store({
     main,
     leftmenu,
     group,
+    perm,
     user,
+    pie,
   }
 })

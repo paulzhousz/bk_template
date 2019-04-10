@@ -5,6 +5,19 @@ export const getDemoApi = params => {
   return $axios.get('/get_demo_api/', { params: params })
 }
 
+// 获取任务状态饼状图
+export const getTaskState = params => {
+  return $axios.get('/api/monitor/mocks/task/state/', { params: params })
+}
+// 获取服务器
+export const getServerSelect = params => {
+  return $axios.get('/api/monitor/mocks/server/select/', { params: params })
+}
+// 获取CPU状态折线图
+export const getServerPerformance = params => {
+  return $axios.get(`/api/monitor/mocks/${params.id}/server/performance/`, { params: params })
+}
+
 // 获取左侧菜单数据
 export const getMenu = params => {
   return $axios.get('/api/sysmanage/menus/tree/', { params: params })

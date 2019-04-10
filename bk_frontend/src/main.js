@@ -12,6 +12,13 @@ import 'element-ui/lib/theme-chalk/index.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTachometerAlt, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import echarts from 'echarts'
+
+// let echarts = require('echarts/lib/echarts'); // 引入 ECharts 主模块
+// require('echarts/lib/chart/bar'); // 引入柱状图
+// require('echarts/lib/component/tooltip'); // 引入提示框和标题组件
+// require('echarts/lib/component/title');
+Vue.prototype.$echarts = echarts;
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
