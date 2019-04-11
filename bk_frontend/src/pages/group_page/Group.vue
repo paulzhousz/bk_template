@@ -359,9 +359,9 @@ export default {
         this.$store.dispatch('group/deleteGroups', params).then(res => {
           if (res.result) {
             this.search()
-            this.$message({type: 'success', message: res.message})
+            this.$message({type: 'success', message: '删除成功'})
           } else {
-            this.$message({type: 'error', message: res.message})
+            this.$message({type: 'error', message: '删除失败'})
           }
         })
       }).catch(() => {
