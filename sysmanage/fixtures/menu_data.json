@@ -3,7 +3,8 @@
   {"id": 2, "name": "system", "display_name": "系统管理", "path": "", "image_url": "ico_navbar_xitong_n.png", "image_h_url": "ico_navbar_xitong_h.png", "icon": "edit","is_menu": true},
   {"id": 3, "name": "user", "display_name": "用户管理", "path": "/user", "image_url": "", "image_h_url": "", "parent_id": 2, "is_menu": true},
   {"id": 4, "name": "group", "display_name": "角色管理", "path": "/group", "image_url": "", "image_h_url": "", "parent_id": 2, "is_menu": true},
-  {"id": 5, "name": "permission", "display_name": "功能权限", "path": "", "image_url": "", "image_h_url": "", "parent_id": 4, "is_menu": false}
+  {"id": 5, "name": "permission", "display_name": "功能权限", "path": "", "image_url": "", "image_h_url": "", "parent_id": 4, "is_menu": false},
+  {"id": 6, "name": "new", "display_name": "测试页面", "path": "/new", "image_url": "", "image_h_url": "", "parent_id": 1, "is_menu": true}
 ]
 
 
