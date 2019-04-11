@@ -223,22 +223,6 @@ export default {
   created() {
     this.search()
   },
-  computed: {
-    leftButtonColor() {
-      if (this.leftData.length == 0) {
-        return false
-      } else {
-        return true
-      }
-    },
-    rightButtonColor() {
-      if (this.rightData.length == 0) {
-        return false
-      } else {
-        return true
-      }
-    },
-  },
   methods: {
     search() {
       let params = {
@@ -444,6 +428,22 @@ export default {
       row.rowIndex = rowIndex
     },
   },
+  computed: {
+    leftButtonColor() {
+      if (this.leftData.length == 0) {
+        return false
+      } else {
+        return true
+      }
+    },
+    rightButtonColor() {
+      if (this.rightData.length == 0) {
+        return false
+      } else {
+        return true
+      }
+    },
+  },
 }
 </script>
 
@@ -459,9 +459,11 @@ export default {
           width: 60%;
         }
       }
+      // /*
       .new {
         height: 40px;
       }
+      // */
       .table {
         height: calc(100% - 130px);
         .el-table {

@@ -16,7 +16,11 @@
       <div class="right_pic">
         <div class="choose_server">
           <span>服务器：</span>
-          <el-select size="mini" v-model="server" @change="serverChange" :placeholder="defaultServer">
+          <el-select
+          size="mini"
+          v-model="server"
+          @change="serverChange"
+          :placeholder="defaultServer">
             <el-option
               v-for="(item, index) in optionsServer"
               :key="index"
@@ -217,10 +221,15 @@ export default {
               source: dataSource
             },
             xAxis: {type: 'category'},
-            yAxis: {},
+            yAxis: {
+              type: 'value',
+              max: function(value) {
+                return value.max + 10
+              }
+            },
             series: [
-              {type: 'bar', color: '#fa541c'},
-              {type: 'bar', color: '#a0d911'}
+              {type: 'bar', color: '#5793f3'},
+              {type: 'bar', color: '#d14a61'}
             ]
           };
           bizServerChart.setOption(option)
@@ -231,7 +240,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .monitor_panel {
     height: 100%;
     padding: 0 20px 0 20px;
