@@ -2,10 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
 import { mapGetters } from 'vuex'
-const MonitorPanel = () => import('@/pages/monitor_panel/MonitorPanel')
-const User = () => import('@/pages/user/user')
-const Group = () => import('@/pages/group/Group')
-const Permission = () => import('@/pages/group/Permission')
+const MonitorPanel = () => import('@/pages/monitor_panel_page/MonitorPanel')
+const User = () => import('@/pages/user_page/user')
+const Group = () => import('@/pages/group_page/Group')
+const Permission = () => import('@/pages/group_page/Permission')
+const New = () => import('@/pages/new_page/New')
 Vue.use(Router);
 
 let routerVue = new Vue({
@@ -50,6 +51,14 @@ let router = new Router({
         {
             path: '/404',
             component: resolve => require(['@/pages/404'], resolve)
+        },
+        {
+            path: '/new',
+            name: 'new',
+            component: New,
+            meta: {
+                currentMenu: '/new'
+            }
         },
         {
             path: '/monitor_panel',
