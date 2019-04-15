@@ -22,9 +22,6 @@
             Container
         },
         created () {
-        //   this.$http.get('/test/').then(res => {
-        //     console.log(res)
-        //   })
         }
     }
 </script>

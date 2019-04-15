@@ -7,6 +7,7 @@ const User = () => import('@/pages/user_page/user')
 const Group = () => import('@/pages/group_page/Group')
 const Permission = () => import('@/pages/group_page/Permission')
 const New = () => import('@/pages/new_page/New')
+const Test = () => import('@/pages/test_page/Test')
 Vue.use(Router);
 
 let routerVue = new Vue({
@@ -57,7 +58,19 @@ let router = new Router({
             name: 'new',
             component: New,
             meta: {
+                bread: [
+                        {displayName: '监控面板', path: {path: ''}},
+                        {displayName: '样例页面', path: {path: '/new'}},
+                    ],
                 currentMenu: '/new'
+            }
+        },
+        {
+            path: '/test',
+            name: 'test',
+            component: Test,
+            meta: {
+                currentMenu: '/test'
             }
         },
         {

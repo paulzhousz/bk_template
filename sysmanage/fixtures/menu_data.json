@@ -5,7 +5,26 @@
   {"id": 4, "name": "group", "display_name": "角色管理", "path": "/group", "image_url": "", "image_h_url": "", "parent_id": 2, "is_menu": true},
   {"id": 5, "name": "permission", "display_name": "功能权限", "path": "", "image_url": "", "image_h_url": "", "parent_id": 4, "is_menu": false},
   {"id": 6, "name": "monitor_panel", "display_name": "监控面板", "path": "/monitor_panel", "image_url": "", "image_h_url": "", "parent_id": 1,"is_menu": true},
-  {"id": 7, "name": "new", "display_name": "测试页面", "path": "/new", "image_url": "", "image_h_url": "", "parent_id": 1, "is_menu": true}
+  {
+    "id": 7,
+    "name": "new",
+    "display_name":"样例页面",
+    "path": "/new",
+    "image_url": "",
+    "image_h_url": "",
+    "parent_id": 1,
+    "is_menu": true
+  },
+  {
+    "id": 8,
+    "name": "test",
+    "display_name": "测试页面",
+    "path": "/test",
+    "image_url": "",
+    "image_h_url": "",
+    "icon": "angry",
+    "is_menu": true
+  }
 ]
 
 

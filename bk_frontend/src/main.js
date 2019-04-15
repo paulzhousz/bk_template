@@ -10,7 +10,7 @@ import '@/api/axios'
 import '../mock/mock.js'
 import 'element-ui/lib/theme-chalk/index.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTachometerAlt, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faTachometerAlt, faEdit, faAngry } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import echarts from 'echarts'
 
@@ -24,7 +24,7 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.prototype.$ = $;
 
-library.add(faTachometerAlt, faEdit)
+library.add(faTachometerAlt, faEdit, faAngry)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 // 过滤器

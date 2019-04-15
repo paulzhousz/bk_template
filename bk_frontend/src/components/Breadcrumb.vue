@@ -11,6 +11,12 @@
   </div>
 </template>
 <script>
+/**
+ * breadcrumb
+ * @desc 面包屑组件
+ * @param to {Array} 面包屑数据对象
+ * @example <breadcrumb :to="to"></breadcrumb>
+ */
   export default {
     props: { // 接收父组件中的每个面包屑对象
       to: {

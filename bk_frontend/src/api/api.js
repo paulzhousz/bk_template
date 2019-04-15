@@ -4,6 +4,10 @@ import { $axios } from './axios'
 export const getDemoApi = params => {
   return $axios.get('/get_demo_api/', { params: params })
 }
+// 测试接口
+export const getTest = params => {
+  return $axios.get('/test/', { params: params })
+}
 
 // 获取任务状态饼状图
 export const getTaskState = params => {
