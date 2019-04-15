@@ -1,5 +1,5 @@
 [
   {"id": 1, "name": "super_admin_role", "display_name": "超级管理角色", "is_built_in": true},
   {"id": 2, "name": "app_admin_role", "display_name": "应用管理角色", "is_built_in": true},
-  {"id": 3, "name": "guest_role", "display_name": "访客角色", "is_built_in": true}
+  {"id": 3, "name": "guest_role", "display_name": "访客角色这是一个很长很长很长很长很长很长很长很长很长很长很长的名字", "is_built_in": true}
 ]
