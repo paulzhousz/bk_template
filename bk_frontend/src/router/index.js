@@ -59,7 +59,7 @@ let router = new Router({
             component: New,
             meta: {
                 bread: [
-                        {displayName: '监控面板', path: {path: ''}},
+                        {displayName: '首页', path: {path: ''}},
                         {displayName: '样例页面', path: {path: '/new'}},
                     ],
                 currentMenu: '/new'
@@ -70,6 +70,9 @@ let router = new Router({
             name: 'test',
             component: Test,
             meta: {
+                bread: [
+                    {displayName: '测试页面', path: {path: '/test'}},
+                ],
                 currentMenu: '/test'
             }
         },
@@ -79,6 +82,7 @@ let router = new Router({
             component: MonitorPanel,
             meta: {
                 bread: [
+                    {displayName: '首页', path: {path: ''}},
                     {displayName: '监控面板', path: {path: '/monitor_panel'}},
                 ],
                 currentMenu: '/monitor_panel'
