@@ -10,10 +10,7 @@ export const getTest = params => {
 }
 // 测试接口
 export const getTableData = params => {
-  return $axios.get(
-    '/api/sysmanage/mocks/users/',
-    { params: params }
-  )
+  return $axios.get('/api/sysmanage/mocks/users/', { params: params })
 }
 
 // 获取任务状态饼状图
