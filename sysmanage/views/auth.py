@@ -168,12 +168,16 @@ class UserViewSet(ModelViewSet):
         serializer = serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-    @list_route(methods=['get'], url_path='add/select')
-    def get_add_select(self, request, *args, **kwargs):
-        """获取新增用户的下拉框数据"""
-        ret = self.queryset.filter(is_enable=True, is_in_app=False).annotate(label=F('chname'),
-                                                                             value=F('id')).values('label', 'value')
-        return Response(list(ret))
+    @list_route(methods=['get'], url_path='add')
+    def get_add_users(self, request, *args, **kwargs):
+        """获取新增用户（无分页）"""
+        queryset = self.filter_queryset(
+            self.get_queryset().filter(is_enable=True, is_in_app=False).exclude(username='AnonymousUser')
+        )
+        serializer_class = BasicUserSerializer
+        kwargs['context'] = self.get_serializer_context()
+        serializer = serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
     @method_decorator(permission_required_or_403('account.change_bkuser'))
     @list_route(methods=['put'], url_path='status')

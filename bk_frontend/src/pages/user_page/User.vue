@@ -366,6 +366,12 @@ export default {
       };
     },
   },
+  filters: {
+    arrayFormat(value) {
+      value = value.map(item => item.display_name)
+      return value.join(',')
+    }
+  }
 }
 </script>
 
