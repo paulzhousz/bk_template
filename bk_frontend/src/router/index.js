@@ -59,9 +59,9 @@ let router = new Router({
             component: New,
             meta: {
                 bread: [
-                        {displayName: '首页', path: {path: ''}},
-                        {displayName: '样例页面', path: {path: '/new'}},
-                    ],
+                    {displayName: '首页', path: ''},
+                    {displayName: '样例页面', path: '/new'},
+                ],
                 currentMenu: '/new'
             }
         },
@@ -71,7 +71,7 @@ let router = new Router({
             component: Test,
             meta: {
                 bread: [
-                    {displayName: '测试页面', path: {path: '/test'}},
+                    {displayName: '测试页面', path: '/test'},
                 ],
                 currentMenu: '/test'
             }
@@ -82,8 +82,8 @@ let router = new Router({
             component: MonitorPanel,
             meta: {
                 bread: [
-                    {displayName: '首页', path: {path: ''}},
-                    {displayName: '监控面板', path: {path: '/monitor_panel'}},
+                    {displayName: '首页', path: ''},
+                    {displayName: '监控面板', path: '/monitor_panel'},
                 ],
                 currentMenu: '/monitor_panel'
             }
@@ -94,8 +94,8 @@ let router = new Router({
             component: User,
             meta: {
                 bread: [
-                    {displayName: '系统管理', path: {path: ''}},
-                    {displayName: '用户管理', path: {path: '/user'}},
+                    {displayName: '系统管理', path: ''},
+                    {displayName: '用户管理', path: '/user'},
                 ],
                 currentMenu: '/user'
             }
@@ -106,8 +106,8 @@ let router = new Router({
             component: Group,
             meta: {
                 bread: [
-                    {displayName: '系统管理', path: {path: ''}},
-                    {displayName: '角色管理', path: {path: '/group'}},
+                    {displayName: '系统管理', path: ''},
+                    {displayName: '角色管理', path: '/group'},
                 ],
                 currentMenu: '/group'
             },
@@ -118,9 +118,9 @@ let router = new Router({
           component: Permission,
           meta: {
               bread: [
-                  {displayName: '系统管理', path: {path: ''}},
-                  {displayName: '角色管理', path: {path: '/group'}},
-                  {displayName: '功能权限', path: {path: ''}},
+                  {displayName: '系统管理', path: ''},
+                  {displayName: '角色管理', path: '/group'},
+                  {displayName: '功能权限', path: ''},
               ],
               currentMenu: '/group'
           }

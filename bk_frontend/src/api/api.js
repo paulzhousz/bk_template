@@ -68,7 +68,7 @@ export const getAuthority = params => {
 }
 // 获取用户的关联权限数据
 export const getUserAuthority = params => {
-  return $axios.get(`api/sysmanage/users/${params.id}/search/perm/`, { params: params })
+  return $axios.get(`/api/sysmanage/users/${params.id}/search/perm/`, { params: params })
 }
 // 编辑角色数据
 export const editGroups = params => {

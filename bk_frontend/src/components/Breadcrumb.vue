@@ -2,10 +2,10 @@
   <div id="bread-crumb">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item
-      v-for="(item, index) in to"
-      :key="index"
-      :to="item.path">
-      {{item.displayName}}
+        v-for="(item, index) in to"
+        :key="index"
+        :to="{ path: item.path }">
+        {{item.displayName}}
       </el-breadcrumb-item>
     </el-breadcrumb>
   </div>

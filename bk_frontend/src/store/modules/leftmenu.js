@@ -43,7 +43,12 @@ const actions = {
     return commonApi.getCurrentPermission().then(res => {
       if (res.result) {
         commit('setIsGetUserPerm', true)
-        let haveAllMenu = JSON.parse(JSON.stringify(res.data.menus))
+        // 筛选出菜单类型的数据
+        let haveAllMenu = JSON.parse(JSON.stringify(res.data.menus)).filter((item) => {
+          if (item.is_menu) {
+            return true
+          }
+        })
         let haveMenuTree = []
         for (let i = 0; i < haveAllMenu.length; i++) {
           if (haveAllMenu[i].parent == null) {
