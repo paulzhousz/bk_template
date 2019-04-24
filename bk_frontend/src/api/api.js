@@ -46,6 +46,10 @@ export const getGroups = params => {
 export const getAllUser = params => {
   return $axios.get('/api/sysmanage/users/all/', { params: params })
 }
+// 新增/编辑角色数据时获取不在app内用户
+export const getNotInAppUser = params => {
+  return $axios.get('/api/sysmanage/users/add/', { params: params })
+}
 // 新增/编辑角色数据时获取所有用户
 export const getAllGroup = params => {
   return $axios.get('/api/sysmanage/groups/select/', { params: params })

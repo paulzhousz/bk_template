@@ -15,7 +15,7 @@ export function validateNameUnderline(rule, value, callback) {
  * 校验中文
  */
 export function validateChName(rule, value, callback) {
-  if (/^[\u4e00-\u9fa5]+$/.test(value)) {
+  if (/^[\u4e00-\u9fa50-9a-zA-Z_]+$/.test(value)) {
     callback()
   } else {
     callback(new Error('只能输入中文'))

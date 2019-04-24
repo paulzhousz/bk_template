@@ -6,7 +6,7 @@ let perm = Vue => {
       // 元素刚插入时隐藏
       el.style.display = 'none'
     },
-    updated: function(el, binding, vnode) {
+    update: function(el, binding, vnode) {
       let {value, arg} = binding
       for (let i of value) {
         if (i.codename == arg) {

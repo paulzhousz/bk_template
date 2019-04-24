@@ -6,6 +6,7 @@
         :fetch-suggestions="querySearchAsync"
         placeholder="请输入用户名"
         @select="handleSelect"
+        @keydown.native="show($event)"
         clearable>
       </el-autocomplete>
     </div>
@@ -145,6 +146,7 @@ export default {
       showAdd: false,
       dataUser: [],
       allUserName: [],
+      notInAppUserName: [],
       allUser: [],
       optionsGroup: [],
       formUser: {
@@ -198,6 +200,11 @@ export default {
         }
       })
     },
+    show(ev) {
+      if (ev.keyCode == 13) {
+        this.getUser()
+      }
+    },
     // 表格分页
     pageSizeChange(val) {
       this.currentPage = val.currentPage
@@ -210,6 +217,7 @@ export default {
       this.dialogAction = 'new'
       this.title = '新建'
       this.$refs['newEdit'].open()
+      this.searchNotInAppUser()
     },
     handleAuthority(scope) {
       this.showForm = false
@@ -328,15 +336,12 @@ export default {
       this.formUser.phone = item.phone
       this.formUser.email = item.email
     },
-    // 获取所有用户（用于关键字提醒）
-    search() {
-      this.allUserName = []
-      this.$store.dispatch('group/getAllUser').then(res => {
+    // 获取所有用户（用于添加用户关键字提醒）
+    searchNotInAppUser() {
+      this.userDetail = []
+      this.$store.dispatch('user/getNotInAppUser').then(res => {
         if (res.result) {
           for (let i of res.data) {
-            this.allUserName.push({
-              value: i.chname
-            })
             this.userDetail.push({
               value: i.chname,
               phone: i.phone,
@@ -344,7 +349,19 @@ export default {
               id: i.id,
             })
           }
-          this.allUser = res.data
+        }
+      })
+    },
+    // 获取所有用户（用于搜索用户关键字提醒）
+    search() {
+      // this.allUserName = []
+      this.$store.dispatch('group/getAllUser').then(res => {
+        if (res.result) {
+          for (let i of res.data) {
+            this.allUserName.push({
+              value: i.chname
+            })
+          }
         }
       })
     },

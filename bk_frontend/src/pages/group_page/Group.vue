@@ -46,10 +46,6 @@
         style="width: 100%"
         height="100%">
         <el-table-column
-        type="selection"
-        width="30">
-        </el-table-column>
-        <el-table-column
         prop="name"
         label="组名"
         show-overflow-tooltip>
@@ -98,7 +94,7 @@
     </pagination>
     <new-edit ref="newEdit" :title="title" @handle-success="handleSuccess" dialog-action="dialogAction" :width="width">
       <div slot="dialog-content">
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" :before-leave="leaveTab">
           <el-tab-pane label="角色信息" name="first">
             <el-form ref="formGroups" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
               <el-form-item label="组名" prop="name">
@@ -254,13 +250,26 @@ export default {
       this.search()
     },
     handleEdit(scope) {
+      this.activeName = 'first'
       this.dialogAction = 'edit'
       this.title = '编辑'
       this.$refs['newEdit'].open()
       this.formGroups = JSON.parse(JSON.stringify(scope.row))
       this.formGroups.users = this.formGroups.users.map(item => item.id)
       this.rightData = scope.row.users
+      this.leftData = []
       this.getLeftUser()
+    },
+    leaveTab(activeName, oldActiveName) {
+      console.log(activeName)
+      console.log(oldActiveName)
+      if (activeName == 'first') {
+        this.$refs['formGroups'].validate((valid) => {
+          this.activeName = 'second'
+        })
+      } else {
+        this.activeName = 'first'
+      }
     },
     handleNew() {
       this.dialogAction = 'new'
@@ -270,6 +279,7 @@ export default {
         this.$refs['formGroups'].clearValidate()
       })
      this.getLeftUser()
+     this.formGroups = {}
     },
     checkboxChange(row) {
       let tipEnable = row.is_enable ? '是否启用' : '是否禁用'
@@ -285,10 +295,10 @@ export default {
           }
           this.$store.dispatch('group/groupsStatus', params).then(res => {
             if (res.result) {
-              this.$message({type: 'success', message: res.message})
+              this.$message({type: 'success', message: '禁用成功'})
             } else {
               row.is_enable = !row.is_enable
-              this.$message({type: 'error', message: res.message})
+              this.$message({type: 'error', message: '禁用失败'})
             }
           });
         } else if (row.is_enable == false) {
@@ -298,10 +308,10 @@ export default {
           }
           this.$store.dispatch('group/groupsStatus', params).then(res => {
             if (res.result) {
-              this.$message({type: 'success', message: res.message})
+              this.$message({type: 'success', message: '启用成功'})
             } else {
               row.is_enable = !row.is_enable
-              this.$message({type: 'error', message: res.message})
+              this.$message({type: 'error', message: '启用失败'})
             }
           });
         }
@@ -323,9 +333,9 @@ export default {
         this.$store.dispatch('group/addGroups', params).then(res => {
           if (res.result) {
             this.search()
-            this.$message({type: 'success', message: res.message})
+            this.$message({type: 'success', message: '新建成功'})
           } else {
-            this.$message({type: 'error', message: res.message})
+            this.$message({type: 'error', message: '新建失败'})
           }
         }).catch(() => {
           this.$message({type: 'info', message: '接口调用失败'})
@@ -337,9 +347,9 @@ export default {
         this.$store.dispatch('group/editGroups', params).then(res => {
           if (res.result) {
             this.search()
-            this.$message({type: 'success', message: res.message})
+            this.$message({type: 'success', message: '编辑成功'})
           } else {
-            this.$message({type: 'error', message: res.message})
+            this.$message({type: 'error', message: '编辑失败'})
           }
         }).catch(() => {
           this.$message({type: 'info', message: '接口调用失败'})

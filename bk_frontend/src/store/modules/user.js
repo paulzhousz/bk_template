@@ -34,6 +34,9 @@ const actions = {
   setUserPerm({commit, state}, param) {
     return commonApi.setUserPerm(param)
   },
+  getNotInAppUser({commit, state}) {
+    return commonApi.getNotInAppUser()
+  },
 }
 
 export default {
