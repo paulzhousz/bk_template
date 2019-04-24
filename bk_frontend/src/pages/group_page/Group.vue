@@ -261,8 +261,6 @@ export default {
       this.getLeftUser()
     },
     leaveTab(activeName, oldActiveName) {
-      console.log(activeName)
-      console.log(oldActiveName)
       if (activeName == 'first') {
         this.$refs['formGroups'].validate((valid) => {
           this.activeName = 'second'
@@ -272,14 +270,17 @@ export default {
       }
     },
     handleNew() {
+      this.activeName = 'first'
       this.dialogAction = 'new'
       this.title = '新建'
       this.$refs['newEdit'].open()
       this.$nextTick(() => {
         this.$refs['formGroups'].clearValidate()
       })
-     this.getLeftUser()
-     this.formGroups = {}
+      this.leftData = []
+      this.rightData = []
+      this.getLeftUser()
+      this.formGroups = {}
     },
     checkboxChange(row) {
       let tipEnable = row.is_enable ? '是否启用' : '是否禁用'

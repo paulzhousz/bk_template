@@ -281,10 +281,10 @@ export default {
           }
           this.$store.dispatch('user/usersStatus', params).then(res => {
             if (res.result) {
-              this.$message({type: 'success', message: res.message})
+              this.$message({type: 'success', message: '禁用成功'})
             } else {
               row.is_enable = !row.is_enable
-              this.$message({type: 'error', message: res.message})
+              this.$message({type: 'error', message: '禁用失败'})
             }
           });
         } else if (row.is_enable == false) {
@@ -294,10 +294,10 @@ export default {
           }
           this.$store.dispatch('user/usersStatus', params).then(res => {
             if (res.result) {
-              this.$message({type: 'success', message: res.message})
+              this.$message({type: 'success', message: '启用成功'})
             } else {
               row.is_enable = !row.is_enable
-              this.$message({type: 'error', message: res.message})
+              this.$message({type: 'error', message: '启用失败'})
             }
           });
         }
