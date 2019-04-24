@@ -17,10 +17,10 @@
         <div class="choose_server">
           <span>服务器：</span>
           <el-select
-            size="mini"
-            v-model="server"
-            @change="serverChange"
-            :placeholder="defaultServer">
+          size="mini"
+          v-model="server"
+          @change="serverChange"
+          :placeholder="defaultServer">
             <el-option
               v-for="(item, index) in optionsServer"
               :key="index"

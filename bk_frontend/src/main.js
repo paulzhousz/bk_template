@@ -13,6 +13,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTachometerAlt, faEdit, faAngry } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import echarts from 'echarts'
+import vPermission from '@/directive/permissions/permission'
 
 // let echarts = require('echarts/lib/echarts'); // 引入 ECharts 主模块
 // require('echarts/lib/chart/bar'); // 引入柱状图
@@ -22,6 +23,7 @@ Vue.prototype.$echarts = echarts;
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
+Vue.use(vPermission);
 Vue.prototype.$ = $;
 
 library.add(faTachometerAlt, faEdit, faAngry)

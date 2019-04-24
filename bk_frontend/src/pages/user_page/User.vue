@@ -10,8 +10,15 @@
       </el-autocomplete>
     </div>
     <div class="new">
-      <el-button size="mini" v-if="showAdd" type="primary" @click="handleNewUser">添加用户</el-button>
-      <el-button size="mini" v-if="!showAdd" type="primary" disabled>添加用户</el-button>
+      <!-- <el-button size="mini" v-if="showAdd" type="primary" @click="handleNewUser">添加用户</el-button>
+      <el-button size="mini" v-if="!showAdd" type="primary" disabled>添加用户</el-button> -->
+      <el-button
+        size="mini"
+        type="primary"
+        v-permission:add_bkuser="permissions"
+        @click="handleNewUser">
+        添加用户
+      </el-button>
     </div>
     <div class="table">
       <el-table
@@ -163,20 +170,20 @@ export default {
   created() {
     this.getUser()
     this.search()
-    this.showAdd = this.requirePerm('add_bkuser')
+    // this.showAdd = this.requirePerm('add_bkuser')
   },
   computed: {
     ...mapGetters('leftmenu', ['permissions']),
   },
   methods: {
-    requirePerm(permission) {
-      for (let i of this.permissions) {
-        if (i.codename == permission) {
-          return true
-        }
-      }
-      return false
-    },
+    // requirePerm(permission) {
+    //   for (let i of this.permissions) {
+    //     if (i.codename == permission) {
+    //       return true
+    //     }
+    //   }
+    //   return false
+    // },
     // 获取用户页面表格数据
     getUser(apiParam) {
       let params = {

@@ -1,6 +1,6 @@
 <template>
   <div class='new'>
-    <div id="self_chart"></div>
+    <el-button type="primary">主要按钮</el-button>
   </div>
 </template>
 <script>
