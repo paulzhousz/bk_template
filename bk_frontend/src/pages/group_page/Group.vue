@@ -96,7 +96,7 @@
       <div slot="dialog-content">
         <el-tabs v-model="activeName" :before-leave="leaveTab">
           <el-tab-pane label="角色信息" name="first">
-            <el-form ref="formGroups" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
+            <el-form ref="refformGroups" :label-position="labelPosition" label-width="120px" :model="formGroups" :rules="rulesGroups">
               <el-form-item label="组名" prop="name">
                 <el-input class="form-content" size="mini" v-model="formGroups.name"></el-input>
               </el-form-item>
@@ -260,14 +260,16 @@ export default {
       this.leftData = []
       this.getLeftUser()
     },
-    leaveTab(activeName, oldActiveName) {
-      if (activeName == 'first') {
-        this.$refs['formGroups'].validate((valid) => {
-          this.activeName = 'second'
-        })
-      } else {
-        this.activeName = 'first'
-      }
+    leaveTab(val) {
+      let res = true
+      this.$refs.refformGroups.validate((valid) => {
+        if (!valid) {
+          res = false
+        } else {
+          res = true
+        }
+      })
+      return res
     },
     handleNew() {
       this.activeName = 'first'
@@ -275,7 +277,7 @@ export default {
       this.title = '新建'
       this.$refs['newEdit'].open()
       this.$nextTick(() => {
-        this.$refs['formGroups'].clearValidate()
+        this.$refs['refformGroups'].clearValidate()
       })
       this.leftData = []
       this.rightData = []
