@@ -96,6 +96,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'account.middlewares.LoginMiddleware',  # 登录鉴权中间件
     'common.middlewares.CheckXssMiddleware',  # Xss攻击处理中间件
+    'dwebsocket.middleware.WebSocketMiddleware' # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
 )
 
 INSTALLED_APPS = (
@@ -113,7 +114,8 @@ INSTALLED_APPS = (
     'app_control',
     'account',
     'home_application',
-    'sysmanage'
+    'sysmanage',
+    'dwebsocket'
 )
 
 # ==============================================================================
@@ -350,3 +352,6 @@ REST_FRAMEWORK = {
 
 # 无权限场景，抛出异常
 GUARDIAN_RAISE_403 = True
+
+# 可以允许每一个单独的视图实用websockets
+WEBSOCKET_ACCEPT_ALL = True

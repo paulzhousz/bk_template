@@ -47,11 +47,16 @@ import * as commonApi from '@/api/api.js'
 export default {
   data() {
     return {
-      tableData: []
+      tableData: [],
+      webSocket: null
     }
   },
   created() {
     this.getData()
+    this.initWebSocket()
+  },
+  destroyed() {
+    this.websocketclose()
   },
   methods: {
     popover() {
@@ -69,6 +74,33 @@ export default {
           this.tableData = res.data
         }
       })
+    },
+    // 初始化ws
+    initWebSocket() {
+      // let wsurl = window.siteUrl.replace('http', 'ws') + '/api/monitor/mocks/websocket/demo/'
+      let wsurl = 'ws://127.0.0.1:8001/api/monitor/mocks/websocket/demo/'
+      this.webSocket = new WebSocket(wsurl)
+      // websocket建立时的回调函数
+      this.webSocket.onopen = this.websocketonopen
+      // 获取服务器传递的数据的回调函数
+      this.webSocket.onmessage = this.websocketonmessage
+      // 获取websocket关闭是的回调函数
+      this.webSocket.onclose = this.websocketonclose
+    },
+    websocketonopen() {
+      // 客户端发送数据到后端
+      this.webSocket.send('{"task_id": 1}')
+    },
+    websocketonmessage(e) {
+      console.log(e.data)
+    },
+    websocketonclose() {
+      console.log('websocket closed')
+    },
+    // 关闭websocket
+    websocketclose() {
+      console.log('close websocket')
+      this.webSocket.close()
     }
   },
 }

@@ -18,7 +18,7 @@ export function validateChName(rule, value, callback) {
   if (/^[\u4e00-\u9fa50-9a-zA-Z_]+$/.test(value)) {
     callback()
   } else {
-    callback(new Error('只能输入中文'))
+    callback(new Error('只能由中文、英文、数字、或者下划线组成'))
   }
 }
 
