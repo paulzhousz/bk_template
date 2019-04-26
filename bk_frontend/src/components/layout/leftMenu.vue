@@ -1,11 +1,11 @@
 <template>
-    <div id="left-menu">
+    <div id="left-menu" :class="isCollapse ? 'width: auto' : 'width: 230px'">
         <el-row>
             <el-col :span="12">
                 <el-menu
                 router
                 :default-active="currentMenu"
-                background-color="rgb(4, 21, 39)"
+                background-color="rgb(42, 47, 55)"
                 text-color="#fff"
                 active-text-color="#ffd04b"
                 :unique-opened="only">
@@ -43,11 +43,15 @@
                 ]
             }
         },
-       created() {
+        created() {
+            this.$root.$on('change', (val) => {
+                this.isCollapse = val
+            })
             this.getUrl()
         },
         computed: {
-            ...mapGetters('leftmenu', ['routerMenuList'])
+            ...mapGetters('leftmenu', ['routerMenuList']),
+            ...mapGetters('main', ['isCollapse'])
         },
         methods: {
             getUrl() {
@@ -79,8 +83,8 @@
 
 <style lang="scss" scoped>
     #left-menu {
-        width: 220px;
-        height: calc(100% - 60px);
+        width: 230px;
+        height: calc(100% - 50px);
         float: left;
         .el-menu {
             border-right: none;
@@ -106,17 +110,50 @@
         margin-left: 20px;
     }
     .el-submenu .el-menu-item {
-        padding-left: 60px !important;
+        padding-left: 50px !important;
     }
 </style>
 <style lang="scss">
-    #left-menu .el-submenu.is-opened > .el-submenu__title {
-        color: rgb(248, 209, 100) !important;
-        i {
-            color: rgb(248, 209, 100);
+    .el-submenu__title {
+        padding-left: 30px !important;
+        font-size: 13px !important;
+        color: rgb(199, 207, 212) !important;
+        font-weight: 500 !important;
+        border-left: 3px solid rgb(42, 47, 55);
+    }
+    .el-submenu__title:hover {
+        color: #fff !important;
+        background: rgb(28, 31, 37) !important;
+        border-left: 3px solid rgb(74, 155, 255);
+    }
+    .el-submenu.is-opened {
+        .el-submenu__title {
+            background: rgb(28, 31, 37) !important;
+            border-left: 3px solid rgb(74, 155, 255);
+        }
+        .el-menu-item {
+            background: rgb(28, 31, 37) !important;
+            border-left: 3px solid rgb(74, 155, 255);
         }
     }
-    #left-menu .el-submenu.is-opened .el-submenu__icon-arrow.el-icon-arrow-down {
-        color: rgb(248, 209, 100) !important;
+    .el-menu-item:hover {
+        color: #fff !important;
+        background: rgb(28, 31, 37) !important;
+    }
+    .el-menu-item.is-active {
+        color: #fff !important;
+        font-weight: 500px;
+        background: rgb(28, 31, 37) !important;
+        border-left: 3px solid rgb(74, 155, 255);
+    }
+    .el-menu-item {
+        padding-left: 30px !important;
+        font-size: 13px !important;
+        color: rgb(155, 175, 185) !important;
+        font-weight: 500 !important;
+        border-left: 3px solid rgb(42, 47, 55);
+    }
+    .el-submenu.is-active {
+        background: rgb(28, 31, 37) !important;
     }
 </style>

@@ -1,18 +1,23 @@
 const state = {
-  breadcrumbs: []
+  // breadcrumbs: []
+  isCollapse: true // 左侧菜单是否收缩
 }
 
 const getters = {
-  breadcrumbs: state => state.breadcrumbs
+  // breadcrumbs: state => state.breadcrumbs
+  isCollapse: state => state.isCollapse
+}
+
+const mutations = {
+  // updateBreadcrumbs (state, breadcrumbs) {
+  //   state.breadcrumbs = breadcrumbs
+  // },
+  setIsCollapse (state, isCollapse) {
+    state.isCollapse = isCollapse
+  },
 }
 
 const actions = {}
-
-const mutations = {
-  updateBreadcrumbs (state, breadcrumbs) {
-      state.breadcrumbs = breadcrumbs
-  }
-}
 
 export default {
   namespaced: true,

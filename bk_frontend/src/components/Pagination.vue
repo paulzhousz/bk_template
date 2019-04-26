@@ -45,7 +45,7 @@
 </script>
 <style>
   #pagination {
-    width: 80%;
+    width: 77%;
     height: 40px;
     position: absolute;
     bottom: 20px;

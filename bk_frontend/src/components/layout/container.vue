@@ -25,11 +25,11 @@
 </script>
 
 <style lang="scss" scoped>
-    $headerHeight: 60px;
+    $headerHeight: 50px;
     #main-container {
         padding: 20px 20px 0 20px;
-        width: calc(100% - 220px);
-        height: calc(100% - 60px);
+        width: calc(100% - 230px);
+        height: calc(100% - 50px);
         background: #f0f2f5;
         float: left;
         overflow: hidden;

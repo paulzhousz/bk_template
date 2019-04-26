@@ -1,13 +1,20 @@
 <template>
     <div id="header">
         <div class="logo-info">
-            <ul>
+            <ul class="fat">
                 <li class="logo">
-                    <img src="../../assets/img/logo.png" alt="">
+                    <img src="../../assets/img/logo_new.png" alt="">
+                    <span class="logo_lg">蓝鲸开发框架</span>
                 </li>
-                <li class="line"></li>
-                <li class="app_name">
-                    <a href="/" class="">开发框架</a>
+                <li class="shrink_leftmenu">
+                    <el-radio-group @change="changeShow">
+                        <el-radio-button :label="true" v-if="!isCollapse">
+                            <i class="el-icon-d-arrow-left"></i>
+                        </el-radio-button>
+                        <el-radio-button :label="false" v-if="isCollapse">
+                            <i class="el-icon-d-arrow-right"></i>
+                        </el-radio-button>
+                    </el-radio-group>
                 </li>
             </ul>
         </div>
@@ -22,6 +29,8 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations } from 'vuex'
+
     export default {
         name: 'cw-header',
         data() {
@@ -30,35 +39,65 @@
                 logout_url: ''
             }
         },
+        computed: {
+            ...mapGetters('main', ['isCollapse'])
+        },
+        methods: {
+            changeShow() {
+                // debugger
+                let isCollapse = !this.isCollapse
+                this.$store.commit('main/setIsCollapse', isCollapse)
+            }
+        },
     }
 </script>
 
 <style lang="scss" scoped>
-    $headerHeight: 60px;
+    $headerHeight: 50px;
     #header {
         width: 100%;
         height: $headerHeight;
         /*box-shadow: 0 0 8px 0 rgba(232, 237, 250, .6), 0 2px 4px 0 rgba(232, 237, 250, .5);*/
         // box-shadow: 0 5px 5px rgba(170, 170, 170, .32);
         line-height: $headerHeight;
-        background: rgb(85, 92, 99);
+        background: rgb(255, 255, 255);
         .logo-info {
-            width: 360px;
+            width: 230px;
             height: $headerHeight;
             float: left;
-            .logo {
-                display: inline;
-                margin-left: 20px;
-                float: left;
-            }
-            .logo img {
-                vertical-align: middle;
-            }
-            .line {
-                float: left;
-                height: 15px;
-                border-left: 1px solid #ddd;
-                margin: 33px 15px 5px 15px;
+            .fat {
+                width: 100%;
+                height: 100%;
+                .logo {
+                    display: inline;
+                    margin-left: 20px;
+                    float: left;
+                    img {
+                        vertical-align: middle;
+                        width: 35px;
+                        height: 25px;
+                    }
+                    .logo_lg {
+                        font-size: 18px;
+                        color: #333;
+                        text-align: left;
+                        font-weight: bold;
+                        vertical-align: middle;
+                        margin-left: 5px;
+                    }
+                }
+                .shrink_leftmenu {
+                    height: 100%;
+                    .el-radio-group {
+                        width: 30px;
+                        .el-icon-d-arrow-left {
+                            cursor: pointer;
+                            font-size: 18px;
+                            margin-left: 40px;
+                            vertical-align: middle;
+                        }
+                    }
+                }
             }
             .app_name {
                 float: left;
