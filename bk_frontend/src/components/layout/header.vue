@@ -6,12 +6,12 @@
                     <img src="../../assets/img/logo_new.png" alt="">
                     <span class="logo_lg">蓝鲸开发框架</span>
                 </li>
-                <li class="shrink_leftmenu">
-                    <el-radio-group @change="changeShow">
-                        <el-radio-button :label="true" v-if="!isCollapse">
+                <li class="shrink_leftmenu" @change="changeShow">
+                    <el-radio-group :value="isCollapse">
+                        <el-radio-button :label="true" v-show="!isCollapse">
                             <i class="el-icon-d-arrow-left"></i>
                         </el-radio-button>
-                        <el-radio-button :label="false" v-if="isCollapse">
+                        <el-radio-button :label="false" v-show="isCollapse">
                             <i class="el-icon-d-arrow-right"></i>
                         </el-radio-button>
                     </el-radio-group>
@@ -44,7 +44,6 @@
         },
         methods: {
             changeShow() {
-                // debugger
                 let isCollapse = !this.isCollapse
                 this.$store.commit('main/setIsCollapse', isCollapse)
             }

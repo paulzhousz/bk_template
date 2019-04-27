@@ -1,8 +1,10 @@
 <template>
     <div id='app'>
         <Header></Header>
-        <LeftMenu></LeftMenu>
-        <Container></Container>
+        <div class="flex_content">
+            <LeftMenu></LeftMenu>
+            <Container></Container>
+        </div>
     </div>
 </template>
 
@@ -25,5 +27,14 @@
         }
     }
 </script>
-<style>
+<style lang="scss">
+#app {
+    .flex_content {
+        height: 100%;
+        display: flex;
+        #main-container {
+            flex-grow: 1;
+        }
+    }
+}
 </style>

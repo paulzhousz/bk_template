@@ -1,5 +1,5 @@
 <template>
-    <div id="left-menu" :class="isCollapse ? 'width: auto' : 'width: 230px'">
+    <div id="left-menu" :style="isCollapse ? 'width: auto' : 'width: 230px'">
         <el-row>
             <el-col :span="12">
                 <el-menu

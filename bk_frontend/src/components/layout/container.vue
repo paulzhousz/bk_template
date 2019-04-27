@@ -1,5 +1,5 @@
 <template>
-    <div id="main-container">
+    <div id="main-container" :style="isCollapse ? 'width: calc(100% - 230px)' : 'width: calc(100% - 230px)'">
         <breadcrumb :to="$route.meta.bread"></breadcrumb>
         <div class="container">
             <router-view/>
@@ -11,6 +11,7 @@
 <script>
     import Breadcrumb from '@/components/Breadcrumb'
     import Footer from '@/components/layout/Footer'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'container',
@@ -20,6 +21,9 @@
             'app-footer': Footer,
             'breadcrumb': Breadcrumb
         },
+        computed: {
+            ...mapGetters('main', ['isCollapse'])
+        },
         methods: {}
     }
 </script>
@@ -28,7 +32,6 @@
     $headerHeight: 50px;
     #main-container {
         padding: 20px 20px 0 20px;
-        width: calc(100% - 230px);
         height: calc(100% - 50px);
         background: #f0f2f5;
         float: left;
