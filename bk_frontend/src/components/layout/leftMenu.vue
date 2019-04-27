@@ -8,7 +8,8 @@
                 background-color="rgb(42, 47, 55)"
                 text-color="#fff"
                 active-text-color="#ffd04b"
-                :unique-opened="only">
+                :unique-opened="only"
+                :collapse="isCollapse">
                     <template v-for="(item, index) in routerMenuList">
                         <el-submenu :index="index + ''" :key="index" v-if="item.children.length > 0 && item.is_menu">
                             <template slot="title">
@@ -83,7 +84,7 @@
 
 <style lang="scss" scoped>
     #left-menu {
-        width: 230px;
+        width: auto;
         height: calc(100% - 50px);
         float: left;
         .el-menu {
