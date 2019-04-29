@@ -84,7 +84,7 @@ export default {
       this.webSocket.onopen = this.websocketonopen
       // 获取服务器传递的数据的回调函数
       this.webSocket.onmessage = this.websocketonmessage
-      // 获取websocket关闭是的回调函数
+      // 获取websocket关闭时的回调函数
       this.webSocket.onclose = this.websocketonclose
     },
     websocketonopen() {
