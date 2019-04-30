@@ -1,13 +1,54 @@
-app_code: framework
-app_name: 开发框架
-author: 蓝鲸智云
-category: 开发工具
-introduction: “开发框架”是蓝鲸智云团队为开发者提供的示例代码，基于此框架，开发者可以快速上手，利用蓝鲸智云集成平台（PaaS）提供的调度引擎、公共组件等模块，构建低成本、免运维的支撑工具和运营系统。
-version: 1.1.0
-language: python
-is_use_celery: True
+app_code: bk_template
+app_name: 蓝鲸开发框架
+author: kris
+version: 1.0.0
+category: SYSTEM
+!!python/unicode 'date': '2019-04-30 16:00:00'
 desktop:
-    width: 1200
-    height: 720
-    is_max: False
-date: 2018-07-08 12:00:00
+  height: 720
+  is_max: true
+  width: 1300
+introduction: 蓝鲸开发框架
+is_use_celery: true
+!!python/unicode 'language': python
+libraries:
+- name: Django
+  version: 1.8.11
+- name: pymysql
+  version: 0.6.7
+- name: MarkupSafe
+  version: 0.23
+- name: Mako
+  version: 1.0.4
+- name: httplib2
+  version: 0.9.1
+- name: suds
+  version: 0.4
+- name: celery
+  version: 3.1.18
+- name: django-celery
+  version: 3.2.1
+- name: supervisor
+  version: 3.3.3
+- name: uWSGI
+  version: 2.0.13.1
+- name: requests
+  version: 2.9.1
+- name: djangorestframework
+  version: 3.6.3
+- name: django-cors-headers
+  version: 2.1.0
+- name: django-guardian
+  version: 1.4.4
+- name: django-filter
+  version: 1.1.0
+- name: django-jsonfield
+  version: 1.0.1
+- name: coreapi
+  version: 2.3.3
+- name: django-rest-swagger
+  version: 2.2.0
+- name: Faker
+  version: 1.0.5
+- name: dwebsocket
+  version: 0.5.10
