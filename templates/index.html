@@ -10,7 +10,7 @@
 </head>`
 <script>
     if ('${RUN_MODE}' === 'DEVELOP') {
-        window.siteUrl = "http://127.0.0.1:8001"
+        window.siteUrl = "http://127.0.0.1:8001/"
         window.env = "d"
     }else if ('${RUN_MODE}' === 'PRODUCT') {
         window.siteUrl = '${BK_PLAT_HOST}${SITE_URL}'
