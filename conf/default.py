@@ -97,7 +97,7 @@ MIDDLEWARE_CLASSES = (
     'account.middlewares.LoginMiddleware',  # 登录鉴权中间件
     'common.middlewares.CheckXssMiddleware',  # Xss攻击处理中间件
     'dwebsocket.middleware.WebSocketMiddleware', # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
-    'home_application.middlewares.CorsMiddleware',  # xhr跨域中间件
+    # 'home_application.middlewares.CorsMiddleware',  # xhr跨域中间件
 )
 
 INSTALLED_APPS = (
