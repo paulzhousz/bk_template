@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+装饰器
+"""
+
 from functools import wraps
 from django.utils.decorators import available_attrs
 from rest_framework.exceptions import PermissionDenied

@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+drf 序列化
+"""
+
 from rest_framework import serializers
 from .models import Log, Menu, GroupProfile, GroupToMenu, PermissionGroup, PermissionProfile
 from django.contrib.auth import get_user_model

@@ -1,5 +1,9 @@
 # -*- coding:utf-8 -*-
 
+"""
+drf filters
+"""
+
 import django_filters
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
