@@ -104,12 +104,12 @@
             }
         }
     }
-    #left-menu ul>li>div>span {
-        margin-left: 20px;
-    }
-    #left-menu ul>li>span {
-        margin-left: 20px;
-    }
+    // #left-menu ul>li>div>span {
+    //     margin-left: 20px;
+    // }
+    // #left-menu ul>li>span {
+    //     margin-left: 20px;
+    // }
     .el-submenu .el-menu-item {
         padding-left: 50px !important;
     }

@@ -9,10 +9,10 @@
                 <li class="shrink_leftmenu" @change="changeShow">
                     <el-radio-group :value="isCollapse">
                         <el-radio-button :label="true" v-show="!isCollapse">
-                            <i class="el-icon-d-arrow-left"></i>
+                            <i class="el-icon-s-fold"></i>
                         </el-radio-button>
                         <el-radio-button :label="false" v-show="isCollapse">
-                            <i class="el-icon-d-arrow-right"></i>
+                            <i class="el-icon-s-unfold"></i>
                         </el-radio-button>
                     </el-radio-group>
                 </li>
@@ -148,5 +148,12 @@
                 color: #ddd;
             }
         }
+    }
+</style>
+<style lang="scss">
+    .el-radio-button__inner {
+        border: none !important;
+        font-size: 20px;
+        // margin-left: 20px;
     }
 </style>
