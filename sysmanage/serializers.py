@@ -199,3 +199,9 @@ class GroupProfileSerializer(ModelSerializer):
     class Meta:
         model = GroupProfile
         fields = ('group', 'display_name')
+
+
+class LogSerializer(ModelSerializer):
+    class Meta:
+        model = Log
+        fields = ('id', 'operator', 'operated_object', 'operated_type', 'operator_date', 'content', 'is_success')

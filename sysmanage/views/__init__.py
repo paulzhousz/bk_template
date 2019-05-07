@@ -2,3 +2,4 @@
 
 from auth import *
 from test import *
+from log import *

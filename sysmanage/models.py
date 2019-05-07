@@ -115,10 +115,10 @@ class Setting(models.Model):
 
 
 class Log(models.Model):
-    operator_date = models.DateTimeField(_(u'操作时间'), null=True, blank=True)
     operator = models.CharField(_(u'操作者'), max_length=50)
     operated_object = models.CharField(_(u'操作对象'), max_length=50, blank=True)
     operated_type = models.CharField(_(u'操作类型'), max_length=50, blank=True)
+    operator_date = models.DateTimeField(_(u'操作时间'), null=True, blank=True)
     content = models.TextField(_(u'操作内容'), blank=True)
     ip_addr = models.CharField(_(u'IP地址'), max_length=50, null=True, blank=True)
     is_success = models.BooleanField(_(u'是否成功'), default=True)
