@@ -6,7 +6,7 @@
 
 from django.apps import AppConfig
 from django.contrib.auth.models import Group, Permission
-from sysmanage.signals.dispatch import (dispatch_init_data, dispatch_save_group, dispatch_save_perm)
+from sysmanage.signals.dispatch import (dispatch_init_data, dispatch_save_group, dispatch_save_perm, dispath_log)
 
 
 class SysmanageConfig(AppConfig):
@@ -17,4 +17,4 @@ class SysmanageConfig(AppConfig):
         dispatch_save_group(Group)
         dispatch_save_perm(Permission)
         dispatch_init_data(self)
-
+        dispath_log()

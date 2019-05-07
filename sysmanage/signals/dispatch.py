@@ -3,9 +3,9 @@
 """
 信号触发
 """
-
+import register
 from django.db.models.signals import post_migrate, post_save
-from sysmanage.signals.handlers import init_data_handler, save_group_handler, save_permission_handler
+from sysmanage.signals.handlers import (init_data_handler, save_group_handler, save_permission_handler, log_handler)
 
 
 def dispatch_init_data(sender):
@@ -18,3 +18,7 @@ def dispatch_save_group(sender):
 
 def dispatch_save_perm(sender):
     post_save.connect(save_permission_handler, sender=sender)
+
+
+def dispath_log():
+    register.signal_log.connect(log_handler, dispatch_uid='sysmanage.handler.log_handler')
