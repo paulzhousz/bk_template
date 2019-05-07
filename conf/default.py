@@ -21,7 +21,7 @@ from django.conf.global_settings import *  # noqa
 # 应用基本信息配置 (请按照说明修改)
 # ==============================================================================
 # 在蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中获取 APP_ID 和 APP_TOKEN 的值
-APP_ID = 'demo'
+APP_ID = ''
 APP_TOKEN = ''
 # 蓝鲸智云开发者中心的域名，形如：http://paas.bking.com
 BK_PAAS_HOST = ''
@@ -96,8 +96,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'account.middlewares.LoginMiddleware',  # 登录鉴权中间件
     'common.middlewares.CheckXssMiddleware',  # Xss攻击处理中间件
-    'dwebsocket.middleware.WebSocketMiddleware', # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
-    'home_application.middlewares.CorsMiddleware',  # xhr跨域中间件
+    'sysmanage.middlewares.LogMiddleware', # 操作日志处理中间件
+    # 'dwebsocket.middleware.WebSocketMiddleware', # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
+    # 'home_application.middlewares.CorsMiddleware',  # xhr跨域中间件
 )
 
 INSTALLED_APPS = (

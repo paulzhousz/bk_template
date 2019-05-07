@@ -4,6 +4,7 @@ import django_filters
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from component.drf.filters import CaseInsensitiveBooleanFilter
+from sysmanage.models import Log
 
 
 class GroupFilter(django_filters.FilterSet):
@@ -35,4 +36,22 @@ class UserFilter(django_filters.FilterSet):
             'email': ['exact'],
             'is_enable': ['exact'],
             'is_in_app': ['exact'],
+        }
+
+
+class LogFilter(django_filters.FilterSet):
+    operator = django_filters.CharFilter(name='operator', lookup_expr='icontains')
+    operated_type = django_filters.CharFilter(name='operated_type', lookup_expr='icontains')
+    content = django_filters.CharFilter(name='content', lookup_expr='icontains')
+    start_date = django_filters.DateFilter(name='operator_date', lookup_expr='gte')
+    end_date = django_filters.DateFilter(name='operator_date', lookup_expr='lte')
+
+    class Meta:
+        model = Log
+        fields = {
+            'operator': ['exact'],
+            'operated_type': ['exact'],
+            'content': ['exact'],
+            'start_date': ['exact'],
+            'end_date': ['exact']
         }

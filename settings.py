@@ -26,11 +26,12 @@ for setting in dir(module):
 
 # check saas app  settings
 try:
-    saas_conf_module = "conf.settings_saas"
-    saas_module = __import__(saas_conf_module, globals(), locals(), ['*'])
-    for saas_setting in dir(saas_module):
-        if saas_setting == saas_setting.upper():
-            locals()[saas_setting] = getattr(saas_module, saas_setting)
+    if ENVIRONMENT == 'production':
+        saas_conf_module = "conf.settings_saas"
+        saas_module = __import__(saas_conf_module, globals(), locals(), ['*'])
+        for saas_setting in dir(saas_module):
+            if saas_setting == saas_setting.upper():
+                locals()[saas_setting] = getattr(saas_module, saas_setting)
 except:
     pass
 

@@ -11,7 +11,7 @@ from settings import APP_ID, MIDDLEWARE_CLASSES
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': APP_ID,                        # 数据库名 (默认与APP_ID相同)
+        'NAME': 'demo',                        # 数据库名 (默认与APP_ID相同)
     },
 }
 

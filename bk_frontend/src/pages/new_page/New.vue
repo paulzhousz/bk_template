@@ -77,8 +77,8 @@ export default {
     },
     // 初始化ws
     initWebSocket() {
-      // let wsurl = window.siteUrl.replace('http', 'ws') + '/api/monitor/mocks/websocket/demo/'
-      let wsurl = 'ws://127.0.0.1:8001/api/monitor/mocks/websocket/demo/'
+      let wsurl = window.siteUrl.replace('http', 'ws') + 'api/monitor/mocks/websocket/demo/'
+      // let wsurl = 'ws://127.0.0.1:8001/api/monitor/mocks/websocket/demo/'
       this.webSocket = new WebSocket(wsurl)
       // websocket建立时的回调函数
       this.webSocket.onopen = this.websocketonopen

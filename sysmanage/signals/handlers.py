@@ -11,6 +11,7 @@ from django.db import transaction
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from common.log import logger
+from component.utils.basic import now
 
 GROUP_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/group_data.json')
 PERMISSION_JSON = os.path.join(settings.PROJECT_ROOT, 'sysmanage/fixtures/permission_data.json')
@@ -179,3 +180,15 @@ def init_data_handler(sender, **kwargs):
                 group.permissions.clear()
                 permission_objs = [Permission.objects.get(id=perm_id) for perm_id in permissions]
                 group.permissions.add(*permission_objs)
+
+
+def log_handler(sender, operator, operated_object, operated_type, content, is_success, **kwargs):
+    """操作日志信号处理"""
+    from sysmanage.models import Log
+    try:
+        Log.objects.create(
+            operator=operator, operated_object=operated_object, operated_type=operated_type, operator_date=now(),
+            content=content, is_success=is_success
+        )
+    except Exception as e:
+        logger.exception(e)
