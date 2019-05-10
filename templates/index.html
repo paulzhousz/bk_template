@@ -3,12 +3,21 @@
 <head>
     <meta charset=utf-8>
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <title>华夏银行监控自服务</title>
+    <title>嘉维蓝鲸开发框架</title>
     <link rel="icon" href="${STATIC_URL}favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="${STATIC_URL}logo.png">
     <link href=${STATIC_URL}assets/css/app.css rel=stylesheet>
-</head>`
+</head>
 <script>
+    /**
+    如果部署到蓝鲸平台，则将siteUrl改成平台url
+    if ('${RUN_MODE}' === 'DEVELOP') {
+        window.siteUrl = "http://dev.szbke.com:8010/"
+    }else ('${RUN_MODE}' === 'PRODUCT') {
+        window.siteUrl = '${BK_PLAT_HOST}${SITE_URL}'
+    }
+    */
+   // 本地开发环境访问url
     if ('${RUN_MODE}' === 'DEVELOP') {
         window.siteUrl = "http://127.0.0.1:8001/"
         window.env = "d"

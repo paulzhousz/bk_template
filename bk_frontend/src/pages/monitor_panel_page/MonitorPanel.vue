@@ -121,9 +121,7 @@ export default {
       })
       taskChart.hideLoading()
       // 浏览器放大或缩小时无需刷新图表自动随页面的大小而变化
-      window.onresize = function() {
-        taskChart.resize()
-      }
+      window.addEventListener('resize', taskChart.resize)
     },
     // 获取服务器数据
     getServerData() {
@@ -194,9 +192,10 @@ export default {
       })
       cpuChart.hideLoading()
       // 浏览器放大或缩小时无需刷新图表自动随页面的大小而变化
-      window.onresize = function() {
-        cpuChart.resize()
-      }
+      window.addEventListener('resize', cpuChart.resize)
+      // window.onresize = function() {
+      //   cpuChart.resize()
+      // }
     },
     // 定时器
     setTime() {
@@ -235,7 +234,9 @@ export default {
           bizServerChart.setOption(option)
         }
       })
-    }
+      // 浏览器放大或缩小时无需刷新图表自动随页面的大小而变化
+      window.addEventListener('resize', bizServerChart.resize)
+    },
   }
 }
 </script>
