@@ -91,14 +91,6 @@ class BasicGroupSerializer(ModelSerializer):
         else:
             return False
 
-    def to_internal_value(self, data):
-        """传入参数格式化校验数据"""
-        data, no_validated_fields = CustomSerializer.to_internal_value(self, data)
-        validated_data = super(BasicGroupSerializer, self).to_internal_value(data)
-        # 添加多对多关系
-        validated_data.update(**no_validated_fields)
-        return validated_data
-
     def create(self, validated_data):
         """重写创建数据方法"""
         group = Group.objects.create(name=validated_data['name'])
@@ -148,14 +140,6 @@ class GroupSerializer(BasicGroupSerializer):
         """
         users = obj.user_set.all()
         return BasicUserSerializer(instance=users, many=True).data
-
-    def to_internal_value(self, data):
-        """传入参数格式化校验数据"""
-        data, no_validated_fields = CustomSerializer.to_internal_value(self, data)
-        validated_data = super(BasicGroupSerializer, self).to_internal_value(data)
-        # 添加多对多关系
-        validated_data.update(**no_validated_fields)
-        return validated_data
 
     def create(self, validated_data):
         """重写创建数据方法"""

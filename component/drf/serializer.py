@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import warnings
+from collections import OrderedDict
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from django.conf import settings
 
 
@@ -9,10 +12,13 @@ class CustomSerializer(object):
 
     @staticmethod
     def to_internal_value(self, data):
-        """实现部分更新功能（包括主外键、多对多、额外键）"""
+        """
+        实现部分更新功能（包括主外键、多对多、额外键）
+        """
         no_validated_fields = {}
         foreign_field_names = getattr(self.Meta, 'foreign_fields', [])
         extra_field_names = getattr(self.Meta, 'extra_fields', [])
+        required_field_names = getattr(self.Meta, 'required_fields', [])
         # 更新数据
         if self.instance:
             fields = self.fields.values()
@@ -36,6 +42,7 @@ class CustomSerializer(object):
         # 创建数据
         else:
             fields = self.fields.values()
+            CustomSerializer()._validate_field(data, required_field_names=required_field_names)
             for field in fields:
                 if field.field_name in data:
                     if getattr(field, 'many', False) or field.field_name in extra_field_names:
@@ -43,6 +50,17 @@ class CustomSerializer(object):
                     elif field.field_name in foreign_field_names:
                         no_validated_fields.update(**{field.field_name + '_id': data[field.field_name]})
         return data, no_validated_fields
+
+    def _validate_field(self, data, required_field_names=[]):
+        """校验参数合法性"""
+        errors = OrderedDict()
+        field_names = set(data.keys())
+        required_field_names = set(required_field_names)
+        validate_require_names = list(required_field_names - field_names)
+        if validate_require_names:
+            errors[','.join(validate_require_names)] = _(u'为必填字段')
+            raise ValidationError(errors)
+
 
     @staticmethod
     def get_instances(model, ids):
@@ -127,4 +145,21 @@ class DynamicFieldsMixin(object):
 
 
 class ModelSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
-    pass
+    """
+    Usage:
+
+    ForeignKey：zone = ZoneSerializer(read_only=True)
+    ManyToMany: permissions = PermissionSerializer(many=True, read_only=True)
+
+    class Meta:
+        foreign_fields = ('zone', 'brand', 'version')  # 外键字段
+        required_fields = ('ip', 'zone', 'brand', 'version')  # 必填字段
+    """
+
+    def to_internal_value(self, data):
+        """自定义清洗传入数据格式"""
+        data, many_foreign_fields = CustomSerializer.to_internal_value(self, data)
+        validated_data = super(ModelSerializer, self).to_internal_value(data)
+        # 添加多对多和主外键关系
+        validated_data.update(**many_foreign_fields)
+        return validated_data
