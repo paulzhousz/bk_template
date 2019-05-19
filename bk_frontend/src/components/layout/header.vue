@@ -22,7 +22,7 @@
             <ul>
                 <li><img class="photo" src="../../assets/img/photo.jpg"></li>
                 <li><span class="username">{{username}}</span></li>
-                <li><a :href="logout_url" class="login-out el-icon-time"></a></li>
+                <!-- <li><a :href="logout_url" class="login-out el-icon-time"></a></li> -->
             </ul>
         </div>
     </div>
@@ -35,7 +35,7 @@
         name: 'cw-header',
         data() {
             return {
-                username: '',
+                username: window.userName,
                 logout_url: ''
             }
         },
@@ -46,6 +46,11 @@
             changeShow() {
                 let isCollapse = !this.isCollapse
                 this.$store.commit('main/setIsCollapse', isCollapse)
+                // 保证菜单完全收缩或者拉伸后，再给window添加resize事件
+                setTimeout(() => {
+                  let resizeEvent = new Event('resize')
+                  window.dispatchEvent(resizeEvent)
+                }, 100)
             }
         },
     }
@@ -152,8 +157,7 @@
 </style>
 <style lang="scss">
     .el-radio-button__inner {
-        border: none !important;
-        font-size: 20px;
-        // margin-left: 20px;
+      border: none !important;
+      font-size: 20px;
     }
 </style>

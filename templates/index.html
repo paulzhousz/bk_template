@@ -20,10 +20,11 @@
     if ('${RUN_MODE}' === 'DEVELOP') {
         window.siteUrl = "http://127.0.0.1:8001/"
         window.env = "d"
-    }else if ('${RUN_MODE}' === 'PRODUCT') {
+    } else if ('${RUN_MODE}' === 'PRODUCT') {
         window.siteUrl = '${BK_PLAT_HOST}${SITE_URL}'
         window.env = "o"
-    }else{
+    } else {
+        window.siteUrl = '${BK_PLAT_HOST}${SITE_URL}'
         window.env = "t"
     }
     window.userName = '${request.user.username}'
